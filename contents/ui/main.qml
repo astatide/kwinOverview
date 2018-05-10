@@ -14,9 +14,6 @@ import org.kde.activities 0.1 as Activities
 // Let's use some blur!
 import QtGraphicalEffects 1.0
 
-// We need to handle the shortcuts.
-import "../code/shortcuts.js" as Shortcuts
-
 //BLAH
 
 	// dashboard background.  Holds window thumbnails.  I hope.
