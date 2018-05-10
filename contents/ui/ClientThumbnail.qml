@@ -176,16 +176,19 @@ Item {
   MouseArea {
     id: mouseArea
     anchors.fill: parent
-    drag.axis: 'XAndYAxis'
-    drag.target: kwinClientThumbnail
-    hoverEnabled: true
+    //drag.axis: 'XAndYAxis'
+    //drag.target: kwinClientThumbnail
+    //hoverEnabled: true
     onClicked: {
       workspace.activeClient = clientObject;
       dashboard.toggleBoth();
     }
 
     onPositionChanged: {
-      container.x = mousePosition.cursorPos().x - clickPos.x;
+      kwinClientThumbnail.x = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x - kwinClientThumbnail.originalX;
+      kwinClientThumbnail.y = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y - kwinClientThumbnail.originalY;
+      //kwinClientThumbnail.y = kwinClientThumbnail.mapFromGlobal(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y).y;
+      //kwinClientThumbnail.y = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y;
       if (kwinClientThumbnail.isHeld == true) {
         if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.height + 30) {
           // If we're not small, we want to shrink.

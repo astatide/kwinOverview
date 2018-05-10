@@ -22,7 +22,7 @@ public:
     }
 };
 
-#include "mouse.moc" // <----- This will make it work
+#include "main.moc" // <----- This will make it work
 
 int main(int argc, char *argv[])
 {
