@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=kwinOverview
+Comment=Overview for KWin as a QtQuick script.
+Icon=dashboard-show
+
+X-Plasma-API=declarativescript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-DefaultSize=1024,768
+
+X-KDE-PluginInfo-Author=A. J. Pratt
+X-KDE-PluginInfo-Email=ajp105@pitt.edu
+X-KDE-PluginInfo-Name=kwinOverview
+X-KDE-PluginInfo-Version=1.0
+
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-ServiceTypes=KWin/Script,Plasma/Applet
+Type=Service
