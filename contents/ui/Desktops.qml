@@ -343,6 +343,8 @@ Item {
           clientGridLayout.rows = clientGridLayout._returnMatrixSize();
           clientGridLayout.columns = clientGridLayout._returnMatrixSize();
           setVisible();
+          // Hack for the moment.
+          //currentDesktopGrid.updateGrid();
           //width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
           //height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
           //clientGridLayout.height = dashboard.screenHeight - dash.height - 30

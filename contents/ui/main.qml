@@ -24,7 +24,7 @@ import QtGraphicalEffects 1.0
 			visible: true
 			x: 0
 			y: 0
-			color: black
+			color: 'black'
 			width: { activeScreen.width }
 			height: {
 				// We have to account for any docks.  Which is a hassle, but eh.
@@ -37,6 +37,18 @@ import QtGraphicalEffects 1.0
 					}
 				}
 				return activeScreen.height + dockHeight }
+			property int dockHeight: {
+				// We have to account for any docks.  Which is a hassle, but eh.
+				var c;
+				var dockHeight = 0;
+				for (c = 0; c < workspace.clientList().length; c++) {
+					//console.log(workspace.clientList()[c].dock)
+					if (workspace.clientList()[c].dock) {
+						dockHeight = workspace.clientList()[c].height;
+					}
+				}
+				return dockHeight;
+			}
 			property var activeScreen: { workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
 			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
 			property int screenWidth: { activeScreen.width }
@@ -243,7 +255,10 @@ import QtGraphicalEffects 1.0
 								property bool isCurrent: model.isCurrent
 								rows: 1
 								// Center the damn thing, if necessary!  Awwww yeah.
-								x: width/(workspace.desktops) + dash.height*dashboard.screenRatio
+								//x: width/(workspace.desktops) + dash.height*dashboard.screenRatio
+								// I should really figure out what behavior I actually want.
+								//x: dash.height*dashboard.screenRatio*(workspace.desktops/2)
+								x: 0
 								y: 10
 								spacing: desktopThumbnailGrid.spacing
 
@@ -254,6 +269,14 @@ import QtGraphicalEffects 1.0
 										newRepeater.columns = clients.nDesktops;
 									}
 								}
+
+								//x: {
+								//	if (clients.nDesktops <= 6 ) {
+								//		return width/6 + dash.height*dashboard.screenRatio
+								//	} else {
+								//		return width/(workspace.desktops) + dash.height*dashboard.screenRatio
+								//	}
+								//}
 
 								Repeater {
 									// Now, we build up our desktops.
@@ -325,11 +348,23 @@ import QtGraphicalEffects 1.0
 															}
 				));
 			}
+			// Register all our clients.
+			var c;
+			for (c = 0; c < workspace.clientList().length; c++) {
+				workspace.clientList()[c].desktopChanged.connect(checkGridUpdate);
+			}
+		}
+
+		function checkGridUpdate() {
+			// Not sure we can determine who sent the signal, actually,
+			// so just update whenever a desktop change happens.
+			currentDesktopGrid.updateGrid();
 		}
 
 	function toggleBoth() {
 		console.log('test-completed');
 		console.log(mainBackground.state);
+		console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
 		if (mainBackground.state == 'visible') {

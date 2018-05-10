@@ -26,6 +26,7 @@ Item {
     visible: true
     x: 0
     y: 0
+    property int numberOfChildren: 0
 
     anchors.verticalCenter: parent.verticalCenter
     rows: { return _returnMatrixSize() }
@@ -90,246 +91,80 @@ Item {
       return 36
     }
 
-    Repeater {
-      // Now, we build up our windows.
-      model: workspace.clientList().length
-      Item {
-        id: kwinClientThumbnail
-        visible: true
-        // We need to dynamically set these.
-        property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
-        property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
-        property int scale: kwinDesktopThumbnailContainer.height / (kwinDesktopThumbnailContainer.width)
-        // Setting the height/width seems to break EVERYTHING, as the thumbnails are busted.
-        //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
-        //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
-        // Get our actual client information.  This way, we can move through desktops/activities.
-        property var clientObject: { workspace.clientList()[model.index] }
-        //anchors.fill: parent
-
-        opacity: 0
-
-        // This is for moving the thumbnail back
-        property int originalX: 0
-        property int originalY: 0
-        // This is for moving to our thumbnail position and size.
-        property int clientRealX: { workspace.clientList()[model.index].x }
-        property int clientRealY: { workspace.clientList()[model.index].y }
-        property int clientRealWidth: { workspace.clientList()[model.index].width }
-        property int clientRealHeight: {workspace.clientList()[model.index].height }
-        x: 0
-        y: 0
-        z: 0
-        property int originalZ: 0
-
-        property bool isHeld: false
-
-        // Connect to the client signal.
-        //signal desktopChanged: { return workspace.clientList()[model.index].desktopChanged }
-
-        // Are THESE breaking it?  What the shit.
-        // These DO seem to break it!  What the fuck.
-        // Something about the way they're painted, maybe?  Not so good.
-        KWinLib.ThumbnailItem {
-          id: actualThumbnail
-          //anchors.verticalCenter: parent.verticalCenter
-          anchors.fill: parent
-          wId: workspace.clientList()[model.index].windowId
-          //width: kwinClientThumbnail.width
-          //height: kwinClientThumbnail.height
-          //x: kwinClientThumbnail.x
-          x: 0
-          y: 0
-          z: 0
-          //y: kwinClientThumbnail.y
-          visible: true
-          clip: true
-        }
-        // I want this to show up if compositing is disabled.
-        Rectangle {
-          id: thumbnailBackgroundRectangle
-          anchors.fill: parent
-          //width: kwinClientThumbnail.width
-          //height: kwinClientThumbnail.height
-          color: 'black'
-          opacity: 1
-          visible: true
-          //clip: true
-          x: 0
-          y: 0
-        }
-        // These don't really work yet, but hey.
-        ParallelAnimation {
-          id: moveToThumbnail
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: clientRealHeight; to: originalHeight; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: clientRealWidth; to: originalWidth; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          //NumberAnimation { target: kwinClientThumbnail; property: "x"; from: clientRealX; to: kwinClientThumbnail.originalX; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          //NumberAnimation { target: kwinClientThumbnail; property: "y"; from: clientRealY; to: kwinClientThumbnail.originalY; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          NumberAnimation { target: kwinClientThumbnail; property: "x"; from: kwinDesktopThumbnailContainer.mapFromGlobal(clientRealX, clientRealY).x; to: kwinClientThumbnail.originalX; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          NumberAnimation { target: kwinClientThumbnail; property: "y"; from: kwinDesktopThumbnailContainer.mapFromGlobal(clientRealX, clientRealY).y; to: kwinClientThumbnail.originalY; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 1000}
-          //NumberAnimation { target: kwinClientThumbnail; property: "x"; from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x; to: kwinClientThumbnail.x; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 5000}
-          //NumberAnimation { target: kwinClientThumbnail; property: "y"; from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y; to: kwinClientThumbnail.y; easing.amplitude: 2; easing.type: Easing.InOutQuad; duration: 5000}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width*2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height*2}
-        }
-        ParallelAnimation {
-          id: moveFromThumbnail
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; to: clientRealHeight; from: originalHeight}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; to: clientRealWidth; from: originalWidth}
-          NumberAnimation { target: kwinClientThumbnail; property: "x"; to: clientRealX; from: kwinClientThumbnail.originalX}
-          NumberAnimation { target: kwinClientThumbnail; property: "y"; to: clientRealY; from: kwinClientThumbnail.originalY}
-        }
-        ParallelAnimation {
-          id: growthAnim
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: originalHeight; to: originalHeight*2}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: originalWidth; to: originalWidth*2}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width*2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height*2}
-        }
-        ParallelAnimation {
-          id: shrinkAnim
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: height; to: originalHeight}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: width; to: originalWidth}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width/2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height/2}
-        }
-        ParallelAnimation on width {
-          id: newShrinkAnim
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: originalHeight; to: height}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: originalWidth; to: width}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width/2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height/2}
-        }
-        ParallelAnimation {
-          id: returnAnim
-          NumberAnimation { target: kwinClientThumbnail; property: "x"; from: x; to: kwinClientThumbnail.originalX}
-          NumberAnimation { target: kwinClientThumbnail; property: "y"; from: y; to: kwinClientThumbnail.originalY}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width/2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height/2}
-        }
-        ParallelAnimation {
-          id: growFromNothing
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: 0; to: originalHeight}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: 0; to: originalWidth}
-          NumberAnimation { target: thumbnailBackgroundRectangle; property: "height"; from: 0; to: kwinClientThumbnail.originalHeight}
-          NumberAnimation { target: thumbnailBackgroundRectangle; property: "width"; from: 0; to: kwinClientThumbnail.originalWidth}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width*2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height*2}
-        }
-        ParallelAnimation {
-          id: shrinkToNothing
-          NumberAnimation { target: kwinClientThumbnail; property: "height"; from: height; to: 0}
-          NumberAnimation { target: kwinClientThumbnail; property: "width"; from: width; to: 0}
-          NumberAnimation { target: thumbnailBackgroundRectangle; property: "height"; from: height; to: 0}
-          NumberAnimation { target: thumbnailBackgroundRectangle; property: "width"; from: width; to: 0}
-          //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width*2}
-          //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height*2}
-        }
-
-
-        MouseArea {
-          id: mouseArea
-          anchors.fill: parent
-          drag.axis: 'XAndYAxis'
-          drag.target: kwinClientThumbnail
-          hoverEnabled: true
-          //drag.maximumX: clientGridLayout.width
-          //onClicked: {
-          //  console.log(mouse);
-          //  if (kwinClientThumbnail.isHeld == false) {
-          //    actualThumbnail.visible = !actualThumbnail.visible;
-          //  }
-          //}
-          onClicked: {
-            workspace.activeClient = clientObject;
-            dashboard.toggleBoth();
-          }
-          onPressed: {
-            kwinClientThumbnail.originalX = kwinClientThumbnail.x;
-            kwinClientThumbnail.originalY = kwinClientThumbnail.y;
-            // Draw above everything else!
-            kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
-            kwinClientThumbnail.z = 1000;
-            kwinClientThumbnail.isHeld = true;
-            //growthAnim.running = true;
-          }
-          onReleased: {
-            // We want to move it to the desktop.
-            //console.log(Object.getOwnPropertyNames(mouse));
-            // These are where the mouse CLICKED on the object.  Blah.
-            var newDesktop = clientGridLayout._overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
-            //console.log(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y));
-            console.log('New Desktop!');
-            console.log(newDesktop);
-            // Hey, it works.  Yay.
-            //console.log(Object.getOwnPropertyNames(workspace));
-            //console.log(Object.getOwnPropertyNames(clientObject));
-            if (clientObject.desktop == newDesktop ) {
-              //console.log(newDesktop);
-              returnAnim.running = true;
-            } else if (newDesktop == 0) {
-              returnAnim.running = true;
-            } else {
-              clientObject.desktop = newDesktop;
-              // We need to make it invisible, as well.
-              kwinClientThumbnail.visible = false;
-              returnAnim.running = true;
-              kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
-              // We want the others to pop up, so.
-            }
-          }
-        }
-
-        function setVisible() {
-          if (workspace.clientList()[model.index].desktop-1 == desktop) {
-            kwinClientThumbnail.visible = true;
-            //actualThumbnail.visible = true;
-          } else {
-            kwinClientThumbnail.visible = false;
-            //actualThumbnail.visible = false;
-          }
-          //growFromNothing.running = true;
-        }
-
-        function runAnimations() {
-          if (visible) {
-            if (mainBackground.state == 'visible') {
-              kwinClientThumbnail.originalX = kwinClientThumbnail.x;
-              kwinClientThumbnail.originalY = kwinClientThumbnail.y;
-              moveToThumbnail.running = true;
-            } else {
-              moveFromThumbnail.running = true;
-            }
-          }
-        }
-
-        Component.onCompleted: {
-          // We just check to see whether we're on the current desktop.
-          // If not, don't show it.
-          setVisible();
-          // WHY DOES THIS FIX IT?
-          shrinkToNothing.running = false;
-          growFromNothing.running = false;
-          moveToThumbnail.running = false;
-          moveFromThumbnail.running = false;
-          workspace.clientList()[model.index].desktopChanged.connect(setVisible);
-          mainBackground.stateChanged.connect(runAnimations)
-          workspace.currentDesktopChanged.connect(updateGrid);
-        }
-
-          function updateGrid(i, client) {
-            // Probably won't work.
-            kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
-            // But we actually need to rebuild the whole grid.  Huh!
-            clientGridLayout.rows = clientGridLayout._returnMatrixSize();
-            clientGridLayout.columns = clientGridLayout._returnMatrixSize();
-            width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
-            height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
-            //clientGridLayout.height = dashboard.screenHeight - dash.height - 30
-            //width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
-            //clientGridLayout.width = dashboard.screenWidth
-            setVisible();
-          }
+    Component.onCompleted: {
+      //updateClients();
+      kwinDesktopThumbnailContainer.updateGrid();
+      // We do want to change when a client changes desktops, but.
+      //workspace.clientList()[clientId].desktopChanged.connect(updateGrid);
+      //mainBackground.stateChanged.connect(runAnimations);
+      workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //workspace.currentDesktopChanged.connect(updateGrid);
+      //workspace.numberDesktopsChanged
+      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
+      workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
+    }
+  }
+  function updateGrid(i, client) {
+    // Probably won't work.
+    console.log('UPDATING GRID');
+    kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    // But we actually need to rebuild the whole grid.  Huh!
+    clientGridLayout.rows = clientGridLayout._returnMatrixSize();
+    clientGridLayout.columns = clientGridLayout._returnMatrixSize();
+    //width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
+    //height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
+    //destroyExisting();
+    updateClients();
+    //clientGridLayout.height = dashboard.screenHeight - dash.height - 30
+    //width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
+    //clientGridLayout.width = dashboard.screenWidth
+    //setVisible();
+}
+    // Now, we build up our windows.
+    //model: workspace.clientList().length
+  function updateClients() {
+    var c; // client
+    //var d; // Desktop
+    for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
+      // Kill all the children.
+      clientGridLayout.children[c].destroy();
+      // ... is the idea, anyway.  Why doesn't it...?
+    }
+    clientGridLayout.numberOfChildren = 0;
+    for (c = 0; c < workspace.clientList().length; c++) {
+      // check if the client is on our desktop.
+      if (workspace.clientList()[c].desktop-1 == desktop) {
+        clientGridLayout.numberOfChildren++;
+        var clientThumbnail = Qt.createComponent('ClientThumbnail.qml')
+        console.log('CREATING CLIENTS');
+        if( clientThumbnail.status == Component.Error )
+            console.debug("Error:"+ clientThumbnail.errorString() );
+        // Why are we doing this here?  We're ditching the repeater,
+        // as we want to dynamically create things.
+        // This means destruction and creation when we add new clients.
+        // In addition, we only create objects when we need them.
+        console.log(workspace.clientList()[c].x, workspace.clientList()[c].y)
+        clientThumbnail.createObject(clientGridLayout,
+                                    // Custom ID for destruction later.
+                                    {id: 'desktopId' + desktop + 'clientId' + c,
+                                    //'background': model.get(0).background,
+                                    'clientObject': workspace.clientList()[c],
+                                    'originalWidth': kwinDesktopThumbnailContainer.width / clientGridLayout.columns,
+                                    'originalHeight': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
+                                    'scale': (kwinDesktopThumbnailContainer.height / kwinDesktopThumbnailContainer.width) / (dashboard.screenHeight/dashboard.screenWidth),
+                                    'clientId': c,
+                                    //'desktop': d+1,
+                                    'visible': true,
+                                    'x': 0, 'y': 0,
+                                    //'x': clientGridLayout.mapFromGlobal(workspace.clientList()[c].x).x,
+                                    //'y': clientGridLayout.mapFromGlobal(workspace.clientList()[c].y).y,
+                                    'clientRealX': workspace.clientList()[c].x,
+                                    // Account for the fucking dock, if any.
+                                    'clientRealY': workspace.clientList()[c].y,
+                                    'clientRealWidth': workspace.clientList()[c].width,
+                                    'clientRealHeight': workspace.clientList()[c].height,
+                                    'height': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
+                                    'width': kwinDesktopThumbnailContainer.width / clientGridLayout.columns});
       }
     }
   }
