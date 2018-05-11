@@ -29,11 +29,11 @@ import QtGraphicalEffects 1.0
 			height: {
 				// We have to account for any docks.  Which is a hassle, but eh.
 				var c;
-				var dockHeight;
+				var dockHeight = 0;
 				for (c = 0; c < workspace.clientList().length; c++) {
 					//console.log(workspace.clientList()[c].dock)
 					if (workspace.clientList()[c].dock) {
-						dockHeight = workspace.clientList()[c].height;
+						dockHeight += workspace.clientList()[c].height;
 					}
 				}
 				return activeScreen.height + dockHeight }

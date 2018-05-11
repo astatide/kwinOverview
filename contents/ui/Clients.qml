@@ -24,8 +24,8 @@ Item {
   Grid {
     id: clientGridLayout
     visible: true
-    x: 0
-    y: 0
+    //x: 0
+    //y: 0
     property int numberOfChildren: 0
 
     anchors.verticalCenter: parent.verticalCenter

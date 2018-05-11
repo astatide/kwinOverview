@@ -23,6 +23,7 @@ Item {
   property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
   //property int scale: (kwinDesktopThumbnailContainer.height / (kwinDesktopThumbnailContainer.width)) / (dashboard.screenHeight/dashboard.screenWidth)
   property int scale: 1
+  property var originalParent: parent
   // Setting the height/width seems to break EVERYTHING, as the thumbnails are busted.
   //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
   //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
@@ -48,11 +49,28 @@ Item {
   z: 0
   property int originalZ: 0
 
-  property bool isHeld: false
+  //property bool isHeld: false
   property bool isSmall: false
 
   // For the mouse.
   property QtObject container
+
+  states: [
+    State {
+      name: 'isHeld'
+      PropertyChanges {
+        target: kwinClientThumbnail
+        parent: mainBackground
+      }
+    },
+    State {
+      name: 'notHeld'
+      PropertyChanges {
+        target: kwinClientThumbnail
+        parent: clientGridLayout
+      }
+    }
+  ]
 
   // Connect to the client signal.
   //signal desktopChanged: { return workspace.clientList()[model.index].desktopChanged }
@@ -65,8 +83,9 @@ Item {
     //anchors.verticalCenter: parent.verticalCenter
     anchors.fill: parent
     wId: workspace.clientList()[clientId].windowId
-    //width: kwinClientThumbnail.width
-    //height: kwinClientThumbnail.height
+    width: kwinClientThumbnail.width
+    height: kwinClientThumbnail.height
+    //scale: 0.5
     //x: kwinClientThumbnail.x
     x: 0
     y: 0
@@ -148,28 +167,78 @@ Item {
     //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width/2}
     //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height/2}
   }
+  /*onHeightChanged: {
+    kwinClientThumbnail.y = y+height/2;
+  }
+  onWidthChanged: {
+    kwinClientThumbnail.x = x+width/2;
+  }*/
+
   ParallelAnimation {
     id: shrinkAnim
-    alwaysRunToEnd: true
+    alwaysRunToEnd: false
     running: false
-    NumberAnimation { target: kwinClientThumbnail; property: "height"; from: originalHeight; to: 100}
-    NumberAnimation { target: kwinClientThumbnail; property: "width"; from: originalWidth; to: 100}
-    //NumberAnimation { target: kwinClientThumbnail; property: "y"; to: y+originalHeight/2}
-    //NumberAnimation { target: kwinClientThumbnail; property: "x"; to: x+originalWidth/2}
+    property int animX: 0
+    property int animY: 0
+    PropertyAnimation {
+      target: kwinClientThumbnail
+      property: "height"
+      to: 100
+      duration: 100
+    }
+    PropertyAnimation {
+      target: kwinClientThumbnail
+      property: "width"
+      to: 100*dashboard.screenRatio
+      duration: 100
+  }
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: shrinkAnim.animX-50+originalWidth/2; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: shrinkAnim.animY-50+originalHeight/2; duration: 1000}
+    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: shrinkAnim.animX-(50*dashboard.screenRatio)+width/2; duration: 100}
+    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: shrinkAnim.animY-50+height/2; duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: shrinkAnim.animX; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: shrinkAnim.animY; duration: 1000}
     onStopped: {
       mouseArea.enabled = true;
+      kwinClientThumbnail.isSmall = true;
+      //x = x+originalWidth/2;
+      //y = y+originalHeight/2;
     }
   }
   ParallelAnimation {
     id: growthAnim
-    alwaysRunToEnd: true
+    alwaysRunToEnd: false
     running: false
-    NumberAnimation { target: kwinClientThumbnail; property: "height"; to: originalHeight}
-    NumberAnimation { target: kwinClientThumbnail; property: "width"; to: originalWidth}
-    //NumberAnimation { target: kwinClientThumbnail; property: "y"; to: y-originalHeight/2}
+    property int animX: 0
+    property int animY: 0
+    NumberAnimation { target: kwinClientThumbnail; property: "height"; to: originalHeight; duration: 100}
+    NumberAnimation { target: kwinClientThumbnail; property: "width"; to: originalWidth; duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: growthAnim.animX+originalWidth/2; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: growthAnim.animY+originalHeight/2; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; from: shrinkAnim.animX-50+width/2; to: growthAnim.animX; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; from: shrinkAnim.animY-50+height/2; to: growthAnim.animY; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; from: x-50+width/2; to: growthAnim.animX; duration: 1000}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; from: y-50+height/2; to: growthAnim.animY; duration: 1000}
+    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: growthAnim.animX+width/2-originalWidth/2; duration: 100}
+    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: growthAnim.animY+height/2-originalHeight/2; duration: 100}
+    //NumberAnimation { target: kwinClientThumbnail; property: "y"; to: y-originalHeight/4}
     //NumberAnimation { target: kwinClientThumbnail; property: "x"; to: x-originalWidth/2}
     onStopped: {
       mouseArea.enabled = true;
+      kwinClientThumbnail.isSmall = false;
+    }
+  }
+  ParallelAnimation {
+    id: moveAnim
+    alwaysRunToEnd: false
+    running: false
+    property int animX: 0
+    property int animY: 0
+    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    onStopped: {
+      mouseArea.enabled = true;
+      //kwinClientThumbnail.isSmall = false;
     }
   }
 
@@ -178,57 +247,128 @@ Item {
     anchors.fill: parent
     //drag.axis: 'XAndYAxis'
     //drag.target: kwinClientThumbnail
-    //hoverEnabled: true
+    hoverEnabled: true
     onClicked: {
       workspace.activeClient = clientObject;
       dashboard.toggleBoth();
     }
 
     onPositionChanged: {
-      kwinClientThumbnail.x = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x - kwinClientThumbnail.originalX;
-      kwinClientThumbnail.y = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y - kwinClientThumbnail.originalY;
-      //kwinClientThumbnail.y = kwinClientThumbnail.mapFromGlobal(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y).y;
-      //kwinClientThumbnail.y = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y;
-      if (kwinClientThumbnail.isHeld == true) {
+      // Let's do this proper.
+      var ranAnimation = false;
+      //var mouseX = mouse.x;
+      //var mouseY = mouse.y;
+      var mouseX = mainBackground.mapFromGlobal(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y).x - width/2 //originalWidth/2 //- width/2;
+      var mouseY = mainBackground.mapFromGlobal(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y).y - height/2 //originalHeight/2 //- height/2;
+      shrinkAnim.animX = mouseX;
+      shrinkAnim.animY = mouseY;
+      growthAnim.animX = mouseX;
+      growthAnim.animY = mouseY;
+      //mouseArea.enabled = false;
+      if (kwinClientThumbnail.state == 'isHeld') {
         if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.height + 30) {
           // If we're not small, we want to shrink.
-          if (!kwinClientThumbnail.isSmall) {
+          //if (!kwinClientThumbnail.isSmall) {
+            //shrinkAnim.restart()
             //mouseArea.enabled = false;
             // Check to make sure the animation isn't already running.
-            kwinClientThumbnail.isSmall = true;
-            if (!shrinkAnim.busy) {
-              mouseArea.enabled = false;
-              shrinkAnim.running = true;
-              }
+            //kwinClientThumbnail.isSmall = true;
+            //if (!shrinkAnim.busy) {
+              //shrinkAnim.stop();
+              if (kwinClientThumbnail.height != 100) {
+              //shrinkAnim.animX = mouseX;
+              //shrinkAnim.animY = mouseY;
+              //shrinkAnim.running = true;
+              //shrinkAnim.restart()
+              //scaleAnim.running = true;
+              //ranAnimation = true;
+              //}
+              ranAnimation = true;
+              shrinkAnim.restart();
           }
         } else if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y > dash.height + 30) {
-          if (kwinClientThumbnail.isSmall) {
-            kwinClientThumbnail.isSmall = false;
-            if (!growthAnim.busy) {
+          //if (kwinClientThumbnail.isSmall) {
+            //if (!growthAnim.busy) {
+              if (kwinClientThumbnail.height != originalHeight) {
               // Avoids jerky behavior.
               //mouseArea.enabled = false;
-              mouseArea.enabled = false;
-              growthAnim.running = true;
+              kwinClientThumbnail.isSmall = false;
+              ranAnimation = true;
+              growthAnim.restart();
             }
           }
-        }
+      // If we didn't animate, then move the window.  With an animation!
+      if (!ranAnimation) {
+      //if (true) {
+          //moveAnim.x = (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x - kwinClientThumbnail.mapToGlobal(originalX, originalY).x);
+          //moveAnim.y = (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y - kwinClientThumbnail.mapToGlobal(originalX, originalY).y);
+          // Is this happening in two steps or something?  What the fuck.
+          //kwinClientThumbnail.x = (kwinClientThumbnail.mapToGlobal(mouseX, mouseY).x - kwinClientThumbnail.mapToGlobal(originalX, originalY).x);
+          //kwinClientThumbnail.y = (kwinClientThumbnail.mapToGlobal(mouseX, mouseY).y - kwinClientThumbnail.mapToGlobal(originalX, originalY).y);
+          var oX = kwinClientThumbnail.originalX;
+          var oY = kwinClientThumbnail.originalY;
+
+          moveAnim.animX = mouseX;
+          moveAnim.animY = mouseY;
+          //kwinClientThumbnail.x = mouseX;
+          //kwinClientThumbnail.y = mouseY;
+          //actualThumbnail.x = mouseX;
+          //actualThumbnail.y = mouseY;
+          //console.log(kwinClientThumbnail.parent);
+          moveAnim.restart();
+          // We are NOT going to want to run this multiple times.
+          //kwinClientThumbnail.parent = currentDesktopGrid;
+          console.log(moveAnim.animX, moveAnim.animY);
+          //console.log(kwinClientThumbnail.originalX == kwinClientThumbnail.x);
+          //moveAnim.running = true;
+      }
       }
     }
 
     onPressed: {
+      // Bail on the grid, basically!?
+      //x = kwinClientThumbnail.mapToItem()
+      //ParentChange { target: kwinClientThumbnail; parent: dashboardBackground; x: 0; y: 0 }
+      //moveAnim.animX = kwinClientThumbnail.parent.mapToGlobal(mouseX, mouseY).x; //- parent.mapToGlobal(oX, oY).x;
+      //moveAnim.animY = kwinClientThumbnail.parent.mapToGlobal(mouseX, mouseY).y;
+      // mouse.x and mouse.y are actually relative to our PARENT, already!?  So the grid, basically.
+      // But our x and y are not relative to our parent.  Ugh ugh ugh.
+      // For instance, if I click in the upper left corner, where the x and y coordinates are 0, 0, our
+      // actual position is n pixels down from the dock, and m pixels from the left of the screen.
+      // So we need to translate our coordinate transformations such that our origin is at our original position on the parent.
+      // But how?
+      //var mouseX = kwinClientThumbnail.mapFromGlobal(kwinClientThumbnail.parent.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.parent.mapToGlobal(mouse.x, mouse.y).y).x;
+      //var mouseY = kwinClientThumbnail.mapFromGlobal(kwinClientThumbnail.parent.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.parent.mapToGlobal(mouse.x, mouse.y).y).y;
+      //console.log(kwinClientThumbnail.originalX == kwinClientThumbnail.x);
+      //var mouseX = kwinClientThumbnail.parent.mapFromItem(kwinClientThumbnail, mouse.x, mouse.y).x;
+      //var mouseY = kwinClientThumbnail.parent.mapFromItem(kwinClientThumbnail, mouse.x, mouse.y).y;
+      //var mouseY = mouse.y;
+      //moveAnim.animX = mouseX; //- parent.mapToGlobal(oX, oY).x;
+      //moveAnim.animY = mouseY;
+      //moveAnim.animX = kwinClientThumbnail.mouseX; //- parent.mapToGlobal(oX, oY).x;
+      //moveAnim.animY = mouseY;
+      //moveAnim.running = true;
       kwinClientThumbnail.originalX = kwinClientThumbnail.x;
       kwinClientThumbnail.originalY = kwinClientThumbnail.y;
       console.log('What is our grid position?');
+      // ... or is this relative to the main background?
+      console.log(mouse.x, mouse.y);
+      console.log(kwinClientThumbnail.mapToItem(currentDesktopGrid, mouse.x, mouse.y));
       console.log(kwinClientThumbnail.x, kwinClientThumbnail.y);
       // Draw above everything else!
       kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
+      // So doesn't work.
       kwinClientThumbnail.z = 1000;
-      kwinClientThumbnail.isHeld = true;
+      kwinClientThumbnail.state = 'isHeld';
       //onPositionChanged: {
       //}
       //growthAnim.running = true;
     }
     onReleased: {
+      //kwinClientThumbnail.parent = clientGridLayout;
+      kwinClientThumbnail.state = 'notHeld';
+      console.log(kwinClientThumbnail.parent);
+      clientGridLayout.updateGrid();
       // We want to move it to the desktop.
       //console.log(Object.getOwnPropertyNames(mouse));
       // These are where the mouse CLICKED on the object.  Blah.
@@ -239,7 +379,6 @@ Item {
       // Hey, it works.  Yay.
       //console.log(Object.getOwnPropertyNames(workspace));
       //console.log(Object.getOwnPropertyNames(clientObject));
-      kwinClientThumbnail.isHeld = false;
       if (kwinClientThumbnail.isSmall) {
         growthAnim.running = true;
         kwinClientThumbnail.isSmall = false;
@@ -267,7 +406,8 @@ Item {
       if (mainBackground.state == 'visible') {
         if (kwinClientThumbnail.originalX == 0) {
           if (kwinClientThumbnail.originalY == 0) {
-            // Why does this hack work?
+            // Why does this hack work?  Can I make it a copy?
+            // WHERE is it fucking updating!?
             kwinClientThumbnail.originalX = kwinClientThumbnail.x;
             kwinClientThumbnail.originalY = kwinClientThumbnail.y;
           }
