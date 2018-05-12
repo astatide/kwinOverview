@@ -228,6 +228,7 @@ import QtGraphicalEffects 1.0
 					}
 					//  This is where we'll build up the grid.  I like to think, anyway.
 
+
 					Item {
 						id: desktopThumbnailGrid
 						anchors.fill: parent
@@ -237,36 +238,66 @@ import QtGraphicalEffects 1.0
 
 						//visible: true
 						y: 0
-
-
-						Repeater {
-							// Here, we're going to build up the desktops and thumbnails.
-							// For each entry here, we want nDesktops in the first row, and one in the second.
-							id: desktopThumbnailGridBackgrounds
-							// Don't reuse model, dumbass.
-							model: ActivitySwitcher.Backend.runningActivitiesModel()
-
 							Grid {
 								// This is just for each of our desktops.
-								id: newRepeater
-								property string activityId: model.id
-								property string background: model.background
-								property var activityModel: model
-								property bool isCurrent: model.isCurrent
+								//id: newRepeater
+								id: desktopThumbnailGridBackgrounds
 								rows: 1
-								// Center the damn thing, if necessary!  Awwww yeah.
-								//x: width/(workspace.desktops) + dash.height*dashboard.screenRatio
-								// I should really figure out what behavior I actually want.
-								//x: dash.height*dashboard.screenRatio*(workspace.desktops/2)
 								x: 0
 								y: 10
 								spacing: desktopThumbnailGrid.spacing
+								//anchors.fill: parent
 
 								columns: {
 									if (clients.nDesktops <= 6 ) {
-										newRepeater.columns = 6;
+										//desktopThumbnailGridBackgrounds.columns = 6;
+										return 6;
 									} else {
-										newRepeater.columns = clients.nDesktops;
+										//desktopThumbnailGridBackgrounds.columns = clients.nDesktops;
+										return clients.nDesktops;
+									}
+								}
+								Repeater {
+									// Now, we build up our desktops.
+									model: clients.nDesktops
+									id: littleDesktopRepeater
+									Item {
+										id: littleDesktopContainer
+										visible: true
+										property int desktop: model.index
+										height: desktopThumbnailGrid.height
+										width: dash.height*dashboard.screenRatio
+										Image {
+											//id: secondBackgroundDesktop
+											anchors.fill: dashboard
+											smooth: true
+											//clip: true
+											//visible: true
+											//source: "wallhaven-567367.jpg"
+											//source: "image://wallpaperthumbnail/" + dashboardBackground.background
+											fillMode: Image.PreserveAspectCrop
+											source: dashboardBackground.background
+											//height: dashboard.screenHeight
+											//width: dashboard.screenWidth
+											height: desktopThumbnailGrid.height
+											width: dash.height*dashboard.screenRatio
+											x: 0
+											y: 0
+											// Maybe?
+											//asynchronous: true
+											//cache: false
+										}
+										Clients {
+											//anchors.fill: parent
+											id: littleDesktopGrid
+											desktop: littleDesktopContainer.desktop
+											x: dash.height*.025*dashboard.screenRatio
+											y: dash.height*.025
+											height: dash.height*.95
+											width: dash.height*dashboard.screenRatio*.95
+											//height: dashboard.screenHeight - dash.height - 30
+											//width: dashboard.screenWidth
+										}
 									}
 								}
 
@@ -278,7 +309,7 @@ import QtGraphicalEffects 1.0
 								//	}
 								//}
 
-								Repeater {
+								/*Repeater {
 									// Now, we build up our desktops.
 									model: clients.nDesktops
 									Desktops {
@@ -294,9 +325,8 @@ import QtGraphicalEffects 1.0
 										height: desktopThumbnailGrid.height
 										width: dash.height*dashboard.screenRatio
 									}
-								}
+								}*/
 							}
-						}
 					}
 				}
 				// We'll create our normal desktop windows here with the same code.
@@ -323,6 +353,7 @@ import QtGraphicalEffects 1.0
 					//width: dashboard.screenWidth
 					//height: dashboard.screenHeight
 					width: dashboard.screenWidth
+					isMain: true
 				}
 		}
 	}
@@ -359,6 +390,14 @@ import QtGraphicalEffects 1.0
 			// Not sure we can determine who sent the signal, actually,
 			// so just update whenever a desktop change happens.
 			currentDesktopGrid.updateGrid();
+			// Let's update all the child grids, as well.
+			//littleDesktopGrid.updateGrid();
+			var d;
+			for (d = 0; d < clients.nDesktops; d++) {
+				//console.log(Object.getOwnPropertyNames(littleDesktopRepeater.itemAt(d).children));
+				// child 1 is the grid.
+				littleDesktopRepeater.itemAt(d).children[1].updateGrid();
+			}
 		}
 
 	function toggleBoth() {

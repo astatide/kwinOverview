@@ -18,6 +18,7 @@ import org.kde.activities 0.1 as Activities
 Item {
   id: kwinDesktopThumbnailContainer
   property int desktop: 0
+  property bool isMain: false
   x: 0
   y: 0
 
@@ -32,6 +33,17 @@ Item {
     rows: { return _returnMatrixSize() }
     // No order guaranteed, here.
     columns: { return _returnMatrixSize() }
+
+    add: Transition {
+      //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+      //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
+      NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    }
+    //remove: Transition {
+      //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+      //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
+    //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    //}
 
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
@@ -97,7 +109,9 @@ Item {
       // We do want to change when a client changes desktops, but.
       //workspace.clientList()[clientId].desktopChanged.connect(updateGrid);
       //mainBackground.stateChanged.connect(runAnimations);
+      //if (kwinDesktopThumbnailContainer.isMain) {
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //}
       //workspace.currentDesktopChanged.connect(updateGrid);
       //workspace.numberDesktopsChanged
       workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
@@ -107,18 +121,13 @@ Item {
   function updateGrid(i, client) {
     // Probably won't work.
     console.log('UPDATING GRID');
-    kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    if (kwinDesktopThumbnailContainer.isMain) {
+      kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    }
     // But we actually need to rebuild the whole grid.  Huh!
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
-    //width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
-    //height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
-    //destroyExisting();
     updateClients();
-    //clientGridLayout.height = dashboard.screenHeight - dash.height - 30
-    //width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
-    //clientGridLayout.width = dashboard.screenWidth
-    //setVisible();
 }
     // Now, we build up our windows.
     //model: workspace.clientList().length

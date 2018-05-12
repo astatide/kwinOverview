@@ -321,11 +321,18 @@ Item {
     //x = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x
     //y = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y
     // Tell our managing function to send out a more global signal.
-    workspace.clientList()[clientId].desktopChanged.connect(function() {
+    //workspace.clientList()[clientId].desktopChanged.connect(function() {
       // Update our main grid.  Bit of a hack for now.
       // (this shouldn't really call our main stuff.)
-      parent.updateGrid();
-    });
+    //  parent.parent.updateGrid();
+    //  parent.updateGrid();
+    //});
+
+    //workspace.clientList()[model.index].desktopChanged.connect(function() {
+      // If one of our things changes, just manually trigger a grid update.
+      // For now, anyway.
+    //  parent.updateGrid();
+    //});
     //mainBackground.stateChanged.connect(runAnimations);
     //workspace.currentDesktopChanged.connect(updateGrid);
     //workspace.currentDesktopChanged.connect(updateGrid);
