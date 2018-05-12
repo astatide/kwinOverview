@@ -28,19 +28,16 @@ import QtGraphicalEffects 1.0
 			// Start disabled.  toggleBoth sets this appropriately.
 			height: 0
 			width: 0
-			//width: { activeScreen.width }
-			/*height: {
-				// We have to account for any docks.  Which is a hassle, but eh.
-				var c;
-				var dockHeight = 0;
-				for (c = 0; c < workspace.clientList().length; c++) {
-					//console.log(workspace.clientList()[c].dock)
-					if (workspace.clientList()[c].dock) {
-						dockHeight = dockHeight + workspace.clientList()[c].height;
-					}
-				}
-				return activeScreen.height + dockHeight }*/
-			property int dockHeight: {
+			property int dockHeight: { return _getDockHeight() }
+			property var activeScreen: { workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
+			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
+			property int screenWidth: { activeScreen.width }
+			property int screenHeight: { return activeScreen.height + _getDockHeight() }
+			property var screenRatio: { activeScreen.width/activeScreen.height }
+
+			property var clientsVisible: { new Array }
+
+			function _getDockHeight() {
 				// We have to account for any docks.  Which is a hassle, but eh.
 				var c;
 				var dockHeight = 0;
@@ -52,23 +49,6 @@ import QtGraphicalEffects 1.0
 				}
 				return dockHeight;
 			}
-			property var activeScreen: { workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
-			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
-			property int screenWidth: { activeScreen.width }
-			property int screenHeight: {
-				// We have to account for any docks.  Which is a hassle, but eh.
-				var c;
-				var dockHeight = 0;
-				for (c = 0; c < workspace.clientList().length; c++) {
-					//console.log(workspace.clientList()[c].dock)
-					if (workspace.clientList()[c].dock) {
-						dockHeight = dockHeight + workspace.clientList()[c].height;
-					}
-				}
-				return activeScreen.height + dockHeight }
-			property var screenRatio: { activeScreen.width/activeScreen.height }
-
-			property var clientsVisible: { new Array }
 
 			Item {
 				id: mainBackground
@@ -85,7 +65,6 @@ import QtGraphicalEffects 1.0
 				MouseArea {
 					anchors.fill: parent
 					onClicked: {
-						console.log('Dashboard clicked');
 						if (mainBackground.state == 'visible') {
 							//endAnim.running = true;
 							//dashboardBackground.visible = false;
@@ -119,10 +98,11 @@ import QtGraphicalEffects 1.0
 					NumberAnimation { target: dash; property: "y"; to: 0}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 1; from: dashboard.opacity}
-					//NumberAnimation { target: blurBackground; property: "radius"; to: 32; from: 1}
+					// Expensive!
+					NumberAnimation { target: blurBackground; property: "radius"; to: 32; from: 1}
 					//NumberAnimation { target: mainBackground; property: "opacity"; to: 1; from: mainBackground.opacity}
 					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: 0}
-					NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 1; from: 0}
+					//NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 1; from: 0}
 
 					//onRunningChanged: {
 					//	if (initAnim.running) {
@@ -135,7 +115,10 @@ import QtGraphicalEffects 1.0
 					id: endAnim
 					NumberAnimation { target: dash; property: "y"; to: -dash.height}
 					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
-					NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
+					// Cheaper!
+					//NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
+					// Not so cheap, probably!
+					NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 0; from: dashboard.opacity}
 					//NumberAnimation { target: mainBackground; property: "opacity"; to: 0; from: mainBackground.opacity}
@@ -247,11 +230,6 @@ import QtGraphicalEffects 1.0
 						width: dashboard.screenWidth
 						color: 'black'
 					}
-
-					// Test import
-					Windows {
-						id: clients
-					}
 					//  This is where we'll build up the grid.  I like to think, anyway.
 
 
@@ -275,17 +253,17 @@ import QtGraphicalEffects 1.0
 								//anchors.fill: parent
 
 								columns: {
-									if (clients.nDesktops <= 6 ) {
+									if (workspace.desktops <= 6 ) {
 										//desktopThumbnailGridBackgrounds.columns = 6;
 										return 6;
 									} else {
-										//desktopThumbnailGridBackgrounds.columns = clients.nDesktops;
-										return clients.nDesktops;
+										//desktopThumbnailGridBackgrounds.columns = workspace.desktops;
+										return workspace.desktops;
 									}
 								}
 								Repeater {
 									// Now, we build up our desktops.
-									model: clients.nDesktops
+									model: workspace.desktops
 									id: littleDesktopRepeater
 									Item {
 										id: littleDesktopContainer
@@ -295,7 +273,8 @@ import QtGraphicalEffects 1.0
 										width: dash.height*dashboard.screenRatio
 										Image {
 											//id: secondBackgroundDesktop
-											anchors.fill: dashboard
+											//anchors.fill: dashboard
+											anchors.fill: parent
 											smooth: true
 											//border { left: 30; top: 30; right: 30; bottom: 30 }
 											//horizontalTileMode: BorderImage.Stretch
@@ -331,7 +310,7 @@ import QtGraphicalEffects 1.0
 								}
 
 								//x: {
-								//	if (clients.nDesktops <= 6 ) {
+								//	if (workspace.desktops <= 6 ) {
 								//		return width/6 + dash.height*dashboard.screenRatio
 								//	} else {
 								//		return width/(workspace.desktops) + dash.height*dashboard.screenRatio
@@ -340,7 +319,7 @@ import QtGraphicalEffects 1.0
 
 								/*Repeater {
 									// Now, we build up our desktops.
-									model: clients.nDesktops
+									model: workspace.desktops
 									Desktops {
 										// I guess we can't refer to it by id anymore.
 										background: newRepeater.background
@@ -348,7 +327,7 @@ import QtGraphicalEffects 1.0
 										desktop: model.index
 										activityModel: newRepeater.activityModel
 										isCurrent: newRepeater.isCurrent
-										nClients: clients.nClients
+										nClients: workspace.clientList().length
 										x: 0
 										y: 0
 										height: desktopThumbnailGrid.height
@@ -373,7 +352,7 @@ import QtGraphicalEffects 1.0
 					//activityModel: newRepeater.activityModel
 					//isCurrent: newRepeater.isCurrent
 					//isCurrent: true
-					//nClients: clients.nClients
+					//nClients: workspace.clientList().length
 					x: 0
 					y: dash.height + 30
 					scale: 1
@@ -388,27 +367,21 @@ import QtGraphicalEffects 1.0
 		}
 	}
 		Component.onCompleted: {
-			console.log("Does this fucking work?");
 			dashboard.visible = true;
 			mainBackground.state = 'visible';
-			console.log(clients.nClients);
-			console.log(clients.nDesktops);
 			populateVisibleClients();
 			// disable!
 
 			// Try and register a shortcut, maybe.
-			console.log('registering shortcut')
-			console.log(Object.getOwnPropertyNames(workspace));
-			console.log(KWin.registerShortcut);
+			//console.log(Object.getOwnPropertyNames(workspace));
 			if (KWin.registerShortcut) {
-				console.log('ACTUALLY registering!');
-				console.log(KWin.registerShortcut("OVERVIEW: Show kwinOverview",
+			KWin.registerShortcut("OVERVIEW: Show kwinOverview",
 															"Show kwinOverview",
 															"Meta+A",
 															function() {
 																toggleBoth()
 															}
-				));
+				);
 			}
 			toggleBoth();
 			// Register all our clients.
@@ -425,7 +398,7 @@ import QtGraphicalEffects 1.0
 			// Let's update all the child grids, as well.
 			//littleDesktopGrid.updateGrid();
 			var d;
-			for (d = 0; d < clients.nDesktops; d++) {
+			for (d = 0; d < workspace.desktops; d++) {
 				//console.log(Object.getOwnPropertyNames(littleDesktopRepeater.itemAt(d).children));
 				// child 1 is the grid.
 				littleDesktopRepeater.itemAt(d).children[1].updateGrid();
@@ -433,8 +406,6 @@ import QtGraphicalEffects 1.0
 		}
 
 	function toggleBoth() {
-		console.log('test-completed');
-		console.log(mainBackground.state);
 		//console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
@@ -449,19 +420,18 @@ import QtGraphicalEffects 1.0
 			mainBackground.state = 'invisible';
 			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
 				//
-				console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));
+				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
 				currentDesktopGrid.children[0].children[c].startMoveFromThumbnail();
 			};
-			enableVisibleClients();
+			//enableVisibleClients();
 			//endAnim
 		} else if (mainBackground.state == 'invisible') {
-			console.log('Am I invisible?');
 			// It hates this command.  Straight up.  It seems to still be hiding things.
 			//dashboard.visible = true;
 			//dashboard.flags = Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
 			//dashboard.show();
 			// Show, then run the init animation.
-			disableVisibleClients();
+			//disableVisibleClients();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
 			initAnim.restart();
@@ -469,11 +439,8 @@ import QtGraphicalEffects 1.0
 			currentDesktopGrid.updateGrid();
 			// Start the animation for the main grid.
 			var c;
-			console.log("HOW MANY KIDS!?");
-			console.log(currentDesktopGrid.children[0].children.length);
 			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
 				//
-				console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));
 				currentDesktopGrid.children[0].children[c].startMoveToThumbnail();
 			};
 			//console.log(Object.getOwnPropertyNames(dashboard));
@@ -491,38 +458,35 @@ import QtGraphicalEffects 1.0
 	}
 
 	function populateVisibleClients() {
-		console.log('Populating Visible Clients');
 		// We need to build the list.
 		var c;
-		dashboard.clientsVisible = new Array(clients.nClients);
-		for (c = 0; c < clients.nClients; c++) {
-			//console.log(JSON.stringify(clients.clientList[c]));
-			dashboard.clientsVisible[c] = clients.clientList[c].minimized;
+		dashboard.clientsVisible = new Array(workspace.clientList().length);
+		for (c = 0; c < workspace.clientList().length; c++) {
+			//console.log(JSON.stringify(workspace.clientList()[c]));
+			dashboard.clientsVisible[c] = workspace.clientList()[c].minimized;
 	  }
 	}
 
 	function disableVisibleClients() {
-		console.log('Toggling Visible Clients');
 		var c;
-		for (c = 0; c < clients.nClients; c++) {
-			//clients.clientList[c].minimized = true;
-			//clients.clientList[c].visible = false;
-			//console.log(Object.getOwnPropertyNames(clients.clientList[c]));
+		for (c = 0; c < workspace.clientList().length; c++) {
+			//workspace.clientList()[c].minimized = true;
+			//workspace.clientList()[c].visible = false;
+			//console.log(Object.getOwnPropertyNames(workspace.clientList()[c]));
 			//console.log(Object.getOwnPropertyNames(workspace));
 			// We're just hiding it by making it invisible.
-			clients.clientList[c].opacity = 0;
+			workspace.clientList()[c].opacity = 0;
 		}
 	}
 
 	function enableVisibleClients() {
-		console.log('Toggling Visible Clients');
 		var c;
-		for (c = 0; c < clients.nClients; c++) {
+		for (c = 0; c < workspace.clientList().length; c++) {
 			if (dashboard.clientsVisible[c] == false) {
-				//clients.clientList[c].minimized = false;
+				//workspace.clientList()[c].minimized = false;
 				// Better than hiding!
-				clients.clientList[c].opacity = 1;
-				//clients.clientList[c].showClient();
+				workspace.clientList()[c].opacity = 1;
+				//workspace.clientList()[c].showClient();
 			}
 		}
 	}

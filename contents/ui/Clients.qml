@@ -121,17 +121,18 @@ Item {
       }
       //workspace.currentDesktopChanged.connect(updateGrid);
       //workspace.numberDesktopsChanged
-      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
+      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
       workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
 
   function updateGridOnDesktopChange() {
     // Probably won't work.
-    console.log('UPDATING GRID');
     var c; // client
     var nClients = clientGridLayout.children.length;
-    kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    if (kwinDesktopThumbnailContainer.isMain) {
+      kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    }
     for (c = 0; c < nClients; c++) {
       // Kill all the children.
         clientGridLayout.children[c].destroy();
@@ -145,7 +146,6 @@ Item {
 
   function updateGrid() {
     // Probably won't work.
-    console.log('UPDATING GRID');
     //if (kwinDesktopThumbnailContainer.isMain) {
     //  kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
     //}
@@ -155,10 +155,13 @@ Item {
     //for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
     for (c = 0; c < nClients; c++) {
       // Kill all the children.
-      if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
-      //if (clientGridLayout.children[c].currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
-        // Destroy anything NOT on the desktop.
-        clientGridLayout.children[c].destroy();
+      // Ah, I see this fails out sometimes.
+      if (clientGridLayout.children[c].clientObject) {
+        if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
+        //if (clientGridLayout.children[c].currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
+          // Destroy anything NOT on the desktop.
+          clientGridLayout.children[c].destroy();
+        }
       }
     }
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
@@ -173,8 +176,6 @@ Item {
     //var d; // Desktop
     //var onDesktop = 0;
     //array var alreadyExists = [];
-    console.log('How many are still alive?');
-    console.log(clientGridLayout.children.length);
     clientGridLayout.numberOfChildren = 0;
     for (c = 0; c < workspace.clientList().length; c++) {
       // check if the client is on our desktop.
@@ -199,11 +200,9 @@ Item {
         // What we PROBABLY need is the stacking order.
         // It seems to draw in reverse list order.  So the 'last' item added to the list
         // is the first thing we draw in KWin.
-        // We need to get the stacking order, then sort accordingly.
         if (!alreadyExists) {
           clientGridLayout.numberOfChildren++;
           var clientThumbnail = Qt.createComponent('ClientThumbnail.qml')
-          console.log('CREATING CLIENTS');
           //console.log(Object.getOwnPropertyNames(workspace.clientList()[c]));
           if( clientThumbnail.status == Component.Error )
               console.debug("Error:"+ clientThumbnail.errorString() );
@@ -211,8 +210,6 @@ Item {
           // as we want to dynamically create things.
           // This means destruction and creation when we add new clients.
           // In addition, we only create objects when we need them.
-          console.log("REAL COORDINATES");
-          console.log(workspace.clientList()[c].x, workspace.clientList()[c].y)
           clientThumbnail.createObject(clientGridLayout,
                                       // Custom ID for destruction later.
                                       {id: 'desktopId' + desktop + 'clientId' + c,

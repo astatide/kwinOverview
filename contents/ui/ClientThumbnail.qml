@@ -115,7 +115,7 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "width";
-      from: clientRealWidth;
+      from: clientRealWidth//*(dashboard.screenWidth/currentDesktopGrid.width);
       to: kwinClientThumbnail.width;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -125,7 +125,7 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "height";
-      from: clientRealHeight;
+      from: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.height);
       to: kwinClientThumbnail.height;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -174,7 +174,7 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "height";
-      to: clientRealHeight;
+      to: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.height);
       from: kwinClientThumbnail.height;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -340,8 +340,6 @@ Item {
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
       var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
-      console.log('New Desktop!');
-      console.log(newDesktop);
       if (kwinClientThumbnail.isSmall) {
         growthAnim.running = true;
         kwinClientThumbnail.isSmall = false;
@@ -466,11 +464,8 @@ Item {
     }
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
-      console.log('Yay!');
-      console.log(workspace.currentDesktop);
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
-      console.log(x, y);
       if (y > dash.height) {
         return workspace.currentDesktop;
       }
