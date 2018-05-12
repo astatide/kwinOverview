@@ -447,6 +447,11 @@ import QtGraphicalEffects 1.0
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			mainBackground.state = 'invisible';
+			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
+				//
+				console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));
+				currentDesktopGrid.children[0].children[c].startMoveFromThumbnail();
+			};
 			enableVisibleClients();
 			//endAnim
 		} else if (mainBackground.state == 'invisible') {

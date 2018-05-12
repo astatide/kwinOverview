@@ -160,10 +160,52 @@ Item {
   }
   ParallelAnimation {
     id: moveFromThumbnail
-    NumberAnimation { target: kwinClientThumbnail; property: "height"; to: clientRealHeight; from: originalHeight}
-    NumberAnimation { target: kwinClientThumbnail; property: "width"; to: clientRealWidth; from: originalWidth}
-    //NumberAnimation { target: kwinClientThumbnail; property: "x"; to: clientRealX; from: kwinClientThumbnail.originalX}
-    //NumberAnimation { target: kwinClientThumbnail; property: "y"; to: clientRealY; from: kwinClientThumbnail.originalY}
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "width";
+      to: clientRealWidth;
+      from: kwinClientThumbnail.width;
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "height";
+      to: clientRealHeight;
+      from: kwinClientThumbnail.height;
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "x";
+      to: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
+      from: kwinClientThumbnail.originalX;
+      //to: 0
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "y";
+      //from: clientRealY;
+      // We want what the global coordinates of the client would be mapped to our thumbnail.
+      // But why does this work when we're maximized, and not otherwise?
+      // Our coordinate scales should be the same, so.
+      to: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
+      from: kwinClientThumbnail.originalY;
+      //to: 0
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
   }
   ParallelAnimation {
     id: returnAnim
@@ -374,6 +416,9 @@ Item {
 
   function startMoveToThumbnail() {
     moveToThumbnail.restart();
+  }
+  function startMoveFromThumbnail() {
+    moveFromThumbnail.restart();
   }
 
   function resizeToSmall(){

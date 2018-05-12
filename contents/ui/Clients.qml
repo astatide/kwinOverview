@@ -196,6 +196,10 @@ Item {
           }
         }
         // If it doesn't already exist, create it!
+        // What we PROBABLY need is the stacking order.
+        // It seems to draw in reverse list order.  So the 'last' item added to the list
+        // is the first thing we draw in KWin.
+        // We need to get the stacking order, then sort accordingly.
         if (!alreadyExists) {
           clientGridLayout.numberOfChildren++;
           var clientThumbnail = Qt.createComponent('ClientThumbnail.qml')
