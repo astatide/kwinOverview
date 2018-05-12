@@ -25,8 +25,11 @@ import QtGraphicalEffects 1.0
 			x: 0
 			y: 0
 			color: 'black'
-			width: { activeScreen.width }
-			height: {
+			// Start disabled.  toggleBoth sets this appropriately.
+			height: 0
+			width: 0
+			//width: { activeScreen.width }
+			/*height: {
 				// We have to account for any docks.  Which is a hassle, but eh.
 				var c;
 				var dockHeight = 0;
@@ -36,7 +39,7 @@ import QtGraphicalEffects 1.0
 						dockHeight = dockHeight + workspace.clientList()[c].height;
 					}
 				}
-				return activeScreen.height + dockHeight }
+				return activeScreen.height + dockHeight }*/
 			property int dockHeight: {
 				// We have to account for any docks.  Which is a hassle, but eh.
 				var c;
@@ -116,8 +119,10 @@ import QtGraphicalEffects 1.0
 					NumberAnimation { target: dash; property: "y"; to: 0}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 1; from: dashboard.opacity}
+					//NumberAnimation { target: blurBackground; property: "radius"; to: 32; from: 1}
 					//NumberAnimation { target: mainBackground; property: "opacity"; to: 1; from: mainBackground.opacity}
-					//NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: backgroundDarken.opacity}
+					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: 0}
+					NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 1; from: 0}
 
 					//onRunningChanged: {
 					//	if (initAnim.running) {
@@ -129,6 +134,8 @@ import QtGraphicalEffects 1.0
 				ParallelAnimation {
 					id: endAnim
 					NumberAnimation { target: dash; property: "y"; to: -dash.height}
+					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
+					NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 0; from: dashboard.opacity}
 					//NumberAnimation { target: mainBackground; property: "opacity"; to: 0; from: mainBackground.opacity}
@@ -162,6 +169,23 @@ import QtGraphicalEffects 1.0
 					y: 0
 					//z: 0
 					//z: 100
+					Image {
+						id: firstBackgroundDesktop
+						anchors.fill: dashboard
+						smooth: true
+						//clip: true
+						//visible: true
+						//source: "wallhaven-567367.jpg"
+						//source: "image://wallpaperthumbnail/" + dashboardBackground.background
+						fillMode: Image.PreserveAspectCrop
+						source: dashboardBackground.background
+						height: dashboard.screenHeight
+						width: dashboard.screenWidth
+						opacity: 1
+						// Maybe?
+						asynchronous: true
+						cache: false
+					}
 
 					Image {
 						id: secondBackgroundDesktop
@@ -175,6 +199,7 @@ import QtGraphicalEffects 1.0
 						source: dashboardBackground.background
 						height: dashboard.screenHeight
 						width: dashboard.screenWidth
+						opacity: 0
 						// Maybe?
 						asynchronous: true
 						cache: false
@@ -182,6 +207,7 @@ import QtGraphicalEffects 1.0
 
 					// Doesn't seem to like this.
 					FastBlur {
+						id: blurBackground
 						anchors.fill: secondBackgroundDesktop
 						source: secondBackgroundDesktop
 						radius: 32
@@ -271,6 +297,9 @@ import QtGraphicalEffects 1.0
 											//id: secondBackgroundDesktop
 											anchors.fill: dashboard
 											smooth: true
+											//border { left: 30; top: 30; right: 30; bottom: 30 }
+											//horizontalTileMode: BorderImage.Stretch
+    									//verticalTileMode: BorderImage.Stretch
 											//clip: true
 											//visible: true
 											//source: "wallhaven-567367.jpg"
@@ -347,6 +376,7 @@ import QtGraphicalEffects 1.0
 					//nClients: clients.nClients
 					x: 0
 					y: dash.height + 30
+					scale: 1
 					//y: 0
 					height: dashboard.screenHeight - dash.height - 30
 					//width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
@@ -360,10 +390,11 @@ import QtGraphicalEffects 1.0
 		Component.onCompleted: {
 			console.log("Does this fucking work?");
 			dashboard.visible = true;
-			mainBackground.state = 'invisible';
+			mainBackground.state = 'visible';
 			console.log(clients.nClients);
 			console.log(clients.nDesktops);
 			populateVisibleClients();
+			// disable!
 
 			// Try and register a shortcut, maybe.
 			console.log('registering shortcut')
@@ -379,8 +410,9 @@ import QtGraphicalEffects 1.0
 															}
 				));
 			}
+			toggleBoth();
 			// Register all our clients.
-			var c;
+			//var c;
 			//for (c = 0; c < workspace.clientList().length; c++) {
 			//	workspace.clientList()[c].desktopChanged.connect(checkGridUpdate);
 			//}
@@ -403,12 +435,13 @@ import QtGraphicalEffects 1.0
 	function toggleBoth() {
 		console.log('test-completed');
 		console.log(mainBackground.state);
-		console.log(Object.getOwnPropertyNames(workspace))
+		//console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
 		if (mainBackground.state == 'visible') {
 			//dashboard.visible = false;
-			endAnim.running = true;
+			//ndAnim.running = true;
+			endAnim.restart();
 			// For the moment, just pause.  We'll probably hook it up to a signal?
 			//while (endAnim.busy == true) {};
 			//dashboard.height = 0;
@@ -426,8 +459,18 @@ import QtGraphicalEffects 1.0
 			disableVisibleClients();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
-			initAnim.running = true;
+			initAnim.restart();
 			mainBackground.state = 'visible';
+			currentDesktopGrid.updateGrid();
+			// Start the animation for the main grid.
+			var c;
+			console.log("HOW MANY KIDS!?");
+			console.log(currentDesktopGrid.children[0].children.length);
+			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
+				//
+				console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));
+				currentDesktopGrid.children[0].children[c].startMoveToThumbnail();
+			};
 			//console.log(Object.getOwnPropertyNames(dashboard));
 			//initAnim.running = true;
 			//dashboard.update();

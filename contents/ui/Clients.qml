@@ -21,6 +21,7 @@ Item {
   property bool isMain: false
   x: 0
   y: 0
+  scale: 1
 
   Grid {
     id: clientGridLayout
@@ -28,28 +29,26 @@ Item {
     //x: 0
     //y: 0
     property int numberOfChildren: 0
+    scale: 1
 
     anchors.verticalCenter: parent.verticalCenter
     rows: { return _returnMatrixSize() }
     // No order guaranteed, here.
     columns: { return _returnMatrixSize() }
 
-    //add: Transition {
-      //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
-      //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
-    //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    //}
-    //move: Transition {
-    //  id: test
-      //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
-      //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
-      //NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    //}
-      onRowsChanged: {
-        testRows.start();
-      }
-      NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
-      NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
+    add: Transition {
+      NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    }
+
+    move: Transition {
+        NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    }
+
+    onRowsChanged: {
+      testRows.start();
+    }
+    NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
+    NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
 
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
@@ -157,6 +156,7 @@ Item {
     for (c = 0; c < nClients; c++) {
       // Kill all the children.
       if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
+      //if (clientGridLayout.children[c].currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
         // Destroy anything NOT on the desktop.
         clientGridLayout.children[c].destroy();
       }
@@ -207,6 +207,7 @@ Item {
           // as we want to dynamically create things.
           // This means destruction and creation when we add new clients.
           // In addition, we only create objects when we need them.
+          console.log("REAL COORDINATES");
           console.log(workspace.clientList()[c].x, workspace.clientList()[c].y)
           clientThumbnail.createObject(clientGridLayout,
                                       // Custom ID for destruction later.

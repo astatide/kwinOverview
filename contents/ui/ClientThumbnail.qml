@@ -112,22 +112,51 @@ Item {
   ParallelAnimation {
     id: moveToThumbnail
     NumberAnimation {
-      target: actualThumbnail; property: "x";
-      //from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).x;
-      from: actualThumbnail.mapFromGlobal(clientRealX, clientRealY).x;
-      to: kwinClientThumbnail.originalX;
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "width";
+      from: clientRealWidth;
+      to: kwinClientThumbnail.width;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
-      duration: 1000}
+      //duration: 1000
+    }
     NumberAnimation {
-      target: actualThumbnail; property: "y";
-      //from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).y;
-      //from: clientRealY;
-      from: actualThumbnail.mapFromGlobal(clientRealX, clientRealY).y;
-      to: kwinClientThumbnail.originalY;
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "height";
+      from: clientRealHeight;
+      to: kwinClientThumbnail.height;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
-      duration: 1000}
+      //duration: 1000
+    }
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "x";
+      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
+      to: kwinClientThumbnail.originalX;
+      //to: 0
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
+    NumberAnimation {
+      //target: kwinClientThumbnail;
+      target: actualThumbnail;
+      property: "y";
+      //from: clientRealY;
+      // We want what the global coordinates of the client would be mapped to our thumbnail.
+      // But why does this work when we're maximized, and not otherwise?
+      // Our coordinate scales should be the same, so.
+      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
+      to: kwinClientThumbnail.originalY;
+      //to: 0
+      easing.amplitude: 2;
+      easing.type: Easing.InOutQuad;
+      //duration: 1000
+    }
   }
   ParallelAnimation {
     id: moveFromThumbnail
@@ -318,7 +347,7 @@ Item {
     // WHY DOES THIS FIX IT?
     //shrinkToNothing.running = false;
     //growFromNothing.running = false;
-    moveToThumbnail.running = true;
+    moveToThumbnail.running = false;
     moveFromThumbnail.running = false;
     growthAnim.running = false;
     shrinkAnim.running = false;
@@ -339,21 +368,26 @@ Item {
     //  parent.parent.updateGrid();
     //  parent.updateGrid();
     });
+    //resizeToLarge();
+    //resizeToSmall();
+  }
 
-    //workspace.clientList()[model.index].desktopChanged.connect(function() {
-      // If one of our things changes, just manually trigger a grid update.
-      // For now, anyway.
-    //  parent.updateGrid();
-    //});
-    //mainBackground.stateChanged.connect(runAnimations);
-    //workspace.currentDesktopChanged.connect(updateGrid);
-    //workspace.currentDesktopChanged.connect(updateGrid);
-    //workspace.numberDesktopsChanged
-    //workspace.clientAdded.connect(updateGrid);
-    //workspace.clientRemoved.connect(updateGrid);
-    //console.log('What are our coordinates?');
-    //console.log(kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY));
-    //console.log(kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y));
+  function startMoveToThumbnail() {
+    moveToThumbnail.restart();
+  }
+
+  function resizeToSmall(){
+    kwinClientThumbnail.width = kwinClientThumbnail.originalWidth;
+    kwinClientThumbnail.height = kwinClientThumbnail.originalHeight;
+    kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+    kwinClientThumbnail.y = kwinClientThumbnail.originalY;
+  }
+
+  function resizeToLarge(){
+    kwinClientThumbnail.width = clientRealWidth;
+    kwinClientThumbnail.height = clientRealHeight;
+    kwinClientThumbnail.x = actualThumbnail.mapFromGlobal(clientRealX, clientRealY).x;
+    kwinClientThumbnail.y = actualThumbnail.mapFromGlobal(clientRealX, clientRealY).y;
   }
 
     function callUpdateGrid() {
