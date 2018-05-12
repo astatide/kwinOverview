@@ -34,11 +34,11 @@ Item {
     // No order guaranteed, here.
     columns: { return _returnMatrixSize() }
 
-    add: Transition {
+    //add: Transition {
       //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
       //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
-      NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    }
+    //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    //}
     //remove: Transition {
       //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
       //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
@@ -109,21 +109,41 @@ Item {
       // We do want to change when a client changes desktops, but.
       //workspace.clientList()[clientId].desktopChanged.connect(updateGrid);
       //mainBackground.stateChanged.connect(runAnimations);
-      //if (kwinDesktopThumbnailContainer.isMain) {
-      workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
-      //}
+      if (!kwinDesktopThumbnailContainer.isMain) {
+        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      } else {
+        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
+      }
       //workspace.currentDesktopChanged.connect(updateGrid);
       //workspace.numberDesktopsChanged
       workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
       workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
+
+  function updateGridOnDesktopChange(i, client) {
+    // Probably won't work.
+    console.log('UPDATING GRID');
+    var c; // client
+    var nClients = clientGridLayout.children.length;
+    kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    for (c = 0; c < nClients; c++) {
+      // Kill all the children.
+        clientGridLayout.children[c].destroy();
+      }
+    clientGridLayout.numberOfChildren = 0;
+    // But we actually need to rebuild the whole grid.  Huh!
+    clientGridLayout.rows = clientGridLayout._returnMatrixSize();
+    clientGridLayout.columns = clientGridLayout._returnMatrixSize();
+    updateClients();
+}
+
   function updateGrid(i, client) {
     // Probably won't work.
     console.log('UPDATING GRID');
-    if (kwinDesktopThumbnailContainer.isMain) {
-      kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
-    }
+    //if (kwinDesktopThumbnailContainer.isMain) {
+    //  kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
+    //}
     // But we actually need to rebuild the whole grid.  Huh!
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
@@ -131,49 +151,78 @@ Item {
 }
     // Now, we build up our windows.
     //model: workspace.clientList().length
+
   function updateClients() {
     var c; // client
     //var d; // Desktop
-    for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
-      // Kill all the children.
-      clientGridLayout.children[c].destroy();
-      // ... is the idea, anyway.  Why doesn't it...?
-    }
+    //var onDesktop = 0;
+    //array var alreadyExists = [];
+      var nClients = clientGridLayout.children.length;
+      //for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
+      for (c = 0; c < nClients; c++) {
+        // Kill all the children.
+        //if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
+          // Destroy anything NOT on the desktop.
+          clientGridLayout.children[c].destroy();
+        //}
+      }
+    console.log('How many are still alive?');
+    console.log(clientGridLayout.children.length);
     clientGridLayout.numberOfChildren = 0;
     for (c = 0; c < workspace.clientList().length; c++) {
       // check if the client is on our desktop.
       if (workspace.clientList()[c].desktop-1 == desktop) {
-        clientGridLayout.numberOfChildren++;
-        var clientThumbnail = Qt.createComponent('ClientThumbnail.qml')
-        console.log('CREATING CLIENTS');
-        if( clientThumbnail.status == Component.Error )
-            console.debug("Error:"+ clientThumbnail.errorString() );
-        // Why are we doing this here?  We're ditching the repeater,
-        // as we want to dynamically create things.
-        // This means destruction and creation when we add new clients.
-        // In addition, we only create objects when we need them.
-        console.log(workspace.clientList()[c].x, workspace.clientList()[c].y)
-        clientThumbnail.createObject(clientGridLayout,
-                                    // Custom ID for destruction later.
-                                    {id: 'desktopId' + desktop + 'clientId' + c,
-                                    //'background': model.get(0).background,
-                                    'clientObject': workspace.clientList()[c],
-                                    'originalWidth': kwinDesktopThumbnailContainer.width / clientGridLayout.columns,
-                                    'originalHeight': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
-                                    'scale': (kwinDesktopThumbnailContainer.height / kwinDesktopThumbnailContainer.width) / (dashboard.screenHeight/dashboard.screenWidth),
-                                    'clientId': c,
-                                    //'desktop': d+1,
-                                    'visible': true,
-                                    'x': 0, 'y': 0,
-                                    //'x': clientGridLayout.mapFromGlobal(workspace.clientList()[c].x).x,
-                                    //'y': clientGridLayout.mapFromGlobal(workspace.clientList()[c].y).y,
-                                    'clientRealX': workspace.clientList()[c].x,
-                                    // Account for the fucking dock, if any.
-                                    'clientRealY': workspace.clientList()[c].y,
-                                    'clientRealWidth': workspace.clientList()[c].width,
-                                    'clientRealHeight': workspace.clientList()[c].height,
-                                    'height': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
-                                    'width': kwinDesktopThumbnailContainer.width / clientGridLayout.columns});
+        // Do we already exist?
+        var e;
+        var alreadyExists = false;
+        for (e = 0; e < clientGridLayout.children.length; e++) {
+          //console.log(clientGridLayout.children[e].clientObject == workspace.clientList()[c]);
+          //if (clientGridLayout.children[e].clientObject.windowId == workspace.clientList()[c].windowId) {
+          if (clientGridLayout.children[e].clientObject == workspace.clientList()[c]) {
+            // Basically, did we destroy it from this list?
+            //alreadyExists = true;
+            //break;
+            //alreadyExists = false;
+            // So scale it!
+            clientGridLayout.children[e].width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
+            clientGridLayout.children[e].height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
+          }
+        }
+        // If it doesn't already exist, create it!
+        if (!alreadyExists) {
+          clientGridLayout.numberOfChildren++;
+          var clientThumbnail = Qt.createComponent('ClientThumbnail.qml')
+          console.log('CREATING CLIENTS');
+          //console.log(Object.getOwnPropertyNames(workspace.clientList()[c]));
+          if( clientThumbnail.status == Component.Error )
+              console.debug("Error:"+ clientThumbnail.errorString() );
+          // Why are we doing this here?  We're ditching the repeater,
+          // as we want to dynamically create things.
+          // This means destruction and creation when we add new clients.
+          // In addition, we only create objects when we need them.
+          console.log(workspace.clientList()[c].x, workspace.clientList()[c].y)
+          clientThumbnail.createObject(clientGridLayout,
+                                      // Custom ID for destruction later.
+                                      {id: 'desktopId' + desktop + 'clientId' + c,
+                                      //'background': model.get(0).background,
+                                      'clientObject': workspace.clientList()[c],
+                                      'originalWidth': kwinDesktopThumbnailContainer.width / clientGridLayout.columns,
+                                      'originalHeight': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
+                                      'scale': (kwinDesktopThumbnailContainer.height / kwinDesktopThumbnailContainer.width) / (dashboard.screenHeight/dashboard.screenWidth),
+                                      'clientId': c,
+                                      //'desktop': d+1,
+                                      'visible': true,
+                                      'x': 0, 'y': 0,
+                                      //'x': clientGridLayout.mapFromGlobal(workspace.clientList()[c].x).x,
+                                      //'y': clientGridLayout.mapFromGlobal(workspace.clientList()[c].y).y,
+                                      'clientRealX': workspace.clientList()[c].x,
+                                      // Account for the fucking dock, if any.
+                                      'clientRealY': workspace.clientList()[c].y,
+                                      'clientRealWidth': workspace.clientList()[c].width,
+                                      'clientRealHeight': workspace.clientList()[c].height,
+                                      'height': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
+                                      'width': kwinDesktopThumbnailContainer.width / clientGridLayout.columns});
+        }
       }
     }
   }
