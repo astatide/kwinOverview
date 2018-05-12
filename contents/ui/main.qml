@@ -409,6 +409,19 @@ import QtGraphicalEffects 1.0
 		//console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
+		console.log('TESTING!');
+		/*console.log(Object.getOwnPropertyNames(workspace));
+		console.log(Object.getOwnPropertyNames(workspace.activities));
+		console.log(Object.getOwnPropertyNames(workspace.activities[0]));
+		console.log(JSON.stringify(workspace.activities[0]));
+		console.log(workspace.activities[0]);
+		console.log(JSON.stringify(workspace.clientList()[0]));
+		console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
+		console.log(Object.getOwnPropertyNames(workspace.clientList()[0].desktop));
+		console.log(workspace.clientList()[0].desktop);*/
+		//console.log(allActivities);
+		//console.log(workspace.clientList()[0].isOnCurrentActivity);
+		console.log(JSON.stringify(workspace.clientList()[1]));
 		if (mainBackground.state == 'visible') {
 			//dashboard.visible = false;
 			//ndAnim.running = true;

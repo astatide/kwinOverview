@@ -26,12 +26,14 @@ Repeater {
 	// Useful for drawing various things.
 	function getCurrentBackground() {
 		var i;
-		for (i = 0; i < allActivities.count; i++) {
+		for (i = 0; i < activityRepeater.count; i++) {
 			console.log('Testing activity model');
 			//console.log(model[i].id);
-			if (allActivities.itemAt(i).isCurrent == true)
-			console.log(allActivities.itemAt(i).background);
-				return allActivities.itemAt(i).background;
+			console.log(Object.getOwnPropertyNames(activityRepeater.itemAt(i)));
+			if (activityRepeater.itemAt(i).isCurrent == true) {
+				console.log(activityRepeater.itemAt(i).background);
+				return activityRepeater.itemAt(i).background;
+			}
 		}
 		return '';
 	}

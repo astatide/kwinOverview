@@ -123,6 +123,8 @@ Item {
       //workspace.numberDesktopsChanged
       workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
       workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
+      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
+      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
     }
   }
 
@@ -179,7 +181,10 @@ Item {
     clientGridLayout.numberOfChildren = 0;
     for (c = 0; c < workspace.clientList().length; c++) {
       // check if the client is on our desktop.
-      if (workspace.clientList()[c].desktop-1 == desktop) {
+      console.log('TESTING ACTIVITIES');
+      console.log(workspace.clientList()[c].activities);
+      console.log(allActivities.id);
+      if (workspace.clientList()[c].desktop-1 == desktop && (workspace.clientList()[c].activities == '' || workspace.clientList()[c].activities == workspace.currentActivity )) {
         // Do we already exist?
         var e;
         var alreadyExists = false;
