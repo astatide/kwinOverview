@@ -233,12 +233,17 @@ import QtGraphicalEffects 1.0
 					//  This is where we'll build up the grid.  I like to think, anyway.
 
 
-					Item {
+					// This seems pretty nice, honestly.
+					Flickable {
 						id: desktopThumbnailGrid
 						anchors.fill: parent
 
 						property int spacing: 10
 						height: dash.height
+						contentHeight: desktopThumbnailGridBackgrounds.height
+						contentWidth: desktopThumbnailGridBackgrounds.width
+						//boundsMovement: Flickable.StopAtBounds
+						//boundsBehavior: Flickable.DragAndOvershootBounds
 
 						//visible: true
 						y: 0
@@ -274,7 +279,7 @@ import QtGraphicalEffects 1.0
 										Image {
 											//id: secondBackgroundDesktop
 											//anchors.fill: dashboard
-											anchors.fill: parent
+											//anchors.fill: parent
 											smooth: true
 											//border { left: 30; top: 30; right: 30; bottom: 30 }
 											//horizontalTileMode: BorderImage.Stretch
@@ -295,6 +300,21 @@ import QtGraphicalEffects 1.0
 											//asynchronous: true
 											//cache: false
 										}
+
+										  MouseArea {
+										    id: littleDesktopGridMouseArea
+										    anchors.fill: parent
+										    //drag.axis: 'XAndYAxis'
+										    //drag.target: kwinClientThumbnail
+										    //hoverEnabled: true
+										    onClicked: {
+										      // We only want to disable the dashboard when we double click on the item
+										      // or when we're currently on said desktop and are 'sure'.
+										      if (littleDesktopContainer.desktop != workspace.currentDesktop-1) {
+														workspace.currentDesktop = littleDesktopContainer.desktop+1;
+										      }
+										    }
+										  }
 										Clients {
 											//anchors.fill: parent
 											id: littleDesktopGrid
