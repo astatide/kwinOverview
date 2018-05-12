@@ -381,9 +381,9 @@ import QtGraphicalEffects 1.0
 			}
 			// Register all our clients.
 			var c;
-			for (c = 0; c < workspace.clientList().length; c++) {
-				workspace.clientList()[c].desktopChanged.connect(checkGridUpdate);
-			}
+			//for (c = 0; c < workspace.clientList().length; c++) {
+			//	workspace.clientList()[c].desktopChanged.connect(checkGridUpdate);
+			//}
 		}
 
 		function checkGridUpdate() {

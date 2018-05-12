@@ -39,11 +39,17 @@ Item {
       //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
     //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
     //}
-    //remove: Transition {
+    //move: Transition {
+    //  id: test
       //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
       //NumberAnimation { property: "scale"; from: 2; to: 1; duration: 400 }
-    //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+      //NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
     //}
+      onRowsChanged: {
+        testRows.start();
+      }
+      NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
+      NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
 
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
@@ -121,7 +127,7 @@ Item {
     }
   }
 
-  function updateGridOnDesktopChange(i, client) {
+  function updateGridOnDesktopChange() {
     // Probably won't work.
     console.log('UPDATING GRID');
     var c; // client
@@ -138,13 +144,23 @@ Item {
     updateClients();
 }
 
-  function updateGrid(i, client) {
+  function updateGrid() {
     // Probably won't work.
     console.log('UPDATING GRID');
     //if (kwinDesktopThumbnailContainer.isMain) {
     //  kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
     //}
     // But we actually need to rebuild the whole grid.  Huh!
+    var c; // client
+    var nClients = clientGridLayout.children.length;
+    //for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
+    for (c = 0; c < nClients; c++) {
+      // Kill all the children.
+      if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
+        // Destroy anything NOT on the desktop.
+        clientGridLayout.children[c].destroy();
+      }
+    }
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
     updateClients();
@@ -157,15 +173,6 @@ Item {
     //var d; // Desktop
     //var onDesktop = 0;
     //array var alreadyExists = [];
-      var nClients = clientGridLayout.children.length;
-      //for (c = 0; c < clientGridLayout.numberOfChildren; c++) {
-      for (c = 0; c < nClients; c++) {
-        // Kill all the children.
-        //if (clientGridLayout.children[c].clientObject.desktop-1 != kwinDesktopThumbnailContainer.desktop) {
-          // Destroy anything NOT on the desktop.
-          clientGridLayout.children[c].destroy();
-        //}
-      }
     console.log('How many are still alive?');
     console.log(clientGridLayout.children.length);
     clientGridLayout.numberOfChildren = 0;
@@ -180,7 +187,7 @@ Item {
           //if (clientGridLayout.children[e].clientObject.windowId == workspace.clientList()[c].windowId) {
           if (clientGridLayout.children[e].clientObject == workspace.clientList()[c]) {
             // Basically, did we destroy it from this list?
-            //alreadyExists = true;
+            alreadyExists = true;
             //break;
             //alreadyExists = false;
             // So scale it!
@@ -210,7 +217,7 @@ Item {
                                       'originalHeight': kwinDesktopThumbnailContainer.height / clientGridLayout.columns,
                                       'scale': (kwinDesktopThumbnailContainer.height / kwinDesktopThumbnailContainer.width) / (dashboard.screenHeight/dashboard.screenWidth),
                                       'clientId': c,
-                                      //'desktop': d+1,
+                                      'currentDesktop': workspace.clientList()[c].desktop,
                                       'visible': true,
                                       'x': 0, 'y': 0,
                                       //'x': clientGridLayout.mapFromGlobal(workspace.clientList()[c].x).x,

@@ -30,6 +30,7 @@ Item {
   // Get our actual client information.  This way, we can move through desktops/activities.
   property var clientObject: ''
   property int clientId: 0
+  property var currentDesktop: 0
 
   opacity: 0
 
@@ -110,14 +111,19 @@ Item {
   // These don't really work yet, but hey.
   ParallelAnimation {
     id: moveToThumbnail
-    NumberAnimation { target: kwinClientThumbnail; property: "x";
-      from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).x;
+    NumberAnimation {
+      target: actualThumbnail; property: "x";
+      //from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).x;
+      from: actualThumbnail.mapFromGlobal(clientRealX, clientRealY).x;
       to: kwinClientThumbnail.originalX;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
       duration: 1000}
-    NumberAnimation { target: kwinClientThumbnail; property: "y";
-      from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).y;
+    NumberAnimation {
+      target: actualThumbnail; property: "y";
+      //from: kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y).y;
+      //from: clientRealY;
+      from: actualThumbnail.mapFromGlobal(clientRealX, clientRealY).y;
       to: kwinClientThumbnail.originalY;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -216,8 +222,12 @@ Item {
     drag.target: kwinClientThumbnail
     hoverEnabled: true
     onClicked: {
+      // We only want to disable the dashboard when we double click on the item
+      // or when we're currently on said desktop and are 'sure'.
+      if (currentDesktop == workspace.currentDesktop) {
+        dashboard.toggleBoth();
+      }
       workspace.activeClient = clientObject;
-      dashboard.toggleBoth();
     }
 
     onPositionChanged: {
@@ -308,10 +318,11 @@ Item {
     // WHY DOES THIS FIX IT?
     //shrinkToNothing.running = false;
     //growFromNothing.running = false;
-    moveToThumbnail.running = false;
+    moveToThumbnail.running = true;
     moveFromThumbnail.running = false;
     growthAnim.running = false;
     shrinkAnim.running = false;
+    //initAnim.running;
     // We really should be where our parents tell us to be
     //console.log('What is our grid position?');
     //console.log(kwinClientThumbnail.x, kwinClientThumbnail.y);
@@ -321,12 +332,13 @@ Item {
     //x = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x
     //y = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y
     // Tell our managing function to send out a more global signal.
-    //workspace.clientList()[clientId].desktopChanged.connect(function() {
+    clientObject.desktopChanged.connect(function() {
       // Update our main grid.  Bit of a hack for now.
       // (this shouldn't really call our main stuff.)
+      callUpdateGrid();
     //  parent.parent.updateGrid();
     //  parent.updateGrid();
-    //});
+    });
 
     //workspace.clientList()[model.index].desktopChanged.connect(function() {
       // If one of our things changes, just manually trigger a grid update.
@@ -343,6 +355,18 @@ Item {
     //console.log(kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY));
     //console.log(kwinClientThumbnail.mapFromItem(parent, parent.mapFromGlobal(clientRealX, clientRealY).x, parent.mapFromGlobal(clientRealX, clientRealY).y));
   }
+
+    function callUpdateGrid() {
+      //parent.updateGrid();
+      //console.log('TESTG!!!');
+      // We ONLY update what needs to be updated by attaching the signal here.
+      if (clientObject.desktop == workspace.currentDesktop | currentDesktop == workspace.currentDesktop ) {
+        currentDesktopGrid.updateGrid();
+      }
+      // Update our grid.
+      parent.parent.updateGrid()
+      littleDesktopRepeater.itemAt(clientObject.desktop-1).children[1].updateGrid();
+    }
 
     function updateGrid(i, client) {
       // Probably won't work.
