@@ -14,6 +14,8 @@ import org.kde.activities 0.1 as Activities
 // Let's use some blur!
 import QtGraphicalEffects 1.0
 
+import "../code/createClients.js" as CreateClients
+
 //BLAH
 
 	// dashboard background.  Holds window thumbnails.  I hope.
@@ -343,37 +345,41 @@ import QtGraphicalEffects 1.0
 
 				// For the current desktop, build a grid.
 				// Easy, but really quite slow.
-				Repeater {
-					// Now, we build up our desktops.
-					model: workspace.desktops
-					id: currentDesktopGrid
-					Item {
-						id: bigDesktopRepeater
-						//id: bigDesktopContainer
-						visible: true
-						property int desktop: model.index
-						height: dashboard.screenHeight - dash.height - 30
-						width: dashboard.screenWidth
-						Clients {
-							//id: currentDesktopGrid
-							desktop: bigDesktopRepeater.desktop
-							visible: false
-							x: 0
-							y: dash.height + 30
-							scale: 1
+				Item {
+					id: currentDesktopGridThumbnailContainer
+					Repeater {
+						// Now, we build up our desktops.
+						model: workspace.desktops
+						id: currentDesktopGrid
+						Item {
+							id: bigDesktopRepeater
+							//id: bigDesktopContainer
+							visible: true
+							property int desktop: model.index
 							height: dashboard.screenHeight - dash.height - 30
 							width: dashboard.screenWidth
-							//isMain: true
-							isLarge: true
+							Clients {
+								//id: currentDesktopGrid
+								desktop: bigDesktopRepeater.desktop
+								visible: false
+								x: 0
+								y: dash.height + 30
+								scale: 1
+								height: dashboard.screenHeight - dash.height - 30
+								width: dashboard.screenWidth
+								//isMain: true
+								isLarge: true
+							}
 						}
 					}
-				}
+			}
 		}
 	}
 		Component.onCompleted: {
 			dashboard.visible = true;
 			mainBackground.state = 'visible';
 			populateVisibleClients();
+
 			// disable!
 
 			// Try and register a shortcut, maybe.
@@ -387,27 +393,33 @@ import QtGraphicalEffects 1.0
 															}
 				);
 			}
+			// Make the big ones.
+			height: dashboard.screenHeight - dash.height - 30
+			width: dashboard.screenWidth
+			CreateClients.createAllClientThumbnails(
+				currentDesktopGridThumbnailContainer,
+				dashboard,
+				6,
+				dashboard.screenHeight - dash.height - 30,
+				dashboard.screenWidth,
+				true
+			)
+			CreateClients.createAllClientThumbnails(
+				desktopThumbnailGrid,
+				dashboard,
+				6,
+				dash.height*.95,
+				dash.height*dashboard.screenRatio*.95,
+				true
+			)
+			//workspace.clientAdded.connect(updateGrid);
+			//workspace.clientRemoved.connect(updateGrid);
 			toggleBoth();
 			// Register all our clients.
 			//var c;
 			//for (c = 0; c < workspace.clientList().length; c++) {
 			//	workspace.clientList()[c].desktopChanged.connect(checkGridUpdate);
 			//}
-		}
-
-		function checkGridUpdate() {
-			// Not sure we can determine who sent the signal, actually,
-			// so just update whenever a desktop change happens.
-			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
-			// Let's update all the child grids, as well.
-			//littleDesktopGrid.updateGrid();
-			var d;
-			for (d = 0; d < workspace.desktops; d++) {
-				//console.log(Object.getOwnPropertyNames(littleDesktopRepeater.itemAt(d).children));
-				// child 1 is the grid.
-				currentDesktopGrid.itemAt(d).children[0].updateGrid();
-				littleDesktopRepeater.itemAt(d).children[2].updateGrid();
-			}
 		}
 
 	function toggleBoth() {
@@ -436,11 +448,11 @@ import QtGraphicalEffects 1.0
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			mainBackground.state = 'invisible';
-			for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
+			/*for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
 				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
-				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[c].startMoveFromThumbnail();
-			};
+				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[0].children[c].startMoveFromThumbnail();
+			}*/
 			//enableVisibleClients();
 			//endAnim
 		} else if (mainBackground.state == 'invisible') {
@@ -454,13 +466,13 @@ import QtGraphicalEffects 1.0
 			dashboard.width = dashboard.screenWidth;
 			initAnim.restart();
 			mainBackground.state = 'visible';
-			currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
+			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
 			// Start the animation for the main grid.
-			var c;
+			/*var c;
 			for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
 				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[c].startMoveToThumbnail();
-			};
+			};*/
 			//console.log(Object.getOwnPropertyNames(dashboard));
 			//initAnim.running = true;
 			//dashboard.update();

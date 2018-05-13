@@ -383,30 +383,16 @@ Item {
   Component.onCompleted: {
     // We just check to see whether we're on the current desktop.
     // If not, don't show it.
-    //setVisible();
-    // WHY DOES THIS FIX IT?
-    //shrinkToNothing.running = false;
-    //growFromNothing.running = false;
     moveToThumbnail.running = false;
     moveFromThumbnail.running = false;
     growthAnim.running = false;
     shrinkAnim.running = false;
-    //initAnim.running;
-    // We really should be where our parents tell us to be
-    //console.log('What is our grid position?');
-    //console.log(kwinClientThumbnail.x, kwinClientThumbnail.y);
-    //kwinClientThumbnail.originalX = kwinClientThumbnail.x;
-    //kwinClientThumbnail.originalY = kwinClientThumbnail.y;
-    //returnAnim.running = true;
-    //x = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x
-    //y = kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y
-    // Tell our managing function to send out a more global signal.
+    callUpdateGrid();
     clientObject.desktopChanged.connect(function() {
       // Update our main grid.  Bit of a hack for now.
       // (this shouldn't really call our main stuff.)
+      // We just want to reparent ourselves.
       callUpdateGrid();
-    //  parent.parent.updateGrid();
-    //  parent.updateGrid();
     });
     //resizeToLarge();
     //resizeToSmall();
@@ -435,34 +421,18 @@ Item {
 
     function callUpdateGrid() {
       //parent.updateGrid();
-      //console.log('TESTG!!!');
-      // We ONLY update what needs to be updated by attaching the signal here.
-      if (clientObject.desktop == workspace.currentDesktop | currentDesktop == workspace.currentDesktop ) {
-        currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].updateGrid();
-        currentDesktopGrid.itemAt(clientObject.desktop-1).children[0].updateGrid();
+      console.log('TESTG!!!');
+      if (kwinClientThumbnail.isLarge) {
+        //reparent ourselves to the new desktop item
+        // it's always going to be the desktop.
+        kwinClientThumbnail.parent = currentDesktopGridThumbnailContainer.children[kwinClientThumbnail.clientObject.desktop];
+      } else {
+        // Command is broken.  Oh well.
+        kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop).children[2];
       }
-      // Update our grid.
-      parent.parent.updateGrid()
-      littleDesktopRepeater.itemAt(clientObject.desktop-1).children[2].updateGrid();
+      kwinClientThumbnail.visible = true;
     }
 
-    function updateGrid(i, client) {
-      // Probably won't work.
-      kwinDesktopThumbnailContainer.desktop = workspace.currentDesktop-1;
-      // But we actually need to rebuild the whole grid.  Huh!
-      clientGridLayout.rows = clientGridLayout._returnMatrixSize();
-      clientGridLayout.columns = clientGridLayout._returnMatrixSize();
-      //width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
-      //height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
-      //originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
-      //originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
-      width = parent.width / clientGridLayout.columns;
-      height = parent.height / clientGridLayout.columns;
-      //clientGridLayout.height = dashboard.screenHeight - dash.height - 30
-      //width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
-      //clientGridLayout.width = dashboard.screenWidth
-      //setVisible();
-    }
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
       //console.log(x, y);
