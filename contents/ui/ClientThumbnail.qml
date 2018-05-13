@@ -425,10 +425,20 @@ Item {
       if (kwinClientThumbnail.isLarge) {
         //reparent ourselves to the new desktop item
         // it's always going to be the desktop.
-        kwinClientThumbnail.parent = currentDesktopGridThumbnailContainer.children[kwinClientThumbnail.clientObject.desktop];
+        kwinClientThumbnail.parent = bigDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop);
       } else {
         // Command is broken.  Oh well.
-        kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop).children[2];
+        //console.log(Object.getOwnPropertyNames(desktopThumbnailGrid));
+        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0];
+        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1];
+        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1]));
+        //console.log(kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1]);
+        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[0].children[1].children[2].itemAt(kwinClientThumbnail.clientObject.desktop-1);
+        //kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop).children[0].children[2];
+        kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop+1).children[2];
+        console.log(kwinClientThumbnail.parent)
+        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop-1);
+        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2];
       }
       kwinClientThumbnail.visible = true;
     }
