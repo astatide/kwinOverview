@@ -80,7 +80,7 @@ Item {
       var c;
       var oD = 0;
       for (c = 0; c < workspace.clientList().length; c++) {
-        if (workspace.clientList()[c].desktop-1 == desktop) {
+        if (workspace.clientList()[c].desktop-1 == desktop && !workspace.clientList()[c].dock) {
           oD++;
         }
       }
@@ -113,21 +113,14 @@ Item {
       //updateClients();
       kwinDesktopThumbnailContainer.updateGrid();
       // We do want to change when a client changes desktops, but.
-      //workspace.clientList()[clientId].desktopChanged.connect(updateGrid);
-      //mainBackground.stateChanged.connect(runAnimations);
       if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
         kwinDesktopThumbnailContainer.isMain = true;
         kwinDesktopThumbnailContainer.visible = true;
       }
-      //if (!kwinDesktopThumbnailContainer.isLarge) {
-      //  workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
-      //} else {
       if (kwinDesktopThumbnailContainer.isLarge) {
         // If we're the main one, we actually just want to go invisible and let the other one in.
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       }
-      //workspace.currentDesktopChanged.connect(updateGrid);
-      //workspace.numberDesktopsChanged
       workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
       workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
       workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
@@ -221,5 +214,20 @@ Item {
     // Check how large our grid needs to be, then reparent on to our current grid.
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
+    console.log('BEGIN: YOU SHOULD SEE THIS');
+    var c;
+    for (c = 0; c < clientGridLayout.children.length; c++) {
+      //var client = clientGridLayout.children[c];
+      //console.log('How many children do we have?');
+      //console.log(clientGridLayout.children.length);
+      //console.log('How big are we?');
+      //console.log(clientGridLayout._returnMatrixSize());
+      //console.log(kwinDesktopThumbnailContainer.width, kwinDesktopThumbnailContainer.height);
+      clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
+      clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
+      clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
+      clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
+    }
+    console.log('END: YOU SHOULD SEE THIS');
   }
 }

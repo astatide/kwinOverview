@@ -19,8 +19,10 @@ Item {
   id: kwinClientThumbnail
   visible: true
   // We need to dynamically set these.
-  property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
-  property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
+  //property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
+  //property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
+  property int originalWidth: 0
+  property int originalHeight: 0
   // This seems to be necessary to set everything appropriately.  Not 100% sure why.
   property int scale: 1
   property var originalParent: parent
@@ -29,7 +31,7 @@ Item {
   //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
   // Get our actual client information.  This way, we can move through desktops/activities.
   property var clientObject: ''
-  property int clientId: 0
+  property var clientId: 0
   property var currentDesktop: 0
 
   opacity: 0
@@ -49,6 +51,7 @@ Item {
 
   //property bool isHeld: false
   property bool isSmall: false
+  property bool isLarge: false
 
   // For the mouse.
   property QtObject container
@@ -98,7 +101,8 @@ Item {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
       anchors.fill: actualThumbnail
-      wId: workspace.clientList()[clientId].windowId
+      //wId: workspace.clientList()[clientId].windowId
+      wId: kwinClientThumbnail.clientId
       //height: kwinClientThumbnail.height
       //width: kwinClientThumbnail.width
       x: 0
@@ -111,6 +115,7 @@ Item {
   // These don't really work yet, but hey.
   ParallelAnimation {
     id: moveToThumbnail
+    running: false
     NumberAnimation {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
@@ -160,6 +165,7 @@ Item {
   }
   ParallelAnimation {
     id: moveFromThumbnail
+    running: false
     NumberAnimation {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
@@ -344,7 +350,7 @@ Item {
         growthAnim.running = true;
         kwinClientThumbnail.isSmall = false;
       }
-      if (clientObject.desktop == newDesktop ) {
+      if (kwinClientThumbnail.clientObject.desktop == newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
         //growthAnim.running = true;
@@ -352,7 +358,7 @@ Item {
         returnAnim.running = true;
         //growthAnim.running = true;
       } else {
-        clientObject.desktop = newDesktop;
+        kwinClientThumbnail.clientObject.desktop = newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
         returnAnim.running = true;
@@ -392,24 +398,19 @@ Item {
       // Update our main grid.  Bit of a hack for now.
       // (this shouldn't really call our main stuff.)
       // We just want to reparent ourselves.
+      // This SHOULD call it for both the large and the small.  Why is it not doing that?
       callUpdateGrid();
+    });
+    // Destroy yourself if you're removed.
+    // Yay!  It works!
+    workspace.clientRemoved.connect(function (c) {
+      if (c.windowId == kwinClientThumbnail.clientId) {
+        console.log('KILLING MYSELF');
+        kwinClientThumbnail.destroy();
+      }
     });
     //resizeToLarge();
     //resizeToSmall();
-  }
-
-  function startMoveToThumbnail() {
-    moveToThumbnail.restart();
-  }
-  function startMoveFromThumbnail() {
-    moveFromThumbnail.restart();
-  }
-
-  function resizeToSmall(){
-    kwinClientThumbnail.width = kwinClientThumbnail.originalWidth;
-    kwinClientThumbnail.height = kwinClientThumbnail.originalHeight;
-    kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-    kwinClientThumbnail.y = kwinClientThumbnail.originalY;
   }
 
   function resizeToLarge(){
@@ -420,25 +421,38 @@ Item {
   }
 
     function callUpdateGrid() {
-      //parent.updateGrid();
       console.log('TESTG!!!');
+      // It seems that when we move a large to a small and vice versa, we don't
+      // always properly trigger updates.
+      // Actually, it seems we don't update our new parent properly.  WHAT.
       if (kwinClientThumbnail.isLarge) {
         //reparent ourselves to the new desktop item
         // it's always going to be the desktop.
-        kwinClientThumbnail.parent = bigDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop);
+        console.log('LARGE DESKTOP!');
+        console.log(kwinClientThumbnail.clientObject.desktop);
+        if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
+          // Reparent, then resize all the appropriate grids.
+          kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
+          // Update our old grid.
+          currentDesktopGrid.itemAt(kwinClientThumbnail.currentDesktop-1).children[0].updateGrid();
+          // Update our NEW desktop.
+          currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].updateGrid();
+
+          kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
+
+        }
       } else {
-        // Command is broken.  Oh well.
-        //console.log(Object.getOwnPropertyNames(desktopThumbnailGrid));
-        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0];
-        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1];
-        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1]));
-        //console.log(kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1]);
-        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[0].children[1].children[2].itemAt(kwinClientThumbnail.clientObject.desktop-1);
-        //kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop).children[0].children[2];
-        kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop+1).children[2];
-        console.log(kwinClientThumbnail.parent)
-        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop-1);
-        //kwinClientThumbnail.parent = desktopThumbnailGrid.children[0].children[1].itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2];
+        console.log('SMALL DESKTOP!');
+        if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
+          // Reparent, then resize all the appropriate grids.
+          kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+          // Update our old grid.
+          littleDesktopRepeater.itemAt(kwinClientThumbnail.currentDesktop-1).children[2].updateGrid();
+          // Update our NEW desktop.
+          littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
+
+          kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
+        }
       }
       kwinClientThumbnail.visible = true;
     }

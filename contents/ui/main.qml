@@ -356,8 +356,8 @@ import "../code/createClients.js" as CreateClients
 							//id: bigDesktopContainer
 							visible: true
 							property int desktop: model.index
-							height: dashboard.screenHeight - dash.height - 30
-							width: dashboard.screenWidth
+							//height: dashboard.screenHeight - dash.height - 30
+							//width: dashboard.screenWidth
 							Clients {
 								//id: currentDesktopGrid
 								desktop: bigDesktopRepeater.desktop
@@ -365,9 +365,9 @@ import "../code/createClients.js" as CreateClients
 								x: 0
 								y: dash.height + 30
 								scale: 1
-								height: dashboard.screenHeight - dash.height - 30
+								height: (dashboard.screenHeight - dash.height - 30)
 								width: dashboard.screenWidth
-								//isMain: true
+								isMain: false
 								isLarge: true
 							}
 						}
@@ -410,10 +410,30 @@ import "../code/createClients.js" as CreateClients
 				6,
 				dash.height*.95,
 				dash.height*dashboard.screenRatio*.95,
-				true
+				false
 			)
-			//workspace.clientAdded.connect(updateGrid);
-			//workspace.clientRemoved.connect(updateGrid);
+			// Make sure we add new thumbnails as necessary.
+			workspace.clientAdded.connect(function (c) {
+				console.log(c);
+				CreateClients.createNewClientThumbnails(
+					desktopThumbnailGrid,
+					dashboard,
+					6,
+					dash.height*.95,
+					dash.height*dashboard.screenRatio*.95,
+					false,
+					c
+				);
+				CreateClients.createNewClientThumbnails(
+					currentDesktopGridThumbnailContainer,
+					dashboard,
+					6,
+					dashboard.screenHeight - dash.height - 30,
+					dashboard.screenWidth,
+					true,
+					c
+				);
+			});
 			toggleBoth();
 			// Register all our clients.
 			//var c;
