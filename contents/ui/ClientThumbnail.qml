@@ -125,7 +125,7 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "height";
-      from: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.height);
+      from: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
       to: kwinClientThumbnail.height;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -174,7 +174,7 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "height";
-      to: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.height);
+      to: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
       from: kwinClientThumbnail.height;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
@@ -438,11 +438,12 @@ Item {
       //console.log('TESTG!!!');
       // We ONLY update what needs to be updated by attaching the signal here.
       if (clientObject.desktop == workspace.currentDesktop | currentDesktop == workspace.currentDesktop ) {
-        currentDesktopGrid.updateGrid();
+        currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].updateGrid();
+        currentDesktopGrid.itemAt(clientObject.desktop-1).children[0].updateGrid();
       }
       // Update our grid.
       parent.parent.updateGrid()
-      littleDesktopRepeater.itemAt(clientObject.desktop-1).children[1].updateGrid();
+      littleDesktopRepeater.itemAt(clientObject.desktop-1).children[2].updateGrid();
     }
 
     function updateGrid(i, client) {

@@ -65,7 +65,7 @@ import QtGraphicalEffects 1.0
 				MouseArea {
 					anchors.fill: parent
 					onClicked: {
-						if (mainBackground.state == 'visible') {
+						/*if (mainBackground.state == 'visible') {
 							//endAnim.running = true;
 							//dashboardBackground.visible = false;
 							//dashboard.visible = false;
@@ -75,7 +75,7 @@ import QtGraphicalEffects 1.0
 							//dashboardBackground.visible = true;
 							//dashboard.visible = true;
 							mainBackground.state = 'visible';
-						}
+						}*/
 						toggleBoth();
 						//dashboard.visible = false;
 					}
@@ -312,7 +312,14 @@ import QtGraphicalEffects 1.0
 										      // or when we're currently on said desktop and are 'sure'.
 										      if (littleDesktopContainer.desktop != workspace.currentDesktop-1) {
 														workspace.currentDesktop = littleDesktopContainer.desktop+1;
-										      }
+										      } else {
+															/*if (mainBackground.state == 'visible') {
+																mainBackground.state = 'invisible';
+															} else if (mainBackground.state == 'invisible') {
+																mainBackground.state = 'visible';
+															}*/
+															toggleBoth();
+													}
 										    }
 										  }
 										Clients {
@@ -328,32 +335,6 @@ import QtGraphicalEffects 1.0
 										}
 									}
 								}
-
-								//x: {
-								//	if (workspace.desktops <= 6 ) {
-								//		return width/6 + dash.height*dashboard.screenRatio
-								//	} else {
-								//		return width/(workspace.desktops) + dash.height*dashboard.screenRatio
-								//	}
-								//}
-
-								/*Repeater {
-									// Now, we build up our desktops.
-									model: workspace.desktops
-									Desktops {
-										// I guess we can't refer to it by id anymore.
-										background: newRepeater.background
-										activityId: newRepeater.activityId
-										desktop: model.index
-										activityModel: newRepeater.activityModel
-										isCurrent: newRepeater.isCurrent
-										nClients: workspace.clientList().length
-										x: 0
-										y: 0
-										height: desktopThumbnailGrid.height
-										width: dash.height*dashboard.screenRatio
-									}
-								}*/
 							}
 					}
 				}
@@ -362,27 +343,30 @@ import QtGraphicalEffects 1.0
 
 				// For the current desktop, build a grid.
 				// Easy, but really quite slow.
-				Clients {
-					//anchors.fill: parent
+				Repeater {
+					// Now, we build up our desktops.
+					model: workspace.desktops
 					id: currentDesktopGrid
-					// I guess we can't refer to it by id anymore.
-					//background: newRepeater.background
-					//activityId: newRepeater.activityId
-					desktop: workspace.currentDesktop-1
-					//activityModel: newRepeater.activityModel
-					//isCurrent: newRepeater.isCurrent
-					//isCurrent: true
-					//nClients: workspace.clientList().length
-					x: 0
-					y: dash.height + 30
-					scale: 1
-					//y: 0
-					height: dashboard.screenHeight - dash.height - 30
-					//width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
-					//width: dashboard.screenWidth
-					//height: dashboard.screenHeight
-					width: dashboard.screenWidth
-					isMain: true
+					Item {
+						id: bigDesktopRepeater
+						//id: bigDesktopContainer
+						visible: true
+						property int desktop: model.index
+						height: dashboard.screenHeight - dash.height - 30
+						width: dashboard.screenWidth
+						Clients {
+							//id: currentDesktopGrid
+							desktop: bigDesktopRepeater.desktop
+							visible: false
+							x: 0
+							y: dash.height + 30
+							scale: 1
+							height: dashboard.screenHeight - dash.height - 30
+							width: dashboard.screenWidth
+							//isMain: true
+							isLarge: true
+						}
+					}
 				}
 		}
 	}
@@ -414,14 +398,15 @@ import QtGraphicalEffects 1.0
 		function checkGridUpdate() {
 			// Not sure we can determine who sent the signal, actually,
 			// so just update whenever a desktop change happens.
-			currentDesktopGrid.updateGrid();
+			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
 			// Let's update all the child grids, as well.
 			//littleDesktopGrid.updateGrid();
 			var d;
 			for (d = 0; d < workspace.desktops; d++) {
 				//console.log(Object.getOwnPropertyNames(littleDesktopRepeater.itemAt(d).children));
 				// child 1 is the grid.
-				littleDesktopRepeater.itemAt(d).children[1].updateGrid();
+				currentDesktopGrid.itemAt(d).children[0].updateGrid();
+				littleDesktopRepeater.itemAt(d).children[2].updateGrid();
 			}
 		}
 
@@ -451,10 +436,10 @@ import QtGraphicalEffects 1.0
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			mainBackground.state = 'invisible';
-			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
+			for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
 				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
-				currentDesktopGrid.children[0].children[c].startMoveFromThumbnail();
+				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[c].startMoveFromThumbnail();
 			};
 			//enableVisibleClients();
 			//endAnim
@@ -469,12 +454,12 @@ import QtGraphicalEffects 1.0
 			dashboard.width = dashboard.screenWidth;
 			initAnim.restart();
 			mainBackground.state = 'visible';
-			currentDesktopGrid.updateGrid();
+			currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
 			// Start the animation for the main grid.
 			var c;
-			for (c = 0; c < currentDesktopGrid.children[0].children.length; c++) {
+			for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
-				currentDesktopGrid.children[0].children[c].startMoveToThumbnail();
+				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[c].startMoveToThumbnail();
 			};
 			//console.log(Object.getOwnPropertyNames(dashboard));
 			//initAnim.running = true;

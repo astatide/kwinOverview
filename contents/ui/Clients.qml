@@ -19,6 +19,7 @@ Item {
   id: kwinDesktopThumbnailContainer
   property int desktop: 0
   property bool isMain: false
+  property bool isLarge: false
   x: 0
   y: 0
   scale: 1
@@ -114,19 +115,107 @@ Item {
       // We do want to change when a client changes desktops, but.
       //workspace.clientList()[clientId].desktopChanged.connect(updateGrid);
       //mainBackground.stateChanged.connect(runAnimations);
-      if (!kwinDesktopThumbnailContainer.isMain) {
+      if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+        kwinDesktopThumbnailContainer.isMain = true;
+        kwinDesktopThumbnailContainer.visible = true;
+      }
+      if (!kwinDesktopThumbnailContainer.isLarge) {
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       } else {
-        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
+        // If we're the main one, we actually just want to go invisible and let the other one in.
+        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       }
       //workspace.currentDesktopChanged.connect(updateGrid);
       //workspace.numberDesktopsChanged
-      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
+      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
       workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
-      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
-      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGridOnDesktopChange);
+      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
+
+  PropertyAnimation {
+    id: moveMainToLeft
+    target: kwinDesktopThumbnailContainer
+    duration: 1000
+    running: false
+    property: 'x'
+    to: -dashboard.screenWidth
+    from: 0
+    easing.amplitude: 2
+    easing.type: Easing.InOutQuad
+    onStopped: {
+      kwinDesktopThumbnailContainer.visible = false;
+    }
+  }
+  PropertyAnimation {
+    id: moveMainToRight
+    target: kwinDesktopThumbnailContainer
+    duration: 1000
+    running: false
+    property: 'x'
+    to: dashboard.screenWidth
+    from: 0
+    easing.amplitude: 2
+    easing.type: Easing.InOutQuad
+    onStopped: {
+      kwinDesktopThumbnailContainer.visible = false;
+    }
+  }
+  PropertyAnimation {
+    id: moveNewToLeft
+    target: kwinDesktopThumbnailContainer
+    duration: 1000
+    property: 'x'
+    running: false
+    from: dashboard.screenWidth
+    to: 0
+    easing.amplitude: 2
+    easing.type: Easing.InOutQuad
+  }
+  PropertyAnimation {
+    id: moveNewToRight
+    target: kwinDesktopThumbnailContainer
+    duration: 1000
+    property: 'x'
+    running: false
+    from: -dashboard.screenWidth
+    to: 0
+    easing.amplitude: 2
+    easing.type: Easing.InOutQuad
+  }
+
+  function swapGrids(oldDesktop, newDesktop) {
+    console.log('WHICH ONE IS WHICH!?');
+    console.log(oldDesktop, newDesktop);
+    // If we're not the 'main', but we ARE current, we want to become visible and change our
+    // x position (to the right or left, don't care right now), then animate a change to 0, 0.
+    if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+      if (!kwinDesktopThumbnailContainer.isMain) {
+        // We need to know which way we're moving.  But, ah, hmmm.
+        // Which one is the old one?
+        if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
+          moveNewToLeft.restart();
+        } else {
+          moveNewToRight.restart();
+        }
+        kwinDesktopThumbnailContainer.isMain = true;
+        kwinDesktopThumbnailContainer.visible = true;
+        //kwinDesktopThumbnailContainer.x = -dashboard.screenWidth;
+      }
+    }
+    if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
+        // Now, handle moving the OTHER one.
+        if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
+          moveMainToLeft.restart();
+        } else {
+          moveMainToRight.restart();
+        }
+        kwinDesktopThumbnailContainer.isMain = false;
+        //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
+    }
+  }
+
 
   function updateGridOnDesktopChange() {
     // Probably won't work.
