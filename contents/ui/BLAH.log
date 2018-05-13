@@ -1,0 +1,899 @@
+OpenGL vendor string:                   NVIDIA Corporation
+OpenGL renderer string:                 GeForce GTX 970/PCIe/SSE2
+OpenGL version string:                  3.1.0 NVIDIA 396.24
+OpenGL shading language version string: 1.40 NVIDIA via Cg compiler
+Driver:                                 NVIDIA
+Driver version:                         396.24
+GPU class:                              Unknown
+OpenGL version:                         3.1
+GLSL version:                           1.40
+X server version:                       1.19.6
+Linux kernel version:                   4.16.8
+Requires strict binding:                no
+GLSL shaders:                           yes
+Texture NPOT support:                   yes
+Virtual Machine:                        no
+kf5.kcoreaddons.desktopparser: Property type "Url" is not a known QVariant type. Found while parsing property definition for "X-KWin-Video-Url" in "/usr/share/kservicetypes5/kwineffect.desktop"
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1905, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1907, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1915, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1919, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1920, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 1921, resource id: 0, major code: 14 (GetGeometry), minor code: 0
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 2022, resource id: 25165874, major code: 3 (GetWindowAttributes), minor code: 0
+QXcbConnection: XCB error: 9 (BadDrawable), sequence: 2023, resource id: 25165874, major code: 14 (GetGeometry), minor code: 0
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:33:29 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:36:11 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/Clients.qml:38:14 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: Testing activity model
+qml: [objectName,parent,data,resources,children,x,y,z,width,height,opacity,enabled,visible,visibleChildren,states,transitions,state,childrenRect,anchors,left,right,horizontalCenter,top,bottom,verticalCenter,baseline,baselineOffset,clip,focus,activeFocus,activeFocusOnTab,rotation,scale,transformOrigin,transformOriginPoint,transform,smooth,antialiasing,implicitWidth,implicitHeight,layer,activityId,background,isCurrent,objectNameChanged,childrenRectChanged,baselineOffsetChanged,stateChanged,focusChanged,activeFocusChanged,activeFocusOnTabChanged,parentChanged,transformOriginChanged,smoothChanged,antialiasingChanged,clipChanged,windowChanged,childrenChanged,opacityChanged,enabledChanged,visibleChanged,visibleChildrenChanged,rotationChanged,scaleChanged,xChanged,yChanged,widthChanged,heightChanged,zChanged,implicitWidthChanged,implicitHeightChanged,update,grabToImage,grabToImage,contains,mapFromItem,mapToItem,mapFromGlobal,mapToGlobal,forceActiveFocus,forceActiveFocus,nextItemInFocusChain,nextItemInFocusChain,childAt,activityIdChanged,backgroundChanged,isCurrentChanged]
+qml: file:///home/judas/Pictures/wallhaven-225484.jpg
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:152:34 depends on non-NOTIFYable properties:
+    QQuickItem_QML_3::data
+    QQuickItem_QML_3::resources
+    QQuickItem_QML_3::states
+    QQuickItem_QML_3::transitions
+    QQuickItem_QML_3::transformOriginPoint
+    QQuickItem_QML_3::transform
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: Attempting creation
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:101:12 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: TESTG!!!
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/ClientThumbnail.qml:430: TypeError: Cannot call method 'itemAt' of undefined
+qml: Client created!
+qml: TESTING!
+QMetaProperty::read: Unable to handle unregistered datatype 'KWin::TabGroup*' for property 'KWin::Client::tabGroup'
+qml: {"objectName":"","alpha":false,"frameId":25165851,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"visibleRect":{"x":77,"y":39,"width":1691,"height":1034,"left":77,"right":1767,"top":39,"bottom":1072},"height":936,"opacity":1,"pos":{"x":138,"y":76},"screen":0,"size":{"width":1569,"height":936},"width":1569,"windowId":56623105,"x":138,"y":76,"desktop":1,"onAllDesktops":false,"rect":{"x":0,"y":0,"width":1569,"height":936,"left":0,"right":1568,"top":0,"bottom":935},"clientPos":{"x":0,"y":24},"clientSize":{"width":1569,"height":912},"resourceName":{},"resourceClass":{},"windowRole":{},"desktopWindow":false,"dock":false,"toolbar":false,"menu":false,"normalWindow":true,"dialog":false,"splash":false,"utility":false,"dropdownMenu":false,"popupMenu":false,"tooltip":false,"notification":false,"onScreenDisplay":false,"comboBox":false,"dndIcon":false,"windowType":0,"activities":{},"managed":true,"deleted":false,"shaped":false,"skipsCloseAnimation":false,"surfaceId":0,"surface":null,"fullScreen":false,"fullScreenable":true,"isCurrentTab":true,"active":false,"desktop":1,"onAllDesktops":false,"skipTaskbar":false,"skipPager":false,"skipSwitcher":false,"closeable":true,"keepAbove":false,"keepBelow":false,"shadeable":true,"shade":false,"minimizable":true,"minimized":false,"iconGeometry":{"x":0,"y":0,"width":0,"height":0,"left":0,"right":-1,"top":0,"bottom":-1},"specialWindow":false,"demandsAttention":false,"caption":"ClientThumbnail.qml — ~/kwinOverview — Atom","minSize":{"width":0,"height":0},"maxSize":{"width":2147483647,"height":2147483647},"wantsInput":true,"transient":false,"transientFor":null,"modal":false,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"move":false,"resize":false,"decorationHasAlpha":true,"noBorder":false,"providesContextHelp":false,"maximizable":true,"moveable":true,"moveableAcrossScreens":true,"resizeable":true,"desktopFileName":{},"hasApplicationMenu":false,"applicationMenuActive":false,"unresponsive":false,"basicUnit":{"width":1,"height":1},"blocksCompositing":false,"clientSideDecorated":false}
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:159:21: Unable to assign QQuickWindowQmlImpl_QML_12 to QQuickItem
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:177:21: Unable to assign QQuickWindowQmlImpl_QML_12 to QQuickItem
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:202:21: Unable to assign QQuickWindowQmlImpl_QML_12 to QQuickItem
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:225:20: Unable to assign QQuickWindowQmlImpl_QML_12 to QQuickItem
+file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:146:20: Unable to assign QQuickWindowQmlImpl_QML_12 to QQuickItem
+qml: TESTING!
+QMetaProperty::read: Unable to handle unregistered datatype 'KWin::TabGroup*' for property 'KWin::Client::tabGroup'
+qml: {"objectName":"","alpha":false,"frameId":25165851,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"visibleRect":{"x":77,"y":39,"width":1691,"height":1034,"left":77,"right":1767,"top":39,"bottom":1072},"height":936,"opacity":1,"pos":{"x":138,"y":76},"screen":0,"size":{"width":1569,"height":936},"width":1569,"windowId":56623105,"x":138,"y":76,"desktop":1,"onAllDesktops":false,"rect":{"x":0,"y":0,"width":1569,"height":936,"left":0,"right":1568,"top":0,"bottom":935},"clientPos":{"x":0,"y":24},"clientSize":{"width":1569,"height":912},"resourceName":{},"resourceClass":{},"windowRole":{},"desktopWindow":false,"dock":false,"toolbar":false,"menu":false,"normalWindow":true,"dialog":false,"splash":false,"utility":false,"dropdownMenu":false,"popupMenu":false,"tooltip":false,"notification":false,"onScreenDisplay":false,"comboBox":false,"dndIcon":false,"windowType":0,"activities":{},"managed":true,"deleted":false,"shaped":false,"skipsCloseAnimation":false,"surfaceId":0,"surface":null,"fullScreen":false,"fullScreenable":true,"isCurrentTab":true,"active":false,"desktop":1,"onAllDesktops":false,"skipTaskbar":false,"skipPager":false,"skipSwitcher":false,"closeable":true,"keepAbove":false,"keepBelow":false,"shadeable":true,"shade":false,"minimizable":true,"minimized":false,"iconGeometry":{"x":0,"y":0,"width":0,"height":0,"left":0,"right":-1,"top":0,"bottom":-1},"specialWindow":false,"demandsAttention":false,"caption":"ClientThumbnail.qml — ~/kwinOverview — Atom","minSize":{"width":0,"height":0},"maxSize":{"width":2147483647,"height":2147483647},"wantsInput":true,"transient":false,"transientFor":null,"modal":false,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"move":false,"resize":false,"decorationHasAlpha":true,"noBorder":false,"providesContextHelp":false,"maximizable":true,"moveable":true,"moveableAcrossScreens":true,"resizeable":true,"desktopFileName":{},"hasApplicationMenu":false,"applicationMenuActive":false,"unresponsive":false,"basicUnit":{"width":1,"height":1},"blocksCompositing":false,"clientSideDecorated":false}
+qml: TESTING!
+QMetaProperty::read: Unable to handle unregistered datatype 'KWin::TabGroup*' for property 'KWin::Client::tabGroup'
+qml: {"objectName":"","alpha":false,"frameId":25165851,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"visibleRect":{"x":77,"y":39,"width":1691,"height":1034,"left":77,"right":1767,"top":39,"bottom":1072},"height":936,"opacity":1,"pos":{"x":138,"y":76},"screen":0,"size":{"width":1569,"height":936},"width":1569,"windowId":56623105,"x":138,"y":76,"desktop":1,"onAllDesktops":false,"rect":{"x":0,"y":0,"width":1569,"height":936,"left":0,"right":1568,"top":0,"bottom":935},"clientPos":{"x":0,"y":24},"clientSize":{"width":1569,"height":912},"resourceName":{},"resourceClass":{},"windowRole":{},"desktopWindow":false,"dock":false,"toolbar":false,"menu":false,"normalWindow":true,"dialog":false,"splash":false,"utility":false,"dropdownMenu":false,"popupMenu":false,"tooltip":false,"notification":false,"onScreenDisplay":false,"comboBox":false,"dndIcon":false,"windowType":0,"activities":{},"managed":true,"deleted":false,"shaped":false,"skipsCloseAnimation":false,"surfaceId":0,"surface":null,"fullScreen":false,"fullScreenable":true,"isCurrentTab":true,"active":false,"desktop":1,"onAllDesktops":false,"skipTaskbar":false,"skipPager":false,"skipSwitcher":false,"closeable":true,"keepAbove":false,"keepBelow":false,"shadeable":true,"shade":false,"minimizable":true,"minimized":false,"iconGeometry":{"x":0,"y":0,"width":0,"height":0,"left":0,"right":-1,"top":0,"bottom":-1},"specialWindow":false,"demandsAttention":false,"caption":"ClientThumbnail.qml — ~/kwinOverview — Atom","minSize":{"width":0,"height":0},"maxSize":{"width":2147483647,"height":2147483647},"wantsInput":true,"transient":false,"transientFor":null,"modal":false,"geometry":{"x":138,"y":76,"width":1569,"height":936,"left":138,"right":1706,"top":76,"bottom":1011},"move":false,"resize":false,"decorationHasAlpha":true,"noBorder":false,"providesContextHelp":false,"maximizable":true,"moveable":true,"moveableAcrossScreens":true,"resizeable":true,"desktopFileName":{},"hasApplicationMenu":false,"applicationMenuActive":false,"unresponsive":false,"basicUnit":{"width":1,"height":1},"blocksCompositing":false,"clientSideDecorated":false}
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+qml: WHICH ONE IS WHICH!?
+qml: 2 null
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:34:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::activeScreen
+QQmlExpression: Expression file:///home/judas/.local/share/kwin/scripts/kwinOverview/contents/ui/main.qml:37:31 depends on non-NOTIFYable properties:
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::dock
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+    KWin::Client::height
+    KWin::DeclarativeScriptWorkspaceWrapper::clients
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+qml: WHICH ONE IS WHICH!?
+qml: 1 null
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 34525, resource id: 25167071, major code: 129 (Unknown), minor code: 6
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 34526, resource id: 25167071, major code: 2 (ChangeWindowAttributes), minor code: 0
+Could not remove our own lock file "/home/judas/.cache/plasma-svgelements-gruvbox_v0.1.lock" maybe permissions changed meanwhile?
