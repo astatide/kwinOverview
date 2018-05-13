@@ -36,6 +36,7 @@ Item {
     rows: { return _returnMatrixSize() }
     // No order guaranteed, here.
     columns: { return _returnMatrixSize() }
+    // These should apparently have their own thread.
 
     add: Transition {
       NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
@@ -127,7 +128,6 @@ Item {
       workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
-
   PropertyAnimation {
     id: moveMainToLeft
     target: kwinDesktopThumbnailContainer
@@ -189,9 +189,9 @@ Item {
         // We need to know which way we're moving.  But, ah, hmmm.
         // Which one is the old one?
         if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
-          moveNewToLeft.restart();
+          moveNewToLeft.start();
         } else {
-          moveNewToRight.restart();
+          moveNewToRight.start();
         }
         kwinDesktopThumbnailContainer.isMain = true;
         kwinDesktopThumbnailContainer.visible = true;
@@ -201,9 +201,9 @@ Item {
     if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
         // Now, handle moving the OTHER one.
         if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
-          moveMainToLeft.restart();
+          moveMainToLeft.start();
         } else {
-          moveMainToRight.restart();
+          moveMainToRight.start();
         }
         kwinDesktopThumbnailContainer.isMain = false;
         //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;

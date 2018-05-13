@@ -30,6 +30,8 @@ import "../code/createClients.js" as CreateClients
 			// Start disabled.  toggleBoth sets this appropriately.
 			height: 0
 			width: 0
+			//width: { activeScreen.width }
+			//height: { return activeScreen.height + _getDockHeight() }
 			property int dockHeight: { return _getDockHeight() }
 			property var activeScreen: { workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
 			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
@@ -130,6 +132,7 @@ import "../code/createClients.js" as CreateClients
 						if (!endAnim.running) {
 							dashboard.height = 0;
 							dashboard.width = 0;
+							//dashboard.visible = false;
 						}
 					}
 				}
@@ -484,6 +487,7 @@ import "../code/createClients.js" as CreateClients
 			//disableVisibleClients();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
+			//dashboard.visible = true;
 			initAnim.restart();
 			mainBackground.state = 'visible';
 			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
