@@ -32,12 +32,19 @@ import "../code/createClients.js" as CreateClients
 			width: 0
 			//width: { activeScreen.width }
 			//height: { return activeScreen.height + _getDockHeight() }
-			property int dockHeight: { return _getDockHeight() }
+			/*property int dockHeight: { return _getDockHeight() }
 			property var activeScreen: { workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
 			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
 			property int screenWidth: { activeScreen.width }
 			property int screenHeight: { return activeScreen.height + _getDockHeight() }
 			property var screenRatio: { activeScreen.width/activeScreen.height }
+			property int dockHeight: { return _getDockHeight() }*/
+			property var activeScreen: 0
+			//property var activeScreen: { workspace.clientArea(MaximizedArea, workspace.activeScreen, workspace.currentDesktop) }
+			property int screenWidth: 0
+			property int screenHeight: 0
+			property var screenRatio: 0
+			property int dockHeight: 0
 
 			property var clientsVisible: { new Array }
 
@@ -387,6 +394,11 @@ import "../code/createClients.js" as CreateClients
 		}
 	}
 		Component.onCompleted: {
+			dashboard.dockHeight = _getDockHeight();
+			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
+			dashboard.screenWidth = dashboard.activeScreen.width;
+			dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
 			dashboard.visible = true;
 			mainBackground.state = 'visible';
 			populateVisibleClients();

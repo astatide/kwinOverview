@@ -34,7 +34,8 @@ Item {
   property var clientId: 0
   property var currentDesktop: 0
 
-  opacity: 0
+  // Ha ha!
+  opacity: 1
 
   // This is for moving the thumbnail back
   property int originalX: 0
@@ -80,24 +81,45 @@ Item {
 
   // I want this to show up if compositing is disabled.  But it doesn't, so heeeeey.
 
-  Rectangle {
-    //id: thumbnailBackgroundRectangle
+  Item {
     id: actualThumbnail
-    // Don't fill the anchors; otherwise, it doesn't work.
-    //anchors.fill: parent
-    color: 'black'
-    opacity: 1
-    visible: true
-    //scale:
-    clip: true
-    x: 0
-    y: 0
+    //anchors.fill kwinClientThumbnail
     height: kwinClientThumbnail.height
     width: kwinClientThumbnail.width
-    // Are THESE breaking it?  What the shit.
-    // These DO seem to break it!  What the fuck.
-    // Something about the way they're painted, maybe?  Not so good.
-    // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
+    visible: true
+    opacity: 1
+    //x: 0
+    //y: 0
+    /*Image {
+      anchors.fill: parent
+      smooth: true
+      visible: true
+      fillMode: Image.PreserveAspectCrop
+      source: dashboardBackground.background
+      height: kwinClientThumbnail.height
+      width: kwinClientThumbnail.width
+      x: 0
+      y: 0
+    }*/
+    Rectangle {
+      //id: thumbnailBackgroundRectangle
+      // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
+      anchors.fill: parent
+      //anchors.fill kwinClientThumbnail
+      color: 'black'
+      opacity: 0.5
+      visible: true
+      scale: 1
+      clip: true
+      //x: 0
+      //y: 0
+      //height: kwinClientThumbnail.height
+      //width: kwinClientThumbnail.width
+      // Are THESE breaking it?  What the shit.
+      // These DO seem to break it!  What the fuck.
+      // Something about the way they're painted, maybe?  Not so good.
+      // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
+    }
     KWinLib.ThumbnailItem {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
