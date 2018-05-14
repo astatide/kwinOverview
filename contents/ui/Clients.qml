@@ -115,8 +115,8 @@ Item {
       //workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
       //workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
       // We'll probably sort this out later, as well.
-      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
-      workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
 
