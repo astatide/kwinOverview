@@ -123,6 +123,7 @@ Item {
     KWinLib.ThumbnailItem {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
+      id: kwinThumbnailRenderWindow
       anchors.fill: actualThumbnail
       //wId: workspace.clientList()[clientId].windowId
       wId: kwinClientThumbnail.clientId
@@ -444,9 +445,11 @@ Item {
       if (mainBackground.state == 'visible') {
         //runMoveToThumbnailAnim();
         actualThumbnail.visible = true;
+        kwinThumbnailRenderWindow.visible = true;
       } else {
         // Hide the thumbnails when we're hidden.
         actualThumbnail.visible = false;
+        kwinThumbnailRenderWindow.visible = false;
       }
     });
     //resizeToLarge();
