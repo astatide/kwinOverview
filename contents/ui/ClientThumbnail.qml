@@ -433,6 +433,14 @@ Item {
       // This SHOULD call it for both the large and the small.  Why is it not doing that?
       callUpdateGrid();
     });
+    workspace.currentActivityChanged.connect(function() {
+      // Update our main grid.  Bit of a hack for now.
+      // (this shouldn't really call our main stuff.)
+      // We just want to reparent ourselves.
+      // This SHOULD call it for both the large and the small.  Why is it not doing that?
+      callUpdateGrid();
+    });
+
     // Destroy yourself if you're removed.
     // Yay!  It works!
     workspace.clientRemoved.connect(function (c) {
@@ -472,40 +480,45 @@ Item {
   }
 
     function callUpdateGrid() {
-      console.log('TESTG!!!');
+      //console.log('TESTG!!!');
       // It seems that when we move a large to a small and vice versa, we don't
       // always properly trigger updates.
       // Actually, it seems we don't update our new parent properly.  WHAT.
       if (kwinClientThumbnail.isLarge) {
         //reparent ourselves to the new desktop item
         // it's always going to be the desktop.
-        console.log('LARGE DESKTOP!');
+        //console.log('LARGE DESKTOP!');
+        console.log('TESTING ACTIVITIES');
+        //console.log(Object.getOwnPropertyNames())
+        console.log(kwinClientThumbnail.clientObject.activities, workspace.currentActivity);
         console.log(kwinClientThumbnail.clientObject.desktop);
         if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
           // Reparent, then resize all the appropriate grids.
-          kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
-          // Update our old grid.
-          //currentDesktopGrid.itemAt(kwinClientThumbnail.currentDesktop-1).children[0].updateGrid();
-          // Update our NEW desktop.
-          //currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].updateGrid();
-
-          kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
-
+          // But also check to make sure we're on the correct activity.
+          if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+            kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
+            kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
+            kwinClientThumbnail.visible = true;
+          } else {
+            // Go back to being in the original parent widget.
+            kwinClientThumbnail.visible = false;
+            kwinClientThumbnail.parent = currentDesktopGridThumbnailContainer;
+          }
         }
       } else {
-        console.log('SMALL DESKTOP!');
+        //console.log('SMALL DESKTOP!');
         if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
           // Reparent, then resize all the appropriate grids.
-          kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
-          // Update our old grid.
-          //littleDesktopRepeater.itemAt(kwinClientThumbnail.currentDesktop-1).children[2].updateGrid();
-          // Update our NEW desktop.
-          //littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
-
-          kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
+          if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+            kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+            kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
+            kwinClientThumbnail.visible = true;
+          } else {
+            kwinClientThumbnail.visible = false;
+            kwinClientThumbnail.parent = desktopThumbnailGrid;
+          }
         }
       }
-      kwinClientThumbnail.visible = true;
     }
 
     function _overlapsDesktop(x, y) {
