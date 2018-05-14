@@ -258,6 +258,8 @@ Item {
     NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight; duration: 100}
     NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth; duration: 100}
 
+    //PropertyAnimation { target: actualThumbnail; property: "x"; from: growthAnim.animX; to: 0; duration: 1000}
+    //PropertyAnimation { target: actualThumbnail; property: "y"; from: growthAnim.animY; to: 0; duration: 1000}
     PropertyAnimation { target: actualThumbnail; property: "x"; to: 0; duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: 0; duration: 100}
     onStopped: {
@@ -346,6 +348,8 @@ Item {
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
       var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
+      //growthAnim.animX = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).x;
+      //growthAnim.animY = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).y;
       if (kwinClientThumbnail.isSmall) {
         growthAnim.running = true;
         kwinClientThumbnail.isSmall = false;
@@ -434,9 +438,9 @@ Item {
           // Reparent, then resize all the appropriate grids.
           kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
           // Update our old grid.
-          currentDesktopGrid.itemAt(kwinClientThumbnail.currentDesktop-1).children[0].updateGrid();
+          //currentDesktopGrid.itemAt(kwinClientThumbnail.currentDesktop-1).children[0].updateGrid();
           // Update our NEW desktop.
-          currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].updateGrid();
+          //currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].updateGrid();
 
           kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
 
@@ -447,9 +451,9 @@ Item {
           // Reparent, then resize all the appropriate grids.
           kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           // Update our old grid.
-          littleDesktopRepeater.itemAt(kwinClientThumbnail.currentDesktop-1).children[2].updateGrid();
+          //littleDesktopRepeater.itemAt(kwinClientThumbnail.currentDesktop-1).children[2].updateGrid();
           // Update our NEW desktop.
-          littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
+          //littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
 
           kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
         }
@@ -478,6 +482,15 @@ Item {
         //  return d;
         }
         return 0;
+      }
+
+      function runGrowthAnim() {
+        // We set the global mouse position when we released the item.
+        // This is called when we reparent.  Now, we want to change our global mouse
+        // coordinates to the local coordinates.
+        //growthAnim.animX = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).x;
+        //growthAnim.animY = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).y;
+        growthAnim.restart();
       }
 
 }

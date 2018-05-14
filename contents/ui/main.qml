@@ -68,6 +68,7 @@ import "../code/createClients.js" as CreateClients
 				// This creates a mouseArea for the rectangle.  We change the height of our dock.
 				MouseArea {
 					anchors.fill: parent
+					enabled: true
 					onClicked: {
 						/*if (mainBackground.state == 'visible') {
 							//endAnim.running = true;
@@ -350,10 +351,17 @@ import "../code/createClients.js" as CreateClients
 				// Easy, but really quite slow.
 				Item {
 					id: currentDesktopGridThumbnailContainer
+					//contentHeight: desktopThumbnailGridBackgrounds.height
+					//contentWidth: desktopThumbnailGridBackgrounds.width
+					//contentHeight: (dashboard.screenHeight - dash.height - 30)
+					//contentWidth: dashboard.screenWidth
+					//anchors.fill: parent
 					Repeater {
 						// Now, we build up our desktops.
 						model: workspace.desktops
 						id: currentDesktopGrid
+						height: (dashboard.screenHeight - dash.height - 30)
+						width: dashboard.screenWidth
 						Item {
 							id: bigDesktopRepeater
 							//id: bigDesktopContainer
@@ -461,7 +469,8 @@ import "../code/createClients.js" as CreateClients
 		console.log(workspace.clientList()[0].desktop);*/
 		//console.log(allActivities);
 		//console.log(workspace.clientList()[0].isOnCurrentActivity);
-		console.log(JSON.stringify(workspace.clientList()[1]));
+		//console.log(JSON.stringify(workspace.clientList()[1]));
+		console.log(Object.getOwnPropertyNames(desktopThumbnailGridBackgrounds));
 		if (mainBackground.state == 'visible') {
 			//dashboard.visible = false;
 			//ndAnim.running = true;

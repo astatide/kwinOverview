@@ -52,6 +52,10 @@ Item {
     NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
     NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
 
+    onChildrenChanged: {
+      kwinDesktopThumbnailContainer.updateGrid();
+    }
+
     function _overlapsDesktop(x, y) {
       // Here, we're going to determine if we're in a new desktop.
       //console.log(workspace.currentDesktop);
@@ -128,10 +132,11 @@ Item {
       workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
   }
+
   PropertyAnimation {
     id: moveMainToLeft
     target: kwinDesktopThumbnailContainer
-    duration: 1000
+    //duration: 100
     running: false
     property: 'x'
     to: -dashboard.screenWidth
@@ -145,7 +150,7 @@ Item {
   PropertyAnimation {
     id: moveMainToRight
     target: kwinDesktopThumbnailContainer
-    duration: 1000
+    //duration: 100
     running: false
     property: 'x'
     to: dashboard.screenWidth
@@ -159,7 +164,7 @@ Item {
   PropertyAnimation {
     id: moveNewToLeft
     target: kwinDesktopThumbnailContainer
-    duration: 1000
+    //duration: 100
     property: 'x'
     running: false
     from: dashboard.screenWidth
@@ -170,7 +175,7 @@ Item {
   PropertyAnimation {
     id: moveNewToRight
     target: kwinDesktopThumbnailContainer
-    duration: 1000
+    //duration: 100
     property: 'x'
     running: false
     from: -dashboard.screenWidth
@@ -189,9 +194,9 @@ Item {
         // We need to know which way we're moving.  But, ah, hmmm.
         // Which one is the old one?
         if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
-          moveNewToLeft.start();
+          moveNewToLeft.restart();
         } else {
-          moveNewToRight.start();
+          moveNewToRight.restart();
         }
         kwinDesktopThumbnailContainer.isMain = true;
         kwinDesktopThumbnailContainer.visible = true;
@@ -201,9 +206,9 @@ Item {
     if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
         // Now, handle moving the OTHER one.
         if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
-          moveMainToLeft.start();
+          moveMainToLeft.restart();
         } else {
-          moveMainToRight.start();
+          moveMainToRight.restart();
         }
         kwinDesktopThumbnailContainer.isMain = false;
         //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
@@ -227,6 +232,9 @@ Item {
       clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
+      // Run the growth animation!
+      clientGridLayout.children[c].runGrowthAnim();
+      //console.log(Object.getOwnPropertyNames(clientGridLayout.children[c]));
     }
     console.log('END: YOU SHOULD SEE THIS');
   }
