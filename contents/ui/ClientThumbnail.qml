@@ -448,12 +448,15 @@ Item {
         kwinThumbnailRenderWindow.visible = true;
       }
     });
+    // We want to wait until the ending animation is finished to hide the thumbnails.
     endAnim.onRunningChanged.connect(function() {
       //console.log('ANIMATION OVER');
-      if (!mainBackground.state == 'visible') {
-          // Hide the thumbnails when we're hidden.
-        actualThumbnail.visible = false;
-        kwinThumbnailRenderWindow.visible = false;
+      if (!endAnim.running) {
+        if (mainBackground.state == 'invisible') {
+            // Hide the thumbnails when we're hidden.
+          actualThumbnail.visible = false;
+          kwinThumbnailRenderWindow.visible = false;
+        }  
       }
     });
 

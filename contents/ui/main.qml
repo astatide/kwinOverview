@@ -549,12 +549,12 @@ import "../code/createClients.js" as CreateClients
 		if (mainBackground.state == 'visible') {
 			//dashboard.visible = false;
 			//ndAnim.running = true;
-			endAnim.restart();
 			// For the moment, just pause.  We'll probably hook it up to a signal?
 			//while (endAnim.busy == true) {};
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			mainBackground.state = 'invisible';
+			endAnim.restart();
 			/*for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
 				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
