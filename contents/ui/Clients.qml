@@ -88,12 +88,27 @@ Item {
       kwinDesktopThumbnailContainer.updateGrid();
       // We do want to change when a client changes desktops, but.
       if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-        kwinDesktopThumbnailContainer.isMain = true;
-        kwinDesktopThumbnailContainer.visible = true;
+        if (kwinDesktopThumbnailContainer.isLarge) {
+          kwinDesktopThumbnailContainer.isMain = true;
+          kwinDesktopThumbnailContainer.visible = true;
+        } else {
+          kwinDesktopThumbnailContainer.isMain = true;
+          kwinDesktopThumbnailContainer.visible = false;
+        }
       }
       if (kwinDesktopThumbnailContainer.isLarge) {
         // If we're the main one, we actually just want to go invisible and let the other one in.
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
+      } else {
+        // If we're small, don't paint again.  Turns out that's rather slow.
+        // This is really just for performance reasons.
+        workspace.currentDesktopChanged.connect(function() {
+          if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+            kwinDesktopThumbnailContainer.visible = false;
+          } else {
+            kwinDesktopThumbnailContainer.visible = true;
+          }
+        });
       }
       // The clients destroy/add themselves, so.
       //workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
