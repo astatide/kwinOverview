@@ -143,8 +143,8 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "width";
-      from: clientRealWidth//*(dashboard.screenWidth/currentDesktopGrid.width);
-      to: kwinClientThumbnail.width;
+      from: clientRealWidth//*dashboard.screenWidth//currentDesktopGrid.width);
+      to: kwinClientThumbnail.originalWidth;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
       //duration: 1000
@@ -153,17 +153,20 @@ Item {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "height";
-      from: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
-      to: kwinClientThumbnail.height;
+      //from: clientRealHeight//*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
+      from: clientRealHeight//*dashboard.screenHeight///currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
+      to: kwinClientThumbnail.originalHeight;
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
       //duration: 1000
     }
-    NumberAnimation {
+    /*NumberAnimation {
       //target: kwinClientThumbnail;
       target: actualThumbnail;
       property: "x";
+      //from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY-dashboard.dockHeight).x//-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
       from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
+      //from: clientRealX
       to: kwinClientThumbnail.originalX;
       //to: 0
       easing.amplitude: 2;
@@ -178,13 +181,14 @@ Item {
       // We want what the global coordinates of the client would be mapped to our thumbnail.
       // But why does this work when we're maximized, and not otherwise?
       // Our coordinate scales should be the same, so.
-      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
+      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y - actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
+      //from: clientRealY
       to: kwinClientThumbnail.originalY;
       //to: 0
       easing.amplitude: 2;
       easing.type: Easing.InOutQuad;
       //duration: 1000
-    }
+    }*/
   }
   ParallelAnimation {
     id: moveFromThumbnail
@@ -436,6 +440,11 @@ Item {
         kwinClientThumbnail.destroy();
       }
     });
+    mainBackground.onStateChanged.connect(function() {
+      if (mainBackground.state == 'visible') {
+        runMoveToThumbnailAnim();
+      }
+    });
     //resizeToLarge();
     //resizeToSmall();
   }
@@ -514,6 +523,21 @@ Item {
         //growthAnim.animX = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).x;
         //growthAnim.animY = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).y;
         growthAnim.restart();
+      }
+      function runMoveToThumbnailAnim() {
+        // We set the global mouse position when we released the item.
+        // This is called when we reparent.  Now, we want to change our global mouse
+        // coordinates to the local coordinates.
+        //growthAnim.animX = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).x;
+        //growthAnim.animY = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).y;
+        if (isLarge) {
+          //if (kwinClientThumbnail.parent.isMain) {
+          if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
+          //if (!currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0].isMain) {
+            // This is too slow.
+            //moveToThumbnail.restart();
+          }
+        }
       }
 
 }
