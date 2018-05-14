@@ -456,8 +456,8 @@ Item {
         kwinClientThumbnail.destroy();
       }
     });
-    mainBackground.onStateChanged.connect(function() {
-      if (mainBackground.state == 'visible') {
+    mainBackground.onStateChanged.connect(function(state) {
+      if (state == 'visible') {
         //runMoveToThumbnailAnim();
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
