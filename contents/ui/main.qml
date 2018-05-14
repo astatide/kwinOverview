@@ -260,95 +260,124 @@ import "../code/createClients.js" as CreateClients
 
 						//visible: true
 						y: 0
-							Grid {
-								// This is just for each of our desktops.
-								//id: newRepeater
-								id: desktopThumbnailGridBackgrounds
-								rows: 1
-								x: 0
-								y: 10
-								spacing: desktopThumbnailGrid.spacing
-								//anchors.fill: parent
+						// This is our active rectangle.  We shift it when our active desktop changes.
+						Rectangle {
+							id: activeDesktopIndicator
+							// We just want this to stand out, currently.
+							color: 'white'
+							opacity: 1
+							visible: true
+							scale: 1
+							clip: true
+							//x: -2
+							x: ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
+							y: 8
+							//height: desktopThumbnailGridBackgrounds.height
+							//width: desktopThumbnailGridBackgrounds.width
+							height: desktopThumbnailGrid.height+4
+							width: (dash.height*dashboard.screenRatio)+4
+						}
+						PropertyAnimation {
+							id: activeDesktopIndicatorShiftAnim
+							target: activeDesktopIndicator
+							property: 'x'
+							running: false
+							property var originalX: 0
+							property var newX: 0
+							from: activeDesktopIndicatorShiftAnim.originalX
+							to: activeDesktopIndicatorShiftAnim.newX
+							duration: 1000
+							//easing.type: Easing.OutBounce
+						}
+						Grid {
+							// This is just for each of our desktops.
+							//id: newRepeater
+							id: desktopThumbnailGridBackgrounds
+							rows: 1
+							x: 0
+							y: 10
+							spacing: desktopThumbnailGrid.spacing
+							//anchors.fill: parent
 
-								columns: {
-									if (workspace.desktops <= 6 ) {
-										//desktopThumbnailGridBackgrounds.columns = 6;
-										return 6;
-									} else {
-										//desktopThumbnailGridBackgrounds.columns = workspace.desktops;
-										return workspace.desktops;
-									}
+							columns: {
+								if (workspace.desktops <= 6 ) {
+									//desktopThumbnailGridBackgrounds.columns = 6;
+									return 6;
+								} else {
+									//desktopThumbnailGridBackgrounds.columns = workspace.desktops;
+									return workspace.desktops;
 								}
-								Repeater {
-									// Now, we build up our desktops.
-									model: workspace.desktops
-									id: littleDesktopRepeater
-									Item {
-										id: littleDesktopContainer
-										visible: true
-										property int desktop: model.index
+							}
+							Repeater {
+								// Now, we build up our desktops.
+								model: workspace.desktops
+								id: littleDesktopRepeater
+								Item {
+									id: littleDesktopContainer
+									visible: true
+									property int desktop: model.index
+									height: desktopThumbnailGrid.height
+									width: dash.height*dashboard.screenRatio
+									Image {
+										//id: secondBackgroundDesktop
+										//anchors.fill: dashboard
+										//anchors.fill: parent
+										smooth: true
+										//border { left: 30; top: 30; right: 30; bottom: 30 }
+										//horizontalTileMode: BorderImage.Stretch
+  									//verticalTileMode: BorderImage.Stretch
+										//clip: true
+										//visible: true
+										//source: "wallhaven-567367.jpg"
+										//source: "image://wallpaperthumbnail/" + dashboardBackground.background
+										fillMode: Image.PreserveAspectCrop
+										source: dashboardBackground.background
+										//height: dashboard.screenHeight
+										//width: dashboard.screenWidth
 										height: desktopThumbnailGrid.height
 										width: dash.height*dashboard.screenRatio
-										Image {
-											//id: secondBackgroundDesktop
-											//anchors.fill: dashboard
-											//anchors.fill: parent
-											smooth: true
-											//border { left: 30; top: 30; right: 30; bottom: 30 }
-											//horizontalTileMode: BorderImage.Stretch
-    									//verticalTileMode: BorderImage.Stretch
-											//clip: true
-											//visible: true
-											//source: "wallhaven-567367.jpg"
-											//source: "image://wallpaperthumbnail/" + dashboardBackground.background
-											fillMode: Image.PreserveAspectCrop
-											source: dashboardBackground.background
-											//height: dashboard.screenHeight
-											//width: dashboard.screenWidth
-											height: desktopThumbnailGrid.height
-											width: dash.height*dashboard.screenRatio
-											x: 0
-											y: 0
-											// Maybe?
-											//asynchronous: true
-											//cache: false
-										}
+										x: 0
+										y: 0
+										// Maybe?
+										//asynchronous: true
+										//cache: false
+									}
 
-										  MouseArea {
-										    id: littleDesktopGridMouseArea
-										    anchors.fill: parent
-										    //drag.axis: 'XAndYAxis'
-										    //drag.target: kwinClientThumbnail
-										    //hoverEnabled: true
-										    onClicked: {
-										      // We only want to disable the dashboard when we double click on the item
-										      // or when we're currently on said desktop and are 'sure'.
-										      if (littleDesktopContainer.desktop != workspace.currentDesktop-1) {
-														workspace.currentDesktop = littleDesktopContainer.desktop+1;
-										      } else {
-															/*if (mainBackground.state == 'visible') {
-																mainBackground.state = 'invisible';
-															} else if (mainBackground.state == 'invisible') {
-																mainBackground.state = 'visible';
-															}*/
-															toggleBoth();
-													}
-										    }
-										  }
-										Clients {
-											//anchors.fill: parent
-											id: littleDesktopGrid
-											desktop: littleDesktopContainer.desktop
-											x: dash.height*.025*dashboard.screenRatio
-											y: dash.height*.025
-											height: dash.height*.95
-											width: dash.height*dashboard.screenRatio*.95
-											//height: dashboard.screenHeight - dash.height - 30
-											//width: dashboard.screenWidth
-										}
+									  MouseArea {
+									    id: littleDesktopGridMouseArea
+									    anchors.fill: parent
+									    //drag.axis: 'XAndYAxis'
+									    //drag.target: kwinClientThumbnail
+									    //hoverEnabled: true
+									    onClicked: {
+									      // We only want to disable the dashboard when we double click on the item
+									      // or when we're currently on said desktop and are 'sure'.
+									      if (littleDesktopContainer.desktop != workspace.currentDesktop-1) {
+													workspace.currentDesktop = littleDesktopContainer.desktop+1;
+									      } else {
+														/*if (mainBackground.state == 'visible') {
+															mainBackground.state = 'invisible';
+														} else if (mainBackground.state == 'invisible') {
+															mainBackground.state = 'visible';
+														}*/
+														toggleBoth();
+												}
+									    }
+									  }
+									Clients {
+										//anchors.fill: parent
+										id: littleDesktopGrid
+										desktop: littleDesktopContainer.desktop
+										x: dash.height*.025*dashboard.screenRatio
+										y: dash.height*.025
+										height: dash.height*.95
+										width: dash.height*dashboard.screenRatio*.95
+										//height: dashboard.screenHeight - dash.height - 30
+										//width: dashboard.screenWidth
 									}
 								}
 							}
+						}
 					}
 				}
 				// We'll create our normal desktop windows here with the same code.
@@ -456,6 +485,15 @@ import "../code/createClients.js" as CreateClients
 					true,
 					c
 				);
+			});
+			workspace.currentDesktopChanged.connect(function() {
+				activeDesktopIndicatorShiftAnim.newX = ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
+				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
+				activeDesktopIndicatorShiftAnim.restart();
+				// Move the flickable container.
+				//if (((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) > desktopThumbnailGrid.contentY) {
+				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing));
+				//}
 			});
 			toggleBoth();
 			// Register all our clients.
