@@ -310,7 +310,7 @@ import "../code/createClients.js" as CreateClients
 							}
 							Repeater {
 								// Now, we build up our desktops.
-								model: workspace.desktops
+								model: dashboard.returnNumberOfDesktops()
 								id: littleDesktopRepeater
 								Item {
 									id: littleDesktopContainer
@@ -396,7 +396,7 @@ import "../code/createClients.js" as CreateClients
 					//anchors.fill: parent
 					Repeater {
 						// Now, we build up our desktops.
-						model: workspace.desktops
+						model: dashboard.returnNumberOfDesktops()
 						id: currentDesktopGrid
 						height: (dashboard.screenHeight - dash.height - 30)
 						width: dashboard.screenWidth
@@ -537,7 +537,7 @@ import "../code/createClients.js" as CreateClients
 				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
 				currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[0].children[c].startMoveFromThumbnail();
 			}*/
-			enableVisibleClients();
+			//enableVisibleClients();
 			//endAnim
 		} else if (mainBackground.state == 'invisible') {
 			// It hates this command.  Straight up.  It seems to still be hiding things.
@@ -545,7 +545,7 @@ import "../code/createClients.js" as CreateClients
 			//dashboard.flags = Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
 			//dashboard.show();
 			// Show, then run the init animation.
-			disableVisibleClients();
+			//disableVisibleClients();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
 			//dashboard.visible = true;
@@ -592,6 +592,10 @@ import "../code/createClients.js" as CreateClients
 			// We're just hiding it by making it invisible.
 			workspace.clientList()[c].opacity = 0;
 		}
+	}
+
+	function returnNumberOfDesktops() {
+		return workspace.desktops;
 	}
 
 	function enableVisibleClients() {
