@@ -27,15 +27,15 @@ Item {
   Grid {
     id: clientGridLayout
     visible: true
-    //x: 0
-    //y: 0
-    property int numberOfChildren: 0
     scale: 1
 
     anchors.verticalCenter: parent.verticalCenter
-    rows: { return _returnMatrixSize() }
+    //rows: { return _returnMatrixSize() }
+    // We dynamically update these.
+    rows: 0
+    columns: 0
     // No order guaranteed, here.
-    columns: { return _returnMatrixSize() }
+    //columns: { return _returnMatrixSize() }
     // These should apparently have their own thread.
 
     add: Transition {
@@ -54,31 +54,6 @@ Item {
 
     onChildrenChanged: {
       kwinDesktopThumbnailContainer.updateGrid();
-    }
-
-    function _overlapsDesktop(x, y) {
-      // Here, we're going to determine if we're in a new desktop.
-      //console.log(workspace.currentDesktop);
-      //console.log(x, y);
-      // If we drag it out of the bar, send it to the current desktop.
-      if (y > dash.height) {
-        return workspace.currentDesktop;
-      }
-      for (var d = 1; d <= workspace.desktops; d++) {
-        // We need to check if we're within the new bounds.  That's height and width!
-        // or just width, actually.
-        // x and y are now global coordinates.
-        // We have workspace.desktops, and our screen width is activeScreen.width
-        //console.log(x, (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*main.screenRatio, d);
-        if (x < (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*dashboard.screenRatio) {
-          return d-1
-        }
-        //if (x > (d-1*width)+activeScreen.width/(2*workspace.desktops)) {
-        //  return d;
-        //}
-      }
-      return 0;
-
     }
 
     function _onDesktop() {
@@ -101,17 +76,11 @@ Item {
       var oD = _onDesktop();
       // Just do it manually for the moment; not elegant, but effective.
       // Not sure what math library I'd need and I'm feeling lazy.
-      if (oD <= 1)
+      if (oD <= 1) {
         return 1
-      if (oD <= 4)
-        return 2
-      if (oD <= 9)
-        return 3
-      if (oD <= 16)
-        return 4
-      if (oD < 25)
-        return 5
-      return 36
+      } else {
+        return Math.ceil(Math.sqrt(oD));
+      }
     }
 
     Component.onCompleted: {
@@ -126,8 +95,10 @@ Item {
         // If we're the main one, we actually just want to go invisible and let the other one in.
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       }
-      workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
-      workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
+      // The clients destroy/add themselves, so.
+      //workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
+      // We'll probably sort this out later, as well.
       workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
     }
