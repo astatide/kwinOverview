@@ -108,7 +108,7 @@ Item {
       //anchors.fill kwinClientThumbnail
       color: 'black'
       opacity: 0.5
-      visible: true
+      visible: false
       scale: 1
       clip: true
       //x: 0

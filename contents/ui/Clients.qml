@@ -92,14 +92,15 @@ Item {
           kwinDesktopThumbnailContainer.isMain = true;
           kwinDesktopThumbnailContainer.visible = true;
         } else {
+          // OH!  But if we just change the scale method on lower end hardware, it's fine.
           kwinDesktopThumbnailContainer.isMain = true;
-          kwinDesktopThumbnailContainer.visible = false;
+          kwinDesktopThumbnailContainer.visible = true;
         }
       }
       if (kwinDesktopThumbnailContainer.isLarge) {
         // If we're the main one, we actually just want to go invisible and let the other one in.
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
-      } else {
+      } /*else {
         // If we're small, don't paint again.  Turns out that's rather slow.
         // This is really just for performance reasons.
         workspace.currentDesktopChanged.connect(function() {
@@ -109,7 +110,7 @@ Item {
             kwinDesktopThumbnailContainer.visible = true;
           }
         });
-      }
+      }*/
       // The clients destroy/add themselves, so.
       //workspace.clientAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
       //workspace.clientRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
