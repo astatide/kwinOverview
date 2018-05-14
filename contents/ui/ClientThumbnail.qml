@@ -433,6 +433,13 @@ Item {
       // This SHOULD call it for both the large and the small.  Why is it not doing that?
       callUpdateGrid();
     });
+    clientObject.activitiesChanged.connect(function() {
+      // Update our main grid.  Bit of a hack for now.
+      // (this shouldn't really call our main stuff.)
+      // We just want to reparent ourselves.
+      // This SHOULD call it for both the large and the small.  Why is it not doing that?
+      callUpdateGrid();
+    });
     workspace.currentActivityChanged.connect(function() {
       // Update our main grid.  Bit of a hack for now.
       // (this shouldn't really call our main stuff.)
@@ -505,8 +512,8 @@ Item {
             kwinClientThumbnail.visible = true;
           } else {
             // Go back to being in the original parent widget.
-            kwinClientThumbnail.visible = false;
             kwinClientThumbnail.parent = currentDesktopGridThumbnailContainer;
+            kwinClientThumbnail.visible = false;
           }
         }
       } else {
@@ -518,8 +525,8 @@ Item {
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             kwinClientThumbnail.visible = true;
           } else {
-            kwinClientThumbnail.visible = false;
             kwinClientThumbnail.parent = desktopThumbnailGrid;
+            kwinClientThumbnail.visible = false;
           }
         }
       }

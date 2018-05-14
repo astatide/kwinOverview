@@ -57,7 +57,7 @@ Item {
     }
 
     function _onDesktop() {
-      var c;
+      /*var c;
       var oD = 0;
       for (c = 0; c < workspace.clientList().length; c++) {
         if (workspace.clientList()[c].desktop-1 == desktop && !workspace.clientList()[c].dock) {
@@ -67,7 +67,8 @@ Item {
       if (clientGridLayout.onDesktop == 0) {
         oD = 1;
       }
-      return oD;
+      return oD;*/
+      return clientGridLayout.children.length;
     }
 
     function _returnMatrixSize() {
