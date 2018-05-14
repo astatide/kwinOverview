@@ -454,10 +454,14 @@ Item {
         //runMoveToThumbnailAnim();
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
+      } else {
+        actualThumbnail.visible = false;
+        kwinThumbnailRenderWindow.visible = false;
       }
     });
     // We want to wait until the ending animation is finished to hide the thumbnails.
-    endAnim.onRunningChanged.connect(function() {
+    // Actually, I don't think this will work.
+    /*endAnim.onRunningChanged.connect(function() {
       //console.log('ANIMATION OVER');
       if (!endAnim.running) {
         if (mainBackground.state == 'invisible') {
@@ -466,7 +470,7 @@ Item {
           kwinThumbnailRenderWindow.visible = false;
         }
       }
-    });
+    });*/
 
     //resizeToLarge();
     //resizeToSmall();

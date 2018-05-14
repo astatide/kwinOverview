@@ -162,6 +162,7 @@ import "../code/createClients.js" as CreateClients
 						if (!endAnim.running) {
 							dashboard.height = 0;
 							dashboard.width = 0;
+							mainBackground.state = 'invisible';
 							//dashboard.visible = false;
 						}
 					}
@@ -403,6 +404,30 @@ import "../code/createClients.js" as CreateClients
 							}
 						}
 					}
+					/*Item {
+						id: blahBlahBlah
+						//anchors.fill: parent
+						x: screenWidth/2-blahBlahBlah.width
+						y: 100
+						Grid {
+							id: activitySwitcherRepeaterGrid
+							//anchors.fill: parent
+							rows: 1
+							columns:  10
+							Repeater {
+								id: activitySwitcherRepeater
+								model: ActivitySwitcher.Backend.runningActivitiesModel()
+								Item {
+									Text {
+										text: model.name
+										font.family: "Helvetica"
+										font.pointSize: 12
+										color: "white"
+									}
+								}
+							}
+						}
+					}*/
 				}
 				// We'll create our normal desktop windows here with the same code.
 				// Just a little bit of tinkering should work.
@@ -553,7 +578,6 @@ import "../code/createClients.js" as CreateClients
 			//while (endAnim.busy == true) {};
 			//dashboard.height = 0;
 			//dashboard.width = 0;
-			mainBackground.state = 'invisible';
 			endAnim.restart();
 			/*for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
