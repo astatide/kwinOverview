@@ -461,9 +461,11 @@ Item {
         //runMoveToThumbnailAnim();
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
-      } else {
+        kwinThumbnailRenderWindow.enabled = true;
+      } else if (state == 'invisible') {
         actualThumbnail.visible = false;
         kwinThumbnailRenderWindow.visible = false;
+        kwinThumbnailRenderWindow.enabled = false;
       }
     });
     // We want to wait until the ending animation is finished to hide the thumbnails.
