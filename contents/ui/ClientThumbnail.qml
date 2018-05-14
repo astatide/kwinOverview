@@ -97,6 +97,7 @@ Item {
     // Are THESE breaking it?  What the shit.
     // These DO seem to break it!  What the fuck.
     // Something about the way they're painted, maybe?  Not so good.
+    // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
     KWinLib.ThumbnailItem {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
@@ -109,7 +110,7 @@ Item {
       y: 0
       z: 0
       visible: true
-      clip: true
+      clip: false
     }
   }
   // These don't really work yet, but hey.
