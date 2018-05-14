@@ -446,12 +446,17 @@ Item {
         //runMoveToThumbnailAnim();
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
-      } else {
-        // Hide the thumbnails when we're hidden.
+      }
+    });
+    endAnim.onRunningChanged.connect(function() {
+      //console.log('ANIMATION OVER');
+      if (!mainBackground.state == 'visible') {
+          // Hide the thumbnails when we're hidden.
         actualThumbnail.visible = false;
         kwinThumbnailRenderWindow.visible = false;
       }
     });
+
     //resizeToLarge();
     //resizeToSmall();
   }

@@ -134,20 +134,24 @@ import "../code/createClients.js" as CreateClients
 				}
 				ParallelAnimation {
 					id: endAnim
-					NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1}
-					NumberAnimation { target: dash; property: "y"; to: -dash.height}
-					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
+					SequentialAnimation {
+						NumberAnimation {
+							target: currentDesktopGridThumbnailContainer
+							property: "y"
+							//to: dashboard.screenHeight - dash.height - 30
+							from: 0
+							to: dashboard.screenHeight
+						}
+						ParallelAnimation {
+							NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1}
+							NumberAnimation { target: dash; property: "y"; to: -dash.height}
+							NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
 					// Cheaper!
 					//NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
 					// Not so cheap, probably!
-					NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32}
-					NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0}
-					NumberAnimation {
-						target: currentDesktopGridThumbnailContainer
-						property: "y"
-						//to: dashboard.screenHeight - dash.height - 30
-						from: 0
-						to: dashboard.screenHeight
+							NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32}
+							NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0}
+						}
 					}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 0; from: dashboard.opacity}
