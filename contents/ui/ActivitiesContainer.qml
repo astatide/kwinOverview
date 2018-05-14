@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.7
 //import org.kde.kwin 2.0 as KWin
 //import org.kde.kwin 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore

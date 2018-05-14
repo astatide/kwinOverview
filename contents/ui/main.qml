@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.7
 import QtQuick.Window 2.2
 //import org.kde.kwin 2.0 as KWin
 import org.kde.kwin 2.0 as KWinLib
@@ -322,7 +322,9 @@ import "../code/createClients.js" as CreateClients
 										//id: secondBackgroundDesktop
 										//anchors.fill: dashboard
 										//anchors.fill: parent
-										smooth: true
+										//smooth: true
+										// Better scaling
+										mipmap: true
 										//border { left: 30; top: 30; right: 30; bottom: 30 }
 										//horizontalTileMode: BorderImage.Stretch
   									//verticalTileMode: BorderImage.Stretch
