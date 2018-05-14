@@ -86,7 +86,7 @@ Item {
     //anchors.fill kwinClientThumbnail
     height: kwinClientThumbnail.height
     width: kwinClientThumbnail.width
-    visible: true
+    visible: false
     opacity: 1
     //x: 0
     //y: 0
@@ -132,7 +132,7 @@ Item {
       x: 0
       y: 0
       z: 0
-      visible: true
+      visible: false
       clip: false
     }
   }
@@ -456,7 +456,7 @@ Item {
             // Hide the thumbnails when we're hidden.
           actualThumbnail.visible = false;
           kwinThumbnailRenderWindow.visible = false;
-        }  
+        }
       }
     });
 
