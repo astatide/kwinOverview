@@ -442,7 +442,11 @@ Item {
     });
     mainBackground.onStateChanged.connect(function() {
       if (mainBackground.state == 'visible') {
-        runMoveToThumbnailAnim();
+        //runMoveToThumbnailAnim();
+        actualThumbnail.visible = true;
+      } else {
+        // Hide the thumbnails when we're hidden.
+        actualThumbnail.visible = false;
       }
     });
     //resizeToLarge();
