@@ -238,8 +238,8 @@ Item {
       duration: 100
   }
 
-    PropertyAnimation { target: actualThumbnail; property: "x"; to: shrinkAnim.animX-(50*dashboard.screenRatio); duration: 100}
-    PropertyAnimation { target: actualThumbnail; property: "y"; to: shrinkAnim.animY-50; duration: 100}
+    PropertyAnimation { target: actualThumbnail; property: "x"; to: shrinkAnim.animX-(dash.gridHeight/2*dashboard.screenRatio); duration: 100}
+    PropertyAnimation { target: actualThumbnail; property: "y"; to: shrinkAnim.animY-dash.gridHeight/2; duration: 100}
 
     onStopped: {
       mouseArea.enabled = true;
@@ -320,12 +320,12 @@ Item {
       growthAnim.animY = mouseY;
 
       if (kwinClientThumbnail.state == 'isHeld') {
-        if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.height + 30) {
-              if (actualThumbnail.height != 100) {
+        if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.gridHeight + 30) {
+              if (actualThumbnail.height != dash.gridHeight) {
               shrinkAnim.restart()
               ranAnimation = true;
           }
-        } else if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y > dash.height + 30) {
+        } else if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y > dash.gridHeight + 30) {
               if (actualThumbnail.height != originalHeight) {
               kwinClientThumbnail.isSmall = false;
               ranAnimation = true;
@@ -340,12 +340,14 @@ Item {
       kwinClientThumbnail.originalX = kwinClientThumbnail.x;
       kwinClientThumbnail.originalY = kwinClientThumbnail.y;
       kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
+      kwinClientThumbnail.clientObject.keepAbove = true;
       // So doesn't work.
       kwinClientThumbnail.z = 1000;
       kwinClientThumbnail.state = 'isHeld';
     }
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
+      kwinClientThumbnail.clientObject.keepAbove = false;
       var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
       //growthAnim.animX = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).x;
       //growthAnim.animY = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).y;
@@ -428,7 +430,7 @@ Item {
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
         kwinThumbnailRenderWindow.enabled = true;
-        kwinClientThumbnail.visible = true;  
+        kwinClientThumbnail.visible = true;
       }
     } else if (state == 'invisible') {
       actualThumbnail.visible = false;
@@ -496,17 +498,17 @@ Item {
       // Here, we're going to determine if we're in a new desktop.
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
-      if (y > dash.height) {
+      if (y > dash.gridHeight) {
         return workspace.currentDesktop;
       }
       for (var d = 0; d <= workspace.desktops; d++) {
         // We need to check if we're within the new bounds.  That's height and width!
         // or just width, actually.
         // x and y are now global coordinates.
-        if (x < d*(dash.height*dashboard.screenRatio)) {
+        if (x < d*(dash.gridHeight*dashboard.screenRatio)) {
         // We have workspace.desktops, and our screen width is activeScreen.width
-        //console.log(x, (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*main.screenRatio, d);
-        //if (x < (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*dashboard.screenRatio) {
+        //console.log(x, (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.gridHeight*main.screenRatio, d);
+        //if (x < (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.gridHeight*dashboard.screenRatio) {
           return d
         }
         //if (x > (d-1*width)+activeScreen.width/(2*workspace.desktops)) {

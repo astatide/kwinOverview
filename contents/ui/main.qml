@@ -123,7 +123,7 @@ import "../code/createClients.js" as CreateClients
 						NumberAnimation {
 							target: currentDesktopGridThumbnailContainer
 							property: "y"
-							//to: dashboard.screenHeight - dash.height - 30
+							//to: dashboard.screenHeight - dash.gridHeight - 30
 							to: 0
 							from: dashboard.screenHeight
 						}
@@ -138,13 +138,13 @@ import "../code/createClients.js" as CreateClients
 						NumberAnimation {
 							target: currentDesktopGridThumbnailContainer
 							property: "y"
-							//to: dashboard.screenHeight - dash.height - 30
+							//to: dashboard.screenHeight - dash.gridHeight - 30
 							from: 0
 							to: dashboard.screenHeight
 						}
 						ParallelAnimation {
 							NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1}
-							NumberAnimation { target: dash; property: "y"; to: -dash.height}
+							NumberAnimation { target: dash; property: "y"; to: -dash.gridHeight}
 							NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
 					// Cheaper!
 					//NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
@@ -254,7 +254,8 @@ import "../code/createClients.js" as CreateClients
 					// When y is set, we start this animation.  This gracefully moves the dock into position, ignoring the whole 'slide' thing.
 					width: dashboard.screenWidth
 					//height: main.screenHeight
-					height: 100
+					height: 115
+					property int gridHeight: 100
 					y: 0
 					anchors.fill: mainBackground
 					//anchors.fill: parent
@@ -272,10 +273,13 @@ import "../code/createClients.js" as CreateClients
 					// This seems pretty nice, honestly.
 					Flickable {
 						id: desktopThumbnailGrid
-						anchors.fill: parent
+						anchors.top: parent.top
+						anchors.left: parent.left
+						anchors.right: parent.right
+						//anchors.fill: parent
 
 						property int spacing: 10
-						height: dash.height
+						height: dash.gridHeight
 						contentHeight: desktopThumbnailGridBackgrounds.height
 						contentWidth: desktopThumbnailGridBackgrounds.width
 						//boundsMovement: Flickable.StopAtBounds
@@ -293,12 +297,12 @@ import "../code/createClients.js" as CreateClients
 							scale: 1
 							clip: true
 							//x: -2
-							x: ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
+							x: ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
 							y: 8
 							//height: desktopThumbnailGridBackgrounds.height
 							//width: desktopThumbnailGridBackgrounds.width
 							height: desktopThumbnailGrid.height+4
-							width: (dash.height*dashboard.screenRatio)+4
+							width: (dash.gridHeight*dashboard.screenRatio)+4
 						}
 						PropertyAnimation {
 							id: activeDesktopIndicatorShiftAnim
@@ -340,7 +344,7 @@ import "../code/createClients.js" as CreateClients
 									visible: true
 									property int desktop: model.index
 									height: desktopThumbnailGrid.height
-									width: dash.height*dashboard.screenRatio
+									width: dash.gridHeight*dashboard.screenRatio
 									Image {
 										//id: secondBackgroundDesktop
 										//anchors.fill: dashboard
@@ -360,7 +364,7 @@ import "../code/createClients.js" as CreateClients
 										//height: dashboard.screenHeight
 										//width: dashboard.screenWidth
 										height: desktopThumbnailGrid.height
-										width: dash.height*dashboard.screenRatio
+										width: dash.gridHeight*dashboard.screenRatio
 										x: 0
 										y: 0
 										// Maybe?
@@ -393,41 +397,59 @@ import "../code/createClients.js" as CreateClients
 										//anchors.fill: parent
 										id: littleDesktopGrid
 										desktop: littleDesktopContainer.desktop
-										x: dash.height*.025*dashboard.screenRatio
-										y: dash.height*.025
-										height: dash.height*.95
-										width: dash.height*dashboard.screenRatio*.95
-										//height: dashboard.screenHeight - dash.height - 30
+										x: dash.gridHeight*.025*dashboard.screenRatio
+										y: dash.gridHeight*.025
+										height: dash.gridHeight*.95
+										width: dash.gridHeight*dashboard.screenRatio*.95
+										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
 									}
 								}
 							}
 						}
 					}
-					/*Item {
+					Item {
 						id: blahBlahBlah
-						//anchors.fill: parent
-						x: screenWidth/2-blahBlahBlah.width
-						y: 100
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.horizontalCenter: parent.horizontalCenter
+						anchors.bottom: parent.top
+						//anchors.top: desktopThumbnailGrid.bottom
+						//x: screenWidth/2-blahBlahBlah.width
+						//y: 124
+						height: 20
 						Grid {
 							id: activitySwitcherRepeaterGrid
 							//anchors.fill: parent
 							rows: 1
 							columns:  10
+							spacing: desktopThumbnailGrid.spacing
 							Repeater {
 								id: activitySwitcherRepeater
 								model: ActivitySwitcher.Backend.runningActivitiesModel()
-								Item {
+								//Item {
+									//x: 0
+									//y: 0
 									Text {
+										//anchors.fill: parent
 										text: model.name
 										font.family: "Helvetica"
 										font.pointSize: 12
 										color: "white"
+										MouseArea {
+											anchors.fill: parent
+											enabled: true
+											onClicked: {
+												//console.log(Object.getOwnPropertyNames(workspace));
+												//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
+												//workspace.currentActivity = model.id;
+												ActivitySwitcher.Backend.setCurrentActivity(model.id)
+											}
+										}
 									}
-								}
+								//}
 							}
 						}
-					}*/
+					}
 				}
 				// We'll create our normal desktop windows here with the same code.
 				// Just a little bit of tinkering should work.
@@ -439,30 +461,30 @@ import "../code/createClients.js" as CreateClients
 					y: dashboard.screenHeight
 					//contentHeight: desktopThumbnailGridBackgrounds.height
 					//contentWidth: desktopThumbnailGridBackgrounds.width
-					//contentHeight: (dashboard.screenHeight - dash.height - 30)
+					//contentHeight: (dashboard.screenHeight - dash.gridHeight - 30)
 					//contentWidth: dashboard.screenWidth
 					//anchors.fill: parent
 					Repeater {
 						// Now, we build up our desktops.
 						model: dashboard.returnNumberOfDesktops()
 						id: currentDesktopGrid
-						height: (dashboard.screenHeight - dash.height - 30)
+						height: (dashboard.screenHeight - dash.gridHeight - 30)
 						width: dashboard.screenWidth
 						Item {
 							id: bigDesktopRepeater
 							//id: bigDesktopContainer
 							visible: true
 							property int desktop: model.index
-							//height: dashboard.screenHeight - dash.height - 30
+							//height: dashboard.screenHeight - dash.gridHeight - 30
 							//width: dashboard.screenWidth
 							Clients {
 								//id: currentDesktopGrid
 								desktop: bigDesktopRepeater.desktop
 								visible: false
 								x: 0
-								y: dash.height + 30
+								y: dash.gridHeight + 30
 								scale: 1
-								height: (dashboard.screenHeight - dash.height - 30)
+								height: (dashboard.screenHeight - dash.gridHeight - 30)
 								width: dashboard.screenWidth
 								isMain: false
 								isLarge: true
@@ -496,13 +518,13 @@ import "../code/createClients.js" as CreateClients
 				);
 			}
 			// Make the big ones.
-			height: dashboard.screenHeight - dash.height - 30
+			height: dashboard.screenHeight - dash.gridHeight - 30
 			width: dashboard.screenWidth
 			CreateClients.createAllClientThumbnails(
 				currentDesktopGridThumbnailContainer,
 				dashboard,
 				6,
-				dashboard.screenHeight - dash.height - 30,
+				dashboard.screenHeight - dash.gridHeight - 30,
 				dashboard.screenWidth,
 				true
 			)
@@ -510,8 +532,8 @@ import "../code/createClients.js" as CreateClients
 				desktopThumbnailGrid,
 				dashboard,
 				6,
-				dash.height*.95,
-				dash.height*dashboard.screenRatio*.95,
+				dash.gridHeight*.95,
+				dash.gridHeight*dashboard.screenRatio*.95,
 				false
 			)
 			// Make sure we add new thumbnails as necessary.
@@ -521,8 +543,8 @@ import "../code/createClients.js" as CreateClients
 					desktopThumbnailGrid,
 					dashboard,
 					6,
-					dash.height*.95,
-					dash.height*dashboard.screenRatio*.95,
+					dash.gridHeight*.95,
+					dash.gridHeight*dashboard.screenRatio*.95,
 					false,
 					c
 				);
@@ -530,19 +552,19 @@ import "../code/createClients.js" as CreateClients
 					currentDesktopGridThumbnailContainer,
 					dashboard,
 					6,
-					dashboard.screenHeight - dash.height - 30,
+					dashboard.screenHeight - dash.gridHeight - 30,
 					dashboard.screenWidth,
 					true,
 					c
 				);
 			});
 			workspace.currentDesktopChanged.connect(function() {
-				activeDesktopIndicatorShiftAnim.newX = ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
+				activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
 				// Move the flickable container.
-				//if (((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) > desktopThumbnailGrid.contentY) {
-				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.height*dashboard.screenRatio+desktopThumbnailGrid.spacing));
+				//if (((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) > desktopThumbnailGrid.contentY) {
+				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing));
 				//}
 			});
 			toggleBoth();

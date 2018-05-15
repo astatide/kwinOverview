@@ -92,7 +92,7 @@ Item {
       //console.log(workspace.currentDesktop);
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
-      if (y > dash.height) {
+      if (y > dash.gridHeight) {
         return workspace.currentDesktop;
       }
       for (var d = 1; d <= workspace.desktops; d++) {
@@ -100,8 +100,8 @@ Item {
         // or just width, actually.
         // x and y are now global coordinates.
         // We have workspace.desktops, and our screen width is activeScreen.width
-        //console.log(x, (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*main.screenRatio, d);
-        if (x < (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.height*dashboard.screenRatio) {
+        //console.log(x, (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.gridHeight*main.screenRatio, d);
+        if (x < (d)*kwinDesktopThumbnailContainer.width + desktopThumbnailGridBackgrounds.width/(workspace.desktops) + dash.gridHeight*dashboard.screenRatio) {
           return d-1
         }
         //if (x > (d-1*width)+activeScreen.width/(2*workspace.desktops)) {
@@ -347,8 +347,8 @@ Item {
           //currentDesktopGrid.updateGrid();
           //width = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
           //height = kwinDesktopThumbnailContainer.height / clientGridLayout.columns;
-          //clientGridLayout.height = dashboard.screenHeight - dash.height - 30
-          //width: (dashboard.screenHeight - dash.height - 30)*dashboard.screenRatio
+          //clientGridLayout.height = dashboard.screenHeight - dash.gridHeight - 30
+          //width: (dashboard.screenHeight - dash.gridHeight - 30)*dashboard.screenRatio
           //clientGridLayout.width = dashboard.screenWidth
         }
       }
