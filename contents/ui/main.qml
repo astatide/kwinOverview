@@ -177,7 +177,7 @@ import "../code/createClients.js" as CreateClients
 				//PlasmaCore.Dialog {
 					id: dashboardBackground
 					//visible: true
-					anchors.fill: dashboard
+					anchors.fill: parent
 					height: dashboard.screenHeight
 					width: dashboard.screenWidth
 					//clip: true
@@ -190,7 +190,7 @@ import "../code/createClients.js" as CreateClients
 					//z: 100
 					Image {
 						id: firstBackgroundDesktop
-						anchors.fill: dashboard
+						anchors.fill: parent
 						smooth: true
 						//clip: true
 						//visible: true
@@ -208,7 +208,7 @@ import "../code/createClients.js" as CreateClients
 
 					Image {
 						id: secondBackgroundDesktop
-						anchors.fill: dashboard
+						anchors.fill: parent
 						smooth: true
 						//clip: true
 						//visible: true
@@ -233,7 +233,7 @@ import "../code/createClients.js" as CreateClients
 					}
 
 					Rectangle {
-						anchors.fill: dashboard
+						anchors.fill: parent
 						id: backgroundDarken
 						//visible: true
 						opacity: 0.5
@@ -256,7 +256,7 @@ import "../code/createClients.js" as CreateClients
 					//height: main.screenHeight
 					height: 100
 					y: 0
-					anchors.fill: dashboard
+					anchors.fill: mainBackground
 					//anchors.fill: parent
 
 					Rectangle {

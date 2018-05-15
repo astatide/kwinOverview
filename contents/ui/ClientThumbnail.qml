@@ -161,35 +161,6 @@ Item {
       easing.type: Easing.InOutQuad;
       //duration: 1000
     }
-    /*NumberAnimation {
-      //target: kwinClientThumbnail;
-      target: actualThumbnail;
-      property: "x";
-      //from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY-dashboard.dockHeight).x//-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
-      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
-      //from: clientRealX
-      to: kwinClientThumbnail.originalX;
-      //to: 0
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
-      //duration: 1000
-    }
-    NumberAnimation {
-      //target: kwinClientThumbnail;
-      target: actualThumbnail;
-      property: "y";
-      //from: clientRealY;
-      // We want what the global coordinates of the client would be mapped to our thumbnail.
-      // But why does this work when we're maximized, and not otherwise?
-      // Our coordinate scales should be the same, so.
-      from: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y - actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
-      //from: clientRealY
-      to: kwinClientThumbnail.originalY;
-      //to: 0
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
-      //duration: 1000
-    }*/
   }
   ParallelAnimation {
     id: moveFromThumbnail
@@ -425,66 +396,46 @@ Item {
     moveFromThumbnail.running = false;
     growthAnim.running = false;
     shrinkAnim.running = false;
+    clientObject.desktopChanged.connect(callUpdateGrid);
+    clientObject.activitiesChanged.connect(callUpdateGrid);
+    workspace.currentActivityChanged.connect(callUpdateGrid);
+    mainBackground.onStateChanged.connect(toggleVisible);
+    workspace.clientRemoved.connect(disconnectAllSignals);
     callUpdateGrid();
-    clientObject.desktopChanged.connect(function() {
-      // Update our main grid.  Bit of a hack for now.
-      // (this shouldn't really call our main stuff.)
-      // We just want to reparent ourselves.
-      // This SHOULD call it for both the large and the small.  Why is it not doing that?
-      callUpdateGrid();
-    });
-    clientObject.activitiesChanged.connect(function() {
-      // Update our main grid.  Bit of a hack for now.
-      // (this shouldn't really call our main stuff.)
-      // We just want to reparent ourselves.
-      // This SHOULD call it for both the large and the small.  Why is it not doing that?
-      callUpdateGrid();
-    });
-    workspace.currentActivityChanged.connect(function() {
-      // Update our main grid.  Bit of a hack for now.
-      // (this shouldn't really call our main stuff.)
-      // We just want to reparent ourselves.
-      // This SHOULD call it for both the large and the small.  Why is it not doing that?
-      callUpdateGrid();
-    });
+  }
 
-    // Destroy yourself if you're removed.
-    // Yay!  It works!
-    workspace.clientRemoved.connect(function (c) {
+  function disconnectAllSignals(c) {
+    console.log(c);
+    if (c) {
       if (c.windowId == kwinClientThumbnail.clientId) {
         console.log('KILLING MYSELF');
+        // Yes, we even have to disconnect this.
+        workspace.clientRemoved.disconnect(disconnectAllSignals);
+        mainBackground.onStateChanged.disconnect(toggleVisible);
+        clientObject.desktopChanged.disconnect(callUpdateGrid);
+        clientObject.activitiesChanged.disconnect(callUpdateGrid);
+        workspace.currentActivityChanged.disconnect(callUpdateGrid);
         kwinClientThumbnail.destroy();
       }
-    });
-    mainBackground.onStateChanged.connect(function(state) {
-      if (state == 'visible') {
-        //runMoveToThumbnailAnim();
+    }
+  }
+
+  function toggleVisible(state) {
+    if (state == 'visible') {
+      //runMoveToThumbnailAnim();
+      // only toggle the ones on the current activity.
+      if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
         kwinThumbnailRenderWindow.enabled = true;
-        kwinClientThumbnail.visible = true;
-      } else if (state == 'invisible') {
-        actualThumbnail.visible = false;
-        kwinThumbnailRenderWindow.visible = false;
-        kwinThumbnailRenderWindow.enabled = false;
-        kwinClientThumbnail.visible = false;
+        kwinClientThumbnail.visible = true;  
       }
-    });
-    // We want to wait until the ending animation is finished to hide the thumbnails.
-    // Actually, I don't think this will work.
-    /*endAnim.onRunningChanged.connect(function() {
-      //console.log('ANIMATION OVER');
-      if (!endAnim.running) {
-        if (mainBackground.state == 'invisible') {
-            // Hide the thumbnails when we're hidden.
-          actualThumbnail.visible = false;
-          kwinThumbnailRenderWindow.visible = false;
-        }
-      }
-    });*/
-
-    //resizeToLarge();
-    //resizeToSmall();
+    } else if (state == 'invisible') {
+      actualThumbnail.visible = false;
+      kwinThumbnailRenderWindow.visible = false;
+      kwinThumbnailRenderWindow.enabled = false;
+      kwinClientThumbnail.visible = false;
+    }
   }
 
   function resizeToLarge(){
@@ -504,34 +455,39 @@ Item {
         // it's always going to be the desktop.
         //console.log('LARGE DESKTOP!');
         console.log('TESTING ACTIVITIES');
-        //console.log(Object.getOwnPropertyNames())
-        console.log(kwinClientThumbnail.clientObject.activities, workspace.currentActivity);
-        console.log(kwinClientThumbnail.clientObject.desktop);
-        if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
-          // Reparent, then resize all the appropriate grids.
-          // But also check to make sure we're on the correct activity.
-          if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+        if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+          //if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
+          if (kwinClientThumbnail.clientObject.desktop > -1) {
+            // Reparent, then resize all the appropriate grids.
+            // But also check to make sure we're on the correct activity.
             kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             kwinClientThumbnail.visible = true;
-          } else {
+            actualThumbnail.visible = true;
+          }
+        } else {
             // Go back to being in the original parent widget.
             kwinClientThumbnail.parent = currentDesktopGridThumbnailContainer;
             kwinClientThumbnail.visible = false;
+            actualThumbnail.visible = false;
           }
-        }
       } else {
-        //console.log('SMALL DESKTOP!');
-        if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
-          // Reparent, then resize all the appropriate grids.
-          if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
-            kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+      //console.log('SMALL DESKTOP!');
+        if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+          //if (kwinClientThumbnail.clientObject.desktop > -1 && !kwinClientThumbnail.clientObject.dock) {
+          if (kwinClientThumbnail.clientObject.desktop > -1) {
+            // Reparent, then resize all the appropriate grids.
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             kwinClientThumbnail.visible = true;
-          } else {
-            kwinClientThumbnail.parent = desktopThumbnailGrid;
-            kwinClientThumbnail.visible = false;
+            actualThumbnail.visible = true;
+            kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           }
+        } else {
+          console.log('REPARENTING');
+          console.log('MAKE ME INVISIBLE');
+          kwinClientThumbnail.visible = false;
+          actualThumbnail.visible = false;
+          kwinClientThumbnail.parent = desktopThumbnailGrid;
         }
       }
     }
