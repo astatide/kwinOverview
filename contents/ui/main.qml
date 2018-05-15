@@ -124,7 +124,7 @@ import "../code/createClients.js" as CreateClients
 							target: currentDesktopGridThumbnailContainer
 							property: "y"
 							//to: dashboard.screenHeight - dash.gridHeight - 30
-							to: 0
+							to: 15
 							from: dashboard.screenHeight
 						}
 					}
@@ -139,7 +139,7 @@ import "../code/createClients.js" as CreateClients
 							target: currentDesktopGridThumbnailContainer
 							property: "y"
 							//to: dashboard.screenHeight - dash.gridHeight - 30
-							from: 0
+							from: 15
 							to: dashboard.screenHeight
 						}
 						ParallelAnimation {
@@ -254,7 +254,7 @@ import "../code/createClients.js" as CreateClients
 					// When y is set, we start this animation.  This gracefully moves the dock into position, ignoring the whole 'slide' thing.
 					width: dashboard.screenWidth
 					//height: main.screenHeight
-					height: 115
+					height: 100
 					property int gridHeight: 100
 					y: 0
 					anchors.fill: mainBackground
@@ -337,7 +337,8 @@ import "../code/createClients.js" as CreateClients
 							}
 							Repeater {
 								// Now, we build up our desktops.
-								model: dashboard.returnNumberOfDesktops()
+								//model: dashboard.returnNumberOfDesktops()
+								model: workspace.desktops
 								id: littleDesktopRepeater
 								Item {
 									id: littleDesktopContainer
@@ -406,47 +407,10 @@ import "../code/createClients.js" as CreateClients
 									}
 								}
 							}
-						}
-					}
-					Item {
-						id: blahBlahBlah
-						anchors.verticalCenter: parent.verticalCenter
-						anchors.horizontalCenter: parent.horizontalCenter
-						anchors.bottom: parent.top
-						//anchors.top: desktopThumbnailGrid.bottom
-						//x: screenWidth/2-blahBlahBlah.width
-						//y: 124
-						height: 20
-						Grid {
-							id: activitySwitcherRepeaterGrid
-							//anchors.fill: parent
-							rows: 1
-							columns:  10
-							spacing: desktopThumbnailGrid.spacing
-							Repeater {
-								id: activitySwitcherRepeater
-								model: ActivitySwitcher.Backend.runningActivitiesModel()
-								//Item {
-									//x: 0
-									//y: 0
-									Text {
-										//anchors.fill: parent
-										text: model.name
-										font.family: "Helvetica"
-										font.pointSize: 12
-										color: "white"
-										MouseArea {
-											anchors.fill: parent
-											enabled: true
-											onClicked: {
-												//console.log(Object.getOwnPropertyNames(workspace));
-												//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
-												//workspace.currentActivity = model.id;
-												ActivitySwitcher.Backend.setCurrentActivity(model.id)
-											}
-										}
-									}
-								//}
+							Component.onCompleted: {
+								workspace.numberDesktopsChanged.connect(function () {
+									littleDesktopRepeater.model = workspace.desktops;
+								});
 							}
 						}
 					}
@@ -464,12 +428,17 @@ import "../code/createClients.js" as CreateClients
 					//contentHeight: (dashboard.screenHeight - dash.gridHeight - 30)
 					//contentWidth: dashboard.screenWidth
 					//anchors.fill: parent
+					//height: (dashboard.screenHeight - dash.height - 30)
+					//y: 15
 					Repeater {
 						// Now, we build up our desktops.
-						model: dashboard.returnNumberOfDesktops()
+						//model: dashboard.returnNumberOfDesktops()
+						//model: KWin.Switcher.model
+						model: workspace.desktops
 						id: currentDesktopGrid
-						height: (dashboard.screenHeight - dash.gridHeight - 30)
+						height: (dashboard.screenHeight - dash.height - 30 - 15)
 						width: dashboard.screenWidth
+						scale: 1
 						Item {
 							id: bigDesktopRepeater
 							//id: bigDesktopContainer
@@ -482,14 +451,145 @@ import "../code/createClients.js" as CreateClients
 								desktop: bigDesktopRepeater.desktop
 								visible: false
 								x: 0
-								y: dash.gridHeight + 30
+								y: dash.height + 30
 								scale: 1
-								height: (dashboard.screenHeight - dash.gridHeight - 30)
+								height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
 								width: dashboard.screenWidth
 								isMain: false
 								isLarge: true
 							}
 						}
+					}
+					Item {
+						id: activitySwitcherDash
+						//anchors.verticalCenter: parent.verticalCenter
+						//anchors.horizontalCenter: parent.horizontalCenter
+						//anchors.bottom: parent.top
+						anchors.top: currentDesktopGrid.bottom
+						anchors.topMargin: 40
+						x: 0
+						width: dashboard.screenWidth
+						//x: screenWidth/2-blahBlahBlah.width
+						//y: 124
+						//anchors.bottom: mainBackground.bottom
+						//y: (dashboard.screenHeight - 80)
+						scale: 1
+						//y: dashboard.screenHeight
+						//y: dashboard.screenHeight - dash.height + 10
+						height: 100
+						property int gridHeight: 70
+						Rectangle {
+							scale: 1
+							opacity: 0.5
+							y: 0
+							x: 0
+							height: activitySwitcherDash.height + 20
+							width: dashboard.screenWidth
+							color: 'black'
+						}
+						Grid {
+							id: activitySwitcherRepeaterGrid
+							//anchors.fill: parent
+							anchors.verticalCenter: parent.verticalCenter
+							anchors.horizontalCenter: parent.horizontalCenter
+							rows: 1
+							columns:  10
+							spacing: desktopThumbnailGrid.spacing
+							visible: true
+							Repeater {
+								id: activitySwitcherRepeater
+								model: ActivitySwitcher.Backend.runningActivitiesModel()
+								Item {
+									x: 0
+									y: 20
+									visible: true
+									height: activitySwitcherDash.gridHeight
+									width: activitySwitcherDash.gridHeight*dashboard.screenRatio
+									Image {
+										id: activityThumbnail
+										anchors.fill: parent
+										//smooth: true
+										mipmap: true
+										fillMode: Image.PreserveAspectCrop
+										source: model.background
+										opacity: 1
+										// Maybe?
+										asynchronous: true
+										cache: false
+									}
+									Rectangle {
+										id: activityThumbnailBlackRectangle
+										scale: 1
+										opacity: 0
+										//y: 0
+										//x: 0
+										anchors.top: activityThumbnail.top
+										height: 20
+										width: activityThumbnail.width
+										color: 'black'
+									}
+									Text {
+										//anchors.fill: parent
+										id: activityThumbnailTitleText
+										anchors.top: activityThumbnail.top
+										anchors.horizontalCenter: activityThumbnail.horizontalCenter
+										anchors.verticalCenter: activityThumbnailBlackRectangle.verticalCenter
+										anchors.topMargin: 2
+										opacity: 0
+										text: model.name
+										//font.family: "Helvetica"
+										//font.pointSize: 12
+										font.bold: true
+										color: "white"
+										//y: 5
+									}
+									ParallelAnimation {
+										id: thumbnailHoverStart
+										running: false
+										NumberAnimation {
+											target: activityThumbnailBlackRectangle;
+											property: 'opacity';
+											from: 0;
+											to: 0.5;
+										}
+										NumberAnimation {
+											target: activityThumbnailTitleText;
+											property: 'opacity';
+											from: 0;
+											to: 1;
+										}
+									}
+									ParallelAnimation {
+										id: thumbnailHoverEnd
+										running: false
+										PropertyAnimation { target: activityThumbnailBlackRectangle; property: 'opacity'; to: 0; from: 0.5}
+										PropertyAnimation { target: activityThumbnailTitleText; property: 'opacity'; to: 0; from: 1}
+									}
+									MouseArea {
+										anchors.fill: parent
+										enabled: true
+										hoverEnabled: true
+										onClicked: {
+											//console.log(Object.getOwnPropertyNames(workspace));
+											//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
+											//workspace.currentActivity = model.id;
+											ActivitySwitcher.Backend.setCurrentActivity(model.id)
+										}
+										onEntered: {
+											thumbnailHoverStart.restart();
+										}
+										onExited: {
+											thumbnailHoverEnd.restart();
+										}
+									}
+								}
+							}
+						}
+					}
+					Component.onCompleted: {
+						workspace.numberDesktopsChanged.connect(function () {
+							currentDesktopGrid.model = workspace.desktops;
+						});
 					}
 			}
 		}
@@ -580,6 +680,7 @@ import "../code/createClients.js" as CreateClients
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
 		console.log('TESTING!');
+		console.log(Object.getOwnPropertyNames(workspace));
 		/*console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.activities));
 		console.log(Object.getOwnPropertyNames(workspace.activities[0]));
