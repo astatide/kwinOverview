@@ -402,6 +402,9 @@ Item {
     clientObject.activitiesChanged.connect(callUpdateGrid);
     workspace.currentActivityChanged.connect(callUpdateGrid);
     mainBackground.onStateChanged.connect(toggleVisible);
+    // We just need to make sure we're calling correct parent signals when
+    // the desktop changes.  This avoids crashes upon creating/removing new desktops!
+    workspace.numberDesktopsChanged.connect(callUpdateGrid);
     workspace.clientRemoved.connect(disconnectAllSignals);
     callUpdateGrid();
   }
@@ -413,6 +416,7 @@ Item {
         console.log('KILLING MYSELF');
         // Yes, we even have to disconnect this.
         workspace.clientRemoved.disconnect(disconnectAllSignals);
+        workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
         mainBackground.onStateChanged.disconnect(toggleVisible);
         clientObject.desktopChanged.disconnect(callUpdateGrid);
         clientObject.activitiesChanged.disconnect(callUpdateGrid);
@@ -421,6 +425,7 @@ Item {
       }
     }
   }
+
 
   function toggleVisible(state) {
     if (state == 'visible') {
@@ -448,7 +453,6 @@ Item {
   }
 
     function callUpdateGrid() {
-      //console.log('TESTG!!!');
       // It seems that when we move a large to a small and vice versa, we don't
       // always properly trigger updates.
       // Actually, it seems we don't update our new parent properly.  WHAT.

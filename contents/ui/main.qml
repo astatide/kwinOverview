@@ -407,11 +407,11 @@ import "../code/createClients.js" as CreateClients
 									}
 								}
 							}
-							Component.onCompleted: {
+							/*Component.onCompleted: {
 								workspace.numberDesktopsChanged.connect(function () {
 									littleDesktopRepeater.model = workspace.desktops;
 								});
-							}
+							}*/
 						}
 					}
 				}
@@ -586,11 +586,12 @@ import "../code/createClients.js" as CreateClients
 							}
 						}
 					}
-					Component.onCompleted: {
+					/*Component.onCompleted: {
 						workspace.numberDesktopsChanged.connect(function () {
-							currentDesktopGrid.model = workspace.desktops;
+							console.log('DESKTOPS CHANGED');
+							//currentDesktopGrid.model = workspace.desktops;
 						});
-					}
+					}*/
 			}
 		}
 	}

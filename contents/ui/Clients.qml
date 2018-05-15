@@ -86,7 +86,7 @@ Item {
 
     Component.onCompleted: {
       //updateClients();
-      kwinDesktopThumbnailContainer.updateGrid();
+      //kwinDesktopThumbnailContainer.updateGrid();
       // We do want to change when a client changes desktops, but.
       if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
         if (kwinDesktopThumbnailContainer.isLarge) {
@@ -210,6 +210,7 @@ Item {
     console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
+      //console.log(JSON.stringify(clientGridLayout.children[c].clientObject));
       //var client = clientGridLayout.children[c];
       //console.log('How many children do we have?');
       //console.log(clientGridLayout.children.length);
