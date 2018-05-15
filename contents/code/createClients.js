@@ -5,8 +5,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
   for (c = 0; c < workspace.clientList().length; c++) {
     if (true) {
       // Don't make ones for docks.  Or desktops.
-      //if (!workspace.clientList()[c].dock && !workspace.clientList()[c].desktop) {
-    if (!workspace.clientList()[c].dock) {
+      if (!workspace.clientList()[c].dock && !workspace.clientList()[c].desktopWindow) {
+        //if (!workspace.clientList()[c].dock) {
         var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
         if( clientThumbnail.status == Component.Error )
             console.debug("Error:"+ clientThumbnail.errorString() );
@@ -41,7 +41,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
 }
 // Here, we just create a new thumbnail as necessary.  Later, we'll reparent it.
 function createNewClientThumbnails(parentContainer, dashboard, columns, height, width, isLarge, c) {
-  if (!c.dock) {
+  //if (!c.dock) {
+  if (c.dock && !c.desktopWindow) {
     var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
     if( clientThumbnail.status == Component.Error )
         console.debug("Error:"+ clientThumbnail.errorString() );

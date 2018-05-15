@@ -681,6 +681,7 @@ import "../code/createClients.js" as CreateClients
 		// but everything still sort of sucks.
 		console.log('TESTING!');
 		console.log(Object.getOwnPropertyNames(workspace));
+		console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
 		/*console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.activities));
 		console.log(Object.getOwnPropertyNames(workspace.activities[0]));
