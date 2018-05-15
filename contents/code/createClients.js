@@ -7,8 +7,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
       // Don't make ones for docks.  Or desktops.
       console.log('WHAT SORT ARE WE?');
       console.log(workspace.clientList()[c].windowType);
-      //if (!workspace.clientList()[c].dock && workspace.clientList()[c].desktopWindow) {
-      if (!workspace.clientList()[c].dock) {
+      if (!workspace.clientList()[c].dock && workspace.clientList()[c].normalWindow) {
+      //if (!workspace.clientList()[c].dock) {
         var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
         if( clientThumbnail.status == Component.Error )
             console.debug("Error:"+ clientThumbnail.errorString() );
@@ -46,8 +46,8 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
   //if (!c.dock) {
   console.log('WHAT SORT ARE WE?');
   console.log(c.windowType, c.windowRole, c.desktopWindow, c.normalWindow);
-  //if (!c.dock && c.desktopWindow) {
-  if (!c.dock) {
+  if (!c.dock && c.normalWindow) {
+  //if (!c.dock) {
     var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
     if( clientThumbnail.status == Component.Error )
         console.debug("Error:"+ clientThumbnail.errorString() );
