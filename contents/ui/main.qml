@@ -276,6 +276,7 @@ import "../code/createClients.js" as CreateClients
 						anchors.top: parent.top
 						anchors.left: parent.left
 						anchors.right: parent.right
+						anchors.leftMargin: 5
 						//anchors.fill: parent
 
 						property int spacing: 10
@@ -286,6 +287,7 @@ import "../code/createClients.js" as CreateClients
 						//boundsBehavior: Flickable.DragAndOvershootBounds
 
 						//visible: true
+						//x: 10
 						y: 0
 						// This is our active rectangle.  We shift it when our active desktop changes.
 						Rectangle {
@@ -477,13 +479,14 @@ import "../code/createClients.js" as CreateClients
 						//y: dashboard.screenHeight
 						//y: dashboard.screenHeight - dash.height + 10
 						height: 100
-						property int gridHeight: 70
+						property int gridHeight: 80
 						Rectangle {
+							id: activitySwitcherDashBackground
 							scale: 1
 							opacity: 0.5
 							y: 0
 							x: 0
-							height: activitySwitcherDash.height + 20
+							height: activitySwitcherDash.height
 							width: dashboard.screenWidth
 							color: 'black'
 						}
@@ -492,6 +495,8 @@ import "../code/createClients.js" as CreateClients
 							//anchors.fill: parent
 							anchors.verticalCenter: parent.verticalCenter
 							anchors.horizontalCenter: parent.horizontalCenter
+							anchors.top: activitySwitcherDashBackground.top
+							anchors.topMargin: 5
 							rows: 1
 							columns:  10
 							spacing: desktopThumbnailGrid.spacing
@@ -501,7 +506,7 @@ import "../code/createClients.js" as CreateClients
 								model: ActivitySwitcher.Backend.runningActivitiesModel()
 								Item {
 									x: 0
-									y: 20
+									y: 0
 									visible: true
 									height: activitySwitcherDash.gridHeight
 									width: activitySwitcherDash.gridHeight*dashboard.screenRatio
