@@ -349,7 +349,7 @@ import "../code/createClients.js" as CreateClients
 									height: desktopThumbnailGrid.height
 									width: dash.gridHeight*dashboard.screenRatio
 									Image {
-										//id: secondBackgroundDesktop
+										id: littleDesktopBackground
 										//anchors.fill: dashboard
 										//anchors.fill: parent
 										//smooth: true
@@ -374,7 +374,6 @@ import "../code/createClients.js" as CreateClients
 										//asynchronous: true
 										//cache: false
 									}
-
 									  MouseArea {
 									    id: littleDesktopGridMouseArea
 									    anchors.fill: parent
@@ -406,6 +405,40 @@ import "../code/createClients.js" as CreateClients
 										width: dash.gridHeight*dashboard.screenRatio*.95
 										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
+									}
+									// Can we use this?
+									DropArea {
+										id: littleDesktopDropArea
+										//anchors.fill: littleDesktopBackground
+										anchors.fill: parent
+										x: 0
+										y: 0
+										height: desktopThumbnailGrid.height
+										width: dash.gridHeight*dashboard.screenRatio
+										// Doesn't really seem to work.
+										/*onDropped: {
+											drag.drop.accept();
+											console.log('DROPPING!');
+											//console.log(drag.source);
+											//drag.source.newDesktop = model.index+1;
+											//console.log(drag.source.newDesktop);
+										}*/
+										Rectangle {
+											anchors.fill: parent
+											visible: false
+											color: "green"
+										}
+										onEntered: {
+											console.log('ENTERING!');
+											//console.log(Object.getOwnPropertyNames(drag.source));
+											drag.source.newDesktop = littleDesktopContainer.desktop+1;
+											console.log(drag.source.newDesktop);
+										}
+										onExited: {
+											console.log('LEAVING');
+											drag.source.newDesktop = drag.source.currentDesktop;
+											console.log(drag.source.newDesktop);
+										}
 									}
 								}
 							}
@@ -449,7 +482,7 @@ import "../code/createClients.js" as CreateClients
 							//height: dashboard.screenHeight - dash.gridHeight - 30
 							//width: dashboard.screenWidth
 							Clients {
-								//id: currentDesktopGrid
+								id: bigDesktopClients
 								desktop: bigDesktopRepeater.desktop
 								visible: false
 								x: 0
@@ -459,6 +492,31 @@ import "../code/createClients.js" as CreateClients
 								width: dashboard.screenWidth
 								isMain: false
 								isLarge: true
+								DropArea {
+									id: bigDesktopDropArea
+									//anchors.fill: littleDesktopBackground
+									anchors.fill: parent
+									//x: 0
+									//y: dash.height + 30
+									//height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
+									//width: dashboard.screenWidth
+									Rectangle {
+										anchors.fill: parent
+										visible: false
+										color: "green"
+									}
+									onEntered: {
+										console.log('ENTERING LARGE DESKTOP!');
+										//console.log(Object.getOwnPropertyNames(drag.source));
+										drag.source.newDesktop = bigDesktopRepeater.desktop+1;
+										console.log(drag.source.newDesktop);
+									}
+									onExited: {
+										console.log('LEAVING');
+										drag.source.newDesktop = drag.source.currentDesktop;
+										console.log(drag.source.newDesktop);
+									}
+								}
 							}
 						}
 					}

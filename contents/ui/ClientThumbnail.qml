@@ -33,6 +33,9 @@ Item {
   property var clientObject: ''
   property var clientId: 0
   property var currentDesktop: 0
+  property var newDesktop: 0
+  Drag.active: mouseArea.drag.active
+  //Drag.hotSpot: Qt.point(50,50)
 
   // Ha ha!
   opacity: 1
@@ -75,11 +78,25 @@ Item {
       }
     }
   ]
-
-  // Connect to the client signal.
-  //signal desktopChanged: { return workspace.clientList()[model.index].desktopChanged }
-
-  // I want this to show up if compositing is disabled.  But it doesn't, so heeeeey.
+  Rectangle {
+    //id: thumbnailBackgroundRectangle
+    // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
+    anchors.fill: parent
+    //anchors.fill kwinClientThumbnail
+    color: 'black'
+    opacity: 0.5
+    visible: false
+    scale: 1
+    clip: true
+    //x: 0
+    //y: 0
+    //height: kwinClientThumbnail.height
+    //width: kwinClientThumbnail.width
+    // Are THESE breaking it?  What the shit.
+    // These DO seem to break it!  What the fuck.
+    // Something about the way they're painted, maybe?  Not so good.
+    // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
+  }
 
   Item {
     id: actualThumbnail
@@ -227,12 +244,14 @@ Item {
 
     PropertyAnimation {
       target: actualThumbnail
+      //target: kwinClientThumbnail
       property: "height"
       to: 100
       duration: 100
     }
     PropertyAnimation {
       target: actualThumbnail
+      //target: kwinClientThumbnail
       property: "width"
       to: 100*dashboard.screenRatio
       duration: 100
@@ -240,6 +259,10 @@ Item {
 
     PropertyAnimation { target: actualThumbnail; property: "x"; to: shrinkAnim.animX-(dash.gridHeight/2*dashboard.screenRatio); duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: shrinkAnim.animY-dash.gridHeight/2; duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: shrinkAnim.animX-(dash.gridHeight/2*dashboard.screenRatio); duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: shrinkAnim.animY-dash.gridHeight/2; duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: kwinClientThumbnail.x-shrinkAnim.animX; duration: 100}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: kwinClientThumbnail.y-shrinkAnim.animY; duration: 100}
 
     onStopped: {
       mouseArea.enabled = true;
@@ -261,6 +284,8 @@ Item {
     //PropertyAnimation { target: actualThumbnail; property: "y"; from: growthAnim.animY; to: 0; duration: 1000}
     PropertyAnimation { target: actualThumbnail; property: "x"; to: 0; duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: 0; duration: 100}
+
+
     onStopped: {
       mouseArea.enabled = true;
       kwinClientThumbnail.isSmall = false;
@@ -298,7 +323,9 @@ Item {
     anchors.fill: parent
     drag.axis: 'XAndYAxis'
     drag.target: kwinClientThumbnail
+    //drag.active: true
     hoverEnabled: true
+    property bool dragActive: drag.active
     onClicked: {
       // We only want to disable the dashboard when we double click on the item
       // or when we're currently on said desktop and are 'sure'.
@@ -318,8 +345,13 @@ Item {
       shrinkAnim.animY = mouseY;
       growthAnim.animX = mouseX;
       growthAnim.animY = mouseY;
-
+      //console.log(Drag.hotSpot);
+      //if (actualThumbnail.height != dash.gridHeight) {
       if (kwinClientThumbnail.state == 'isHeld') {
+        shrinkAnim.restart()
+      }
+
+      /*if (kwinClientThumbnail.state == 'isHeld') {
         if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.gridHeight + 30) {
               if (actualThumbnail.height != dash.gridHeight) {
               shrinkAnim.restart()
@@ -332,7 +364,7 @@ Item {
               growthAnim.restart();
             }
           }
-      }
+      }*/
     }
 
     onPressed: {
@@ -344,18 +376,29 @@ Item {
       // So doesn't work.
       kwinClientThumbnail.z = 1000;
       kwinClientThumbnail.state = 'isHeld';
+      // This works!
+      //kwinClientThumbnail.Drag.hotSpot.x = mouse.x-(dash.gridHeight/2*dashboard.screenRatio);
+      //kwinClientThumbnail.Drag.hotSpot.y = mouse.y-dash.gridHeight/2;
+      kwinClientThumbnail.Drag.hotSpot.x = mouse.x;
+      kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
     }
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
       kwinClientThumbnail.clientObject.keepAbove = false;
-      var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
+      console.log(Drag.drop());
+      console.log('TESTING');
+      console.log(kwinClientThumbnail.newDesktop);
+      // Let's see if the dropArea can handle this.
+      //var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
+      //var newDesktop = 0;
       //growthAnim.animX = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).x;
       //growthAnim.animY = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).y;
       if (kwinClientThumbnail.isSmall) {
-        growthAnim.running = true;
+        //growthAnim.running = true;
+        growthAnim.restart();
         kwinClientThumbnail.isSmall = false;
       }
-      if (kwinClientThumbnail.clientObject.desktop == newDesktop ) {
+      if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
         //growthAnim.running = true;
@@ -363,7 +406,8 @@ Item {
         returnAnim.running = true;
         //growthAnim.running = true;
       } else {
-        kwinClientThumbnail.clientObject.desktop = newDesktop;
+        kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
+        kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
         returnAnim.running = true;
@@ -400,6 +444,7 @@ Item {
     shrinkAnim.running = false;
     clientObject.desktopChanged.connect(callUpdateGrid);
     clientObject.activitiesChanged.connect(callUpdateGrid);
+    // It seems that occasionally, this might not fire off.  Unsure as to why.
     workspace.currentActivityChanged.connect(callUpdateGrid);
     mainBackground.onStateChanged.connect(toggleVisible);
     // We just need to make sure we're calling correct parent signals when

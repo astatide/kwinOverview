@@ -24,6 +24,7 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'clientId': workspace.clientList()[c].windowId,
                                     // We'll use this to determine where to switch from.
                                     'currentDesktop': workspace.clientList()[c].desktop,
+                                    'newDesktop': workspace.clientList()[c].desktop,
                                     'isLarge': isLarge,
                                     // We don't want to actually SHOW these, yet.
                                     // We'll just distribute them accordingly.
@@ -61,6 +62,7 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 'scale': (height / width) / (dashboard.screenHeight/dashboard.screenWidth),
                                 'clientId': c.windowId,
                                 'currentDesktop': c.desktop,
+                                'newDesktop': c.desktop,
                                 'isLarge': isLarge,
                                 // We don't want to actually SHOW these, yet.
                                 // We'll just distribute them accordingly.
