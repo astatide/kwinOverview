@@ -104,8 +104,8 @@ import "../code/createClients.js" as CreateClients
 						//PropertyChanges { target: dashboard; visible: false }
 					}
 				]
-				NumberAnimation { id: fadeToBlack; running: false; target: backgroundDarken; property: "opacity"; to: 1; from: 0.5}
-				NumberAnimation { id: fadeFromBlack; running: false; target: backgroundDarken; property: "opacity"; to: 0.5; from: 1}
+				NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
+				NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
 				// These are just temporary to get it out of my way.  We'll change them later.
 				ParallelAnimation {
 					id: initAnim
@@ -676,6 +676,18 @@ import "../code/createClients.js" as CreateClients
 								}
 							}
 						}
+					}
+					Rectangle {
+						//anchors.fill: parent
+						id: foregroundDarken
+						visible: true
+						opacity: 0
+						x: 0
+						y: 0
+						//clip: true
+						color: 'black'
+						height: dashboard.screenHeight
+						width: dashboard.screenWidth
 					}
 					/*Component.onCompleted: {
 						workspace.numberDesktopsChanged.connect(function () {

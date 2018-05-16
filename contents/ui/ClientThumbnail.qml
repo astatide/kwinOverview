@@ -382,6 +382,8 @@ Item {
       //kwinClientThumbnail.Drag.hotSpot.y = mouse.y-dash.gridHeight/2;
       kwinClientThumbnail.Drag.hotSpot.x = mouse.x;
       kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
+      kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
+      kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
     }
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
