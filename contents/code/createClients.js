@@ -26,6 +26,7 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'currentDesktop': workspace.clientList()[c].desktop,
                                     'newDesktop': workspace.clientList()[c].desktop,
                                     'isLarge': isLarge,
+                                    'newActivity': workspace.clientList()[c].activities,
                                     // We don't want to actually SHOW these, yet.
                                     // We'll just distribute them accordingly.
                                     'visible': false,
@@ -64,6 +65,7 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 'currentDesktop': c.desktop,
                                 'newDesktop': c.desktop,
                                 'isLarge': isLarge,
+                                'newActivity': c.activities,
                                 // We don't want to actually SHOW these, yet.
                                 // We'll just distribute them accordingly.
                                 'visible': false,

@@ -645,6 +645,30 @@ import "../code/createClients.js" as CreateClients
 											thumbnailHoverEnd.restart();
 										}
 									}
+									/*DropArea {
+										id: activityDropArea
+										anchors.fill: parent
+										Rectangle {
+											anchors.fill: parent
+											visible: true
+											color: "green"
+										}
+										onEntered: {
+											console.log('ENTERING ACTIVITY!');
+											//console.log(Object.getOwnPropertyNames(drag.source));
+											//drag.source.newDesktop = bigDesktopRepeater.desktop+1;
+											drag.source.newActivity = model.id;
+											console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
+											//con
+											console.log(drag.source.newDesktop);
+										}
+										onExited: {
+											console.log('LEAVING ACTIVITY');
+											//drag.source.newDesktop = drag.source.currentDesktop;
+											drag.source.newActivity = drag.source.clientObject.activities;
+											console.log(drag.source.newDesktop);
+										}
+									}*/
 								}
 							}
 						}

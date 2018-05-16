@@ -34,6 +34,7 @@ Item {
   property var clientId: 0
   property var currentDesktop: 0
   property var newDesktop: 0
+  property var newActivity: 0
   Drag.active: mouseArea.drag.active
   //Drag.hotSpot: Qt.point(50,50)
 
@@ -398,7 +399,10 @@ Item {
         growthAnim.restart();
         kwinClientThumbnail.isSmall = false;
       }
-      if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
+      if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
+        //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
+        //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
+      } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
         //growthAnim.running = true;
