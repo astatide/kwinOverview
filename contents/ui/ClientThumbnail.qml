@@ -410,8 +410,8 @@ Item {
         returnAnim.running = true;
         //growthAnim.running = true;
       } else {
-        kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
+        kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
         returnAnim.running = true;

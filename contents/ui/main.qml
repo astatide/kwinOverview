@@ -104,6 +104,8 @@ import "../code/createClients.js" as CreateClients
 						//PropertyChanges { target: dashboard; visible: false }
 					}
 				]
+				NumberAnimation { id: fadeToBlack; running: false; target: backgroundDarken; property: "opacity"; to: 1; from: 0.5}
+				NumberAnimation { id: fadeFromBlack; running: false; target: backgroundDarken; property: "opacity"; to: 0.5; from: 1}
 				// These are just temporary to get it out of my way.  We'll change them later.
 				ParallelAnimation {
 					id: initAnim
@@ -636,7 +638,9 @@ import "../code/createClients.js" as CreateClients
 											//console.log(Object.getOwnPropertyNames(workspace));
 											//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
 											//workspace.currentActivity = model.id;
+											fadeToBlack.restart();
 											ActivitySwitcher.Backend.setCurrentActivity(model.id)
+											fadeFromBlack.restart();
 										}
 										onEntered: {
 											thumbnailHoverStart.restart();
