@@ -30,6 +30,7 @@ import "../code/createClients.js" as CreateClients
 			// Start disabled.  toggleBoth sets this appropriately.
 			height: 0
 			width: 0
+			property var windowId: 0
 			//width: { activeScreen.width }
 			//height: { return activeScreen.height + _getDockHeight() }
 			/*property int dockHeight: { return _getDockHeight() }
@@ -736,8 +737,26 @@ import "../code/createClients.js" as CreateClients
 		}
 	}
 
+	Timer {
+		id: timer
+		interval: 200
+		//onTriggered: TextField.searchTextChanged()
+		onTriggered: {
+			// I suspect that we have problems reacquiring focus on a desktop change.
+			console.log('DESKTOPCHANGED');
+			dashboard.requestActivate();
+			//workspace.activeClient = dashboard.windowId;
+			//dashboard.height = dashboard.screenHeight-1;
+			//dashboard.width = dashboard.screenWidth-1;
+			//dashboard.height = dashboard.screenHeight;
+			//dashboard.width = dashboard.screenWidth;
+			searchFieldAndResults.children[1].forceActiveFocus();
+		}
+	}
+
 		Component.onCompleted: {
 			dashboard.requestActivate();
+			//dashboard.windowId = workspace.activeClient;
 			//mainBackground.focus = true;
 			searchFieldAndResults.children[1].forceActiveFocus();
 			//searchFieldAndResults.forceActiveFocus();
@@ -811,8 +830,16 @@ import "../code/createClients.js" as CreateClients
 				activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
-				dashboard.requestActivate();
-				searchFieldAndResults.children[1].forceActiveFocus();
+				//dashboard.requestActivate();
+				//searchFieldAndResults.children[1].forceActiveFocus();
+				if (mainBackground.state == 'visible') {
+					timer.restart();
+					dashboard.height = dashboard.screenHeight;
+					dashboard.width = dashboard.screenWidth;
+				}
+				//dashboard.visible = true;
+				//initAnim.restart();
+				//mainBackground.state = 'visible';
 				//searchFieldAndResults.forceActiveFocus();
 				// We want the text input to basically always have focus.
 
@@ -838,8 +865,10 @@ import "../code/createClients.js" as CreateClients
 		console.log('Who has focus?');
 		console.log(dashboard.activeFocusItem);
 		console.log('TESTING!');
+		console.log(workspace.activeClient);
+		console.log(Object.getOwnPropertyNames(dashboard));
 		console.log(Object.getOwnPropertyNames(workspace));
-		console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
+		//console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
 		/*console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.activities));
 		console.log(Object.getOwnPropertyNames(workspace.activities[0]));
@@ -852,7 +881,7 @@ import "../code/createClients.js" as CreateClients
 		//console.log(allActivities);
 		//console.log(workspace.clientList()[0].isOnCurrentActivity);
 		//console.log(JSON.stringify(workspace.clientList()[1]));
-		console.log(Object.getOwnPropertyNames(desktopThumbnailGridBackgrounds));
+		//console.log(Object.getOwnPropertyNames(desktopThumbnailGridBackgrounds));
 		if (mainBackground.state == 'visible') {
 			//dashboard.visible = false;
 			//ndAnim.running = true;
@@ -881,6 +910,7 @@ import "../code/createClients.js" as CreateClients
 			//dashboard.visible = true;
 			initAnim.restart();
 			mainBackground.state = 'visible';
+			timer.restart();
 			searchFieldAndResults.children[1].forceActiveFocus();
 			//searchFieldAndResults.forceActiveFocus();
 			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();

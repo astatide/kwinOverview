@@ -92,7 +92,7 @@ Item {
 
       onTextChanged: timer.restart()
 
-      MouseArea {
+      /*MouseArea {
         anchors.fill: parent
         onClicked: {
           // we really just want to make sure that when we click here,
@@ -100,7 +100,7 @@ Item {
           //dashboard.requestActivate();
           searchField.focus = true;
         }
-      }
+      }*/
   }
 
   // This is where the actual business happens.
