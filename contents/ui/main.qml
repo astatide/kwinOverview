@@ -491,7 +491,8 @@ import "../code/createClients.js" as CreateClients
 					// Instantiate the search container.
 					Search {
 						id: searchFieldAndResults
-						visible: true
+						// Don't show until we start typing.
+						visible: false
 						y: dash.height + 30
 						//x: 0
 						height: (dashboard.screenHeight - dash.height - 30 - 15)

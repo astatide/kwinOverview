@@ -81,16 +81,28 @@ Item {
           //currentDesktopGrid.visible = !currentDesktopGrid.visible;
           // This propery enables and disables the large grid clients.
           if (searchField.text == '') {
+            mainSearch.visible = false;
             currentDesktopGridThumbnailContainer.state = 'showDesktop';
             //searchField.focus = false;
           } else {
+            mainSearch.visible = true;
             currentDesktopGridThumbnailContainer.state = 'showSearch';
           }
           searchField.forceActiveFocus()
         }
       }
 
-      onTextChanged: timer.restart()
+      onTextChanged: {
+        if (searchField.text == '') {
+          mainSearch.visible = false;
+          //currentDesktopGridThumbnailContainer.state = 'showDesktop';
+          //searchField.focus = false;
+        } else {
+          mainSearch.visible = true;
+          //currentDesktopGridThumbnailContainer.state = 'showSearch';
+        }
+        timer.restart()
+      }
 
       /*MouseArea {
         anchors.fill: parent
