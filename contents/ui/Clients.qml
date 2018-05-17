@@ -87,6 +87,20 @@ Item {
     Component.onCompleted: {
       //updateClients();
       //kwinDesktopThumbnailContainer.updateGrid();
+
+      // Register for the state change.
+      currentDesktopGridThumbnailContainer.onStateChanged.connect(function() {
+        if (kwinDesktopThumbnailContainer.isLarge) {
+          if (currentDesktopGridThumbnailContainer.state == 'showDesktop') {
+            if (kwinDesktopThumbnailContainer.isMain) {
+              kwinDesktopThumbnailContainer.visible = true;
+            }
+          } else {
+            kwinDesktopThumbnailContainer.visible = false;
+          }
+        }
+      });
+
       // We do want to change when a client changes desktops, but.
       if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
         if (kwinDesktopThumbnailContainer.isLarge) {
@@ -187,7 +201,9 @@ Item {
           moveNewToRight.restart();
         }
         kwinDesktopThumbnailContainer.isMain = true;
-        kwinDesktopThumbnailContainer.visible = true;
+        if (currentDesktopGridThumbnailContainer.state == 'showDesktop') {
+          kwinDesktopThumbnailContainer.visible = true;
+        }
         //kwinDesktopThumbnailContainer.x = -dashboard.screenWidth;
       }
     }

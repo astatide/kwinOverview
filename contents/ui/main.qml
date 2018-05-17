@@ -452,6 +452,7 @@ import "../code/createClients.js" as CreateClients
 						}
 					}
 				}
+
 				// We'll create our normal desktop windows here with the same code.
 				// Just a little bit of tinkering should work.
 
@@ -467,15 +468,41 @@ import "../code/createClients.js" as CreateClients
 					//anchors.fill: parent
 					//height: (dashboard.screenHeight - dash.height - 30)
 					//y: 15
+					states: [
+						State {
+							name: 'showSearch'
+							//PropertyChanges { target: dashboard; visible: true }
+						},
+						State {
+							name: 'showDesktop'
+							//PropertyChanges { target: dashboard; visible: false }
+						}
+					]
+					// Instantiate the search container.
+					Search {
+						id: searchFieldAndResults
+						visible: true
+						y: dash.height + 30
+						//x: 0
+						height: (dashboard.screenHeight - dash.height - 30 - 15)
+						width: dashboard.screenWidth
+						property int textHeight: 24
+						anchors.left: parent.left
+						//anchors.left: dash.left
+						//anchors.verticalCenter: parent.verticalCenter
+						//anchors.horizontalCenter: parent.horizontalCenter
+					}
 					Repeater {
 						// Now, we build up our desktops.
 						//model: dashboard.returnNumberOfDesktops()
 						//model: KWin.Switcher.model
 						model: workspace.desktops
 						id: currentDesktopGrid
-						height: (dashboard.screenHeight - dash.height - 30 - 15)
+						// We're leaving a little room for the text search area!
+						height: (dashboard.screenHeight - dash.height - 30 - 15 - searchFieldAndResults.textHeight)
 						width: dashboard.screenWidth
 						scale: 1
+						visible: true
 						Item {
 							id: bigDesktopRepeater
 							//id: bigDesktopContainer
@@ -488,7 +515,8 @@ import "../code/createClients.js" as CreateClients
 								desktop: bigDesktopRepeater.desktop
 								visible: false
 								x: 0
-								y: dash.height + 30
+								// Leave a little room for the text!
+								y: dash.height + 30 + searchFieldAndResults.textHeight
 								scale: 1
 								height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
 								width: dashboard.screenWidth
@@ -528,7 +556,7 @@ import "../code/createClients.js" as CreateClients
 						//anchors.horizontalCenter: parent.horizontalCenter
 						//anchors.bottom: parent.top
 						anchors.top: currentDesktopGrid.bottom
-						anchors.topMargin: 40
+						anchors.topMargin: 40 + 24
 						x: 0
 						width: dashboard.screenWidth
 						//x: screenWidth/2-blahBlahBlah.width
@@ -698,7 +726,17 @@ import "../code/createClients.js" as CreateClients
 			}
 		}
 	}
+
+	Keys.onPressed: {
+		console.log(event.key);
+		console.log('WHEEEE');
+		//searchFieldAndResults.focus = true;
+		//searchField.text = ""
+		//currentDesktopGrid.visible = !currentDesktopGrid.visible;
+	}
+
 		Component.onCompleted: {
+			dashboard.requestActivate();
 			dashboard.dockHeight = _getDockHeight();
 			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
 			dashboard.screenWidth = dashboard.activeScreen.width;
@@ -706,6 +744,7 @@ import "../code/createClients.js" as CreateClients
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
 			dashboard.visible = true;
 			mainBackground.state = 'visible';
+			currentDesktopGridThumbnailContainer.state = 'showDesktop';
 			populateVisibleClients();
 
 			// disable!
@@ -783,6 +822,7 @@ import "../code/createClients.js" as CreateClients
 		//console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
+		dashboard.requestActivate();
 		console.log('TESTING!');
 		console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
