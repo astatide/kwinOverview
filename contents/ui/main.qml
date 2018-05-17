@@ -65,12 +65,21 @@ import "../code/createClients.js" as CreateClients
 				id: mainBackground
 				width: dashboard.screenWidth
 				anchors.fill: parent
+				focus: true
 				//height: main.screenHeight
 		    height: dashboard.screenHeight
 				x: 0
 				y: 0
 				//visible: true
 				opacity: 1
+
+				/*Keys.onPressed: {
+			    console.log(event.key);
+			    console.log('WHEEEE');
+			    //searchFieldAndResults.focus = true;
+			    //searchField.text = ""
+			    //currentDesktopGrid.visible = !currentDesktopGrid.visible;
+			  }*/
 
 				// This creates a mouseArea for the rectangle.  We change the height of our dock.
 				MouseArea {
@@ -727,16 +736,11 @@ import "../code/createClients.js" as CreateClients
 		}
 	}
 
-	Keys.onPressed: {
-		console.log(event.key);
-		console.log('WHEEEE');
-		//searchFieldAndResults.focus = true;
-		//searchField.text = ""
-		//currentDesktopGrid.visible = !currentDesktopGrid.visible;
-	}
-
 		Component.onCompleted: {
 			dashboard.requestActivate();
+			//mainBackground.focus = true;
+			searchFieldAndResults.children[1].forceActiveFocus();
+			//searchFieldAndResults.forceActiveFocus();
 			dashboard.dockHeight = _getDockHeight();
 			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
 			dashboard.screenWidth = dashboard.activeScreen.width;
@@ -800,11 +804,19 @@ import "../code/createClients.js" as CreateClients
 					true,
 					c
 				);
+				dashboard.requestActivate();
+				searchFieldAndResults.children[1].forceActiveFocus();
 			});
 			workspace.currentDesktopChanged.connect(function() {
 				activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
+				dashboard.requestActivate();
+				searchFieldAndResults.children[1].forceActiveFocus();
+				//searchFieldAndResults.forceActiveFocus();
+				// We want the text input to basically always have focus.
+
+				//mainBackground.forceActiveFocus();
 				// Move the flickable container.
 				//if (((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) > desktopThumbnailGrid.contentY) {
 				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing));
@@ -822,7 +834,9 @@ import "../code/createClients.js" as CreateClients
 		//console.log(Object.getOwnPropertyNames(workspace))
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
-		dashboard.requestActivate();
+		//mainBackground.forceActiveFocus();
+		console.log('Who has focus?');
+		console.log(dashboard.activeFocusItem);
 		console.log('TESTING!');
 		console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
@@ -861,11 +875,14 @@ import "../code/createClients.js" as CreateClients
 			//dashboard.show();
 			// Show, then run the init animation.
 			//disableVisibleClients();
+			dashboard.requestActivate();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
 			//dashboard.visible = true;
 			initAnim.restart();
 			mainBackground.state = 'visible';
+			searchFieldAndResults.children[1].forceActiveFocus();
+			//searchFieldAndResults.forceActiveFocus();
 			//currentDesktopGrid.itemAt(workspace.currentDesktop-1).updateGrid();
 			// Start the animation for the main grid.
 			/*var c;

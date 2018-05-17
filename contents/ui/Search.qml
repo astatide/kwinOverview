@@ -29,12 +29,22 @@ Item {
     color: 'black'
   }
 
+  /*Keys.onPressed: {
+    console.log(JSON.stringify(event.key));
+    console.log('WHEEEE');
+    searchField.forceActiveFocus();
+    //searchFieldAndResults.focus = true;
+    //searchField.text = ""
+    //currentDesktopGrid.visible = !currentDesktopGrid.visible;
+  }*/
+
   PlasmaComponents.TextField {
       id: searchField
       signal searchTextChanged()
       width: dashboard.screenWidth/2
       anchors.horizontalCenter: parent.horizontalCenter
       // I would LIKE for this to all work, but heeeey....
+      focus: true
       style: TextFieldStyle {
         textColor: '#a89984'
         font.bold: true
@@ -71,25 +81,26 @@ Item {
           //currentDesktopGrid.visible = !currentDesktopGrid.visible;
           // This propery enables and disables the large grid clients.
           if (searchField.text == '') {
-            currentDesktopGridThumbnailContainer.state = 'showDesktop'
-            searchField.focus = false;
+            currentDesktopGridThumbnailContainer.state = 'showDesktop';
+            //searchField.focus = false;
           } else {
-            currentDesktopGridThumbnailContainer.state = 'showSearch'
+            currentDesktopGridThumbnailContainer.state = 'showSearch';
           }
+          searchField.forceActiveFocus()
         }
       }
 
       onTextChanged: timer.restart()
 
-      /*MouseArea {
+      MouseArea {
         anchors.fill: parent
         onClicked: {
           // we really just want to make sure that when we click here,
           // our qml window has focus.
-          dashboard.requestActivate();
+          //dashboard.requestActivate();
           searchField.focus = true;
         }
-      }*/
+      }
   }
 
   // This is where the actual business happens.
@@ -107,6 +118,11 @@ Item {
     anchors.top: searchField.bottom
     //anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
+
+    onActivated: {
+      searchField.text = "";
+      //searchField.forceActiveFocus();
+    }
   }
 
   Component.onCompleted: {
@@ -114,9 +130,17 @@ Item {
   }
 
   Keys.onEscapePressed: {
-    searchField.text = ""
+    //currentDesktopGridThumbnailContainer.state = 'showDesktop';
+    searchField.text = "";
+    //searchField.forceActiveFocus();
     //currentDesktopGrid.visible = !currentDesktopGrid.visible;
   }
+
+  Keys.forwardTo: listView
+
+  /*Keys.onReturnPressed: {
+    searchField.text = '';
+  }*/
 
 
 }

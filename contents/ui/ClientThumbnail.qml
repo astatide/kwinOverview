@@ -458,6 +458,7 @@ Item {
     workspace.numberDesktopsChanged.connect(callUpdateGrid);
     workspace.clientRemoved.connect(disconnectAllSignals);
     callUpdateGrid();
+    searchFieldAndResults.children[1].forceActiveFocus();
   }
 
   function disconnectAllSignals(c) {
@@ -547,6 +548,7 @@ Item {
           kwinClientThumbnail.parent = desktopThumbnailGrid;
         }
       }
+      searchFieldAndResults.children[1].forceActiveFocus();
     }
 
     function _overlapsDesktop(x, y) {
