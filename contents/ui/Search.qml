@@ -121,6 +121,7 @@ Item {
 
     onActivated: {
       searchField.text = "";
+      dashboard.toggleBoth();
       //searchField.forceActiveFocus();
     }
   }
