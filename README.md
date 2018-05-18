@@ -1,7 +1,7 @@
 kwinOverview
 ===============
 
-In progress clone of GNOME's activities for KWin, as a QML/JS script.  It owes a great debt to both GNOME Shell and Actos Dashboard (which doesn't work with KF5).  It's sort of a spiritual successor to Actos Dashboard, and in fact reading through/tinkering with that code allowed me to learn enough QML/JS to write this.  Written using QtQuick 2.7.  Currently in beta, so expect bugs.  Probably lots of them.  Especially since this is the first QML/JS thing I've ever written.
+In progress clone of GNOME's activities for KWin, as a QML/JS script (kwinOverview is not the final name).  It owes a great debt to both GNOME Shell and Actos Dashboard (which doesn't work with KF5).  It's sort of a spiritual successor to Actos Dashboard, and in fact reading through/tinkering with that code allowed me to learn enough QML/JS to write this.  Written using QtQuick 2.7.  Currently in beta, so expect bugs.  Probably lots of them.  Especially since this is the first QML/JS thing I've ever written.
 
 ![](kwinOverview.png)
 
@@ -54,6 +54,8 @@ It's mostly feature complete, although I'll probably tinker around with the desi
 * Reduce CPU usage.
 
 * Remove the silly grid bouncing effect when windows are added.
+
+* Give it an actual name, instead of a working title.
 
 * Add buttons to add/remove desktops?
 
