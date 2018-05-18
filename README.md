@@ -19,6 +19,8 @@ Like most other KWin scripts, it can be activated from the KDE system settings. 
 
 Once you've hit Meta+A, you can start typing to search for applications to launch.  You can switch desktops by clicking/using the shortcut, and dragging/dropping applications to other desktops.  You can click on another activity on the bottom dash to switch to that activity (hover over for the activity name).  In addition, you can click and drag (or use the scroll wheel) the desktop dash above if there are more desktops than you have space available for!  So it supports the maximum number of desktops you can have on Plasma.
 
+Works incredibly well with https://github.com/rliang/kwin-dynamic-virtual-desktops, which is what I'm using to manage the addition/removal of desktops (as there's currently no button to do so).
+
 ## Design Decisions
 
 * Mostly, it was designed to be fast on my aging macbook pro.  The biggest slowdown comes from painting the active live thumbnails.  If you find this to be slowing down your computer, change the thumbnail scaling quality in KWin's compositor settings.
@@ -50,5 +52,7 @@ It's mostly feature complete, although I'll probably tinker around with the desi
 * Adjust how the grid configuration is done so that it takes more advantage of available screen space.
 
 * Remove the silly grid bouncing effect when windows are added.
+
+* Add buttons to add/remove desktops?
 
 * Add a license?
