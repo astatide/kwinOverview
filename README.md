@@ -3,6 +3,8 @@ kwinOverview
 
 In progress clone of GNOME's activities for KWin, as a QML/JS script.  It owes a great debt to both GNOME Shell and Actos Dashboard (which doesn't work with KF5).  It's sort of a spiritual successor to Actos Dashboard, and in fact reading through/tinkering with that code allowed me to learn enough QML/JS to write this.  Written using QtQuick 2.7.  Currently in beta, so expect bugs.  Probably lots of them.  Especially since this is the first QML/JS thing I've ever written.
 
+![](kwinOverview.png)
+
 ## Installation
 
   git clone https://github.com/ajoshpratt/kwinOverview.git
