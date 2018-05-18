@@ -29,11 +29,11 @@ Works incredibly well with https://github.com/rliang/kwin-dynamic-virtual-deskto
 
 * In addition, I wanted to keep activities close but separate; hence why they're shown down below.  
 
-* I've avoided using plasma components wherever possible (although it's still tied pretty heavily to activities), largely to maintain design cleanliness.
+* I've avoided using plasma components wherever possible (although it's still tied pretty heavily to activities) to ensure that regardless of what theme you're using, the components are still visible.
 
-* By using the KWin scripting interface, it doesn't actually rely on compositing!  Although it really just shows the icon, so it's not terribly clear what application/window is what.
+* By using the KWin scripting interface, it doesn't actually rely on compositing!  Although it really just shows the icon when compositing is disabled, so it's not THAT useful at the moment when that's the case.  Perhaps I'll add some text for when compositing is disabled.
 
-* Although I like scaling animations as much as the next person (visually, they're easy to parse), I found implementing them slowed down even my desktop with more than two windows on the screen; something about the repaints for the thumbnails is slow.
+* Although I like scaling animations as much as the next person (visually, they're easy to parse), I found implementing them slowed down even my desktop with more than two windows on the screen; something about the repaints for the thumbnails is slow.  Hence why most of the animations are fading/sliding around.
 
 ## Known Bugs
 
