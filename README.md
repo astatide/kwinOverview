@@ -55,6 +55,8 @@ It's mostly feature complete, although I'll probably tinker around with the desi
 
 * Reduce CPU usage.
 
+* Tinker with init/end animation timing.  Ending feels a bit slow.
+
 * Remove the silly grid bouncing effect when windows are added.
 
 * Give it an actual name, instead of a working title.
