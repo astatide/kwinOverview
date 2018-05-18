@@ -153,16 +153,17 @@ import "../code/createClients.js" as CreateClients
 							//to: dashboard.screenHeight - dash.gridHeight - 30
 							from: 15
 							to: dashboard.screenHeight
+							duration: 100
 						}
 						ParallelAnimation {
-							NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1}
-							NumberAnimation { target: dash; property: "y"; to: -dash.gridHeight}
-							NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5}
+							NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
+							NumberAnimation { target: dash; property: "y"; to: -dash.gridHeight; duration: 100}
+							NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
 					// Cheaper!
 					//NumberAnimation { target: secondBackgroundDesktop; property: "opacity"; to: 0; from: 1}
 					// Not so cheap, probably!
-							NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32}
-							NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0}
+							NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
+							NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0; duration: 100}
 						}
 					}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: dashboard.opacity}
