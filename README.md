@@ -51,8 +51,12 @@ It's mostly feature complete, although I'll probably tinker around with the desi
 
 * Adjust how the grid configuration is done so that it takes more advantage of available screen space.
 
+* Reduce CPU usage.
+
 * Remove the silly grid bouncing effect when windows are added.
 
 * Add buttons to add/remove desktops?
+
+* Cleanup the incredibly messy code.
 
 * Add a license?
