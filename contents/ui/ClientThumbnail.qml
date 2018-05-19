@@ -484,12 +484,16 @@ Item {
       //runMoveToThumbnailAnim();
       // only toggle the ones on the current activity.
       if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+        kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
         kwinThumbnailRenderWindow.enabled = true;
         kwinClientThumbnail.visible = true;
       }
     } else if (state == 'invisible') {
+    //} else {
+      // break it for now.
+      kwinThumbnailRenderWindow.wId = -1;
       actualThumbnail.visible = false;
       kwinThumbnailRenderWindow.visible = false;
       kwinThumbnailRenderWindow.enabled = false;

@@ -177,6 +177,7 @@ import "../code/createClients.js" as CreateClients
 							dashboard.width = 0;
 							mainBackground.state = 'invisible';
 							//dashboard.visible = false;
+							mainBackground.visible = false;
 						}
 					}
 				}
@@ -767,8 +768,12 @@ import "../code/createClients.js" as CreateClients
 			dashboard.screenWidth = dashboard.activeScreen.width;
 			dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
-			dashboard.visible = true;
-			mainBackground.state = 'visible';
+			//dashboard.height = dashboard.screenHeight;
+			//dashboard.width = dashboard.screenWidth;
+      //dashboard.show();
+			//mainBackground.hide();
+			mainBackground.visible = false;
+			mainBackground.state = 'invisible';
 			currentDesktopGridThumbnailContainer.state = 'showDesktop';
 			populateVisibleClients();
 
@@ -832,12 +837,13 @@ import "../code/createClients.js" as CreateClients
 				activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
-				//dashboard.requestActivate();
+				workspace.slotToggleShowDesktop();
+				dashboard.requestActivate();
 				//searchFieldAndResults.children[1].forceActiveFocus();
 				if (mainBackground.state == 'visible') {
 					timer.restart();
-					dashboard.height = dashboard.screenHeight;
-					dashboard.width = dashboard.screenWidth;
+					//dashboard.height = dashboard.screenHeight;
+					//dashboard.width = dashboard.screenWidth;
 				}
 				//dashboard.visible = true;
 				//initAnim.restart();
@@ -851,7 +857,7 @@ import "../code/createClients.js" as CreateClients
 				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing));
 				//}
 			});
-			toggleBoth();
+			//toggleBoth();
 			// Register all our clients.
 			//var c;
 			//for (c = 0; c < workspace.clientList().length; c++) {
@@ -892,6 +898,8 @@ import "../code/createClients.js" as CreateClients
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			endAnim.restart();
+			workspace.slotToggleShowDesktop();
+			//workspace.slotToggleShowDesktop();
 			/*for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
 				//console.log(Object.getOwnPropertyNames(currentDesktopGrid.children[0].children[c]));;
@@ -903,15 +911,20 @@ import "../code/createClients.js" as CreateClients
 			// It hates this command.  Straight up.  It seems to still be hiding things.
 			//dashboard.visible = true;
 			//dashboard.flags = Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
-			//dashboard.show();
+			//mainBackground.show();
 			// Show, then run the init animation.
 			//disableVisibleClients();
+			dashboard.flags = Qt.X11BypassWindowManagerHint;
+			//dashboard.raise();
+			//dashboard.update();
 			dashboard.requestActivate();
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
 			//dashboard.visible = true;
+			workspace.slotToggleShowDesktop();
 			initAnim.restart();
 			mainBackground.state = 'visible';
+			mainBackground.visible = true;
 			timer.restart();
 			searchFieldAndResults.children[1].forceActiveFocus();
 			//searchFieldAndResults.forceActiveFocus();
