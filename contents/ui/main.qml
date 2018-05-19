@@ -837,10 +837,10 @@ import "../code/createClients.js" as CreateClients
 				activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
-				workspace.slotToggleShowDesktop();
-				dashboard.requestActivate();
 				//searchFieldAndResults.children[1].forceActiveFocus();
 				if (mainBackground.state == 'visible') {
+					workspace.slotToggleShowDesktop();
+					dashboard.requestActivate();
 					timer.restart();
 					//dashboard.height = dashboard.screenHeight;
 					//dashboard.width = dashboard.screenWidth;
