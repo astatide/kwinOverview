@@ -413,10 +413,10 @@ import "../code/createClients.js" as CreateClients
 										//anchors.fill: parent
 										id: littleDesktopGrid
 										desktop: littleDesktopContainer.desktop
-										x: dash.gridHeight*.025*dashboard.screenRatio
-										y: dash.gridHeight*.025
-										height: dash.gridHeight*.85
-										width: dash.gridHeight*dashboard.screenRatio*.85
+										//x: dash.gridHeight*.025*dashboard.screenRatio
+										//y: dash.gridHeight*.025
+										height: dash.gridHeight
+										width: dash.gridHeight*dashboard.screenRatio
 										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
 									}
