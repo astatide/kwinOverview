@@ -263,13 +263,20 @@ Item {
       clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
 
       var mul = 0;
-      if (clientGridLayout._onDesktop()/clientGridLayout._returnMatrixSize() <= 1) {
-        mul = clientGridLayout._returnMatrixSize()-1;
-        if (mul < 1) {
-          mul = 1;
-        }
+      if (clientGridLayout._onDesktop()/Math.pow(clientGridLayout._returnMatrixSize(),2) <= 1) {
+        //if (clientGridLayout._onDesktop()/Math.pow(clientGridLayout._returnMatrixSize()-1,2) > 1) {
+        //  mul = clientGridLayout._returnMatrixSize()-1;
+        //
+        //} else {
+        //  mul = clientGridLayout._returnMatrixSize();
+        //}
+        mul = Math.ceil(clientGridLayout._onDesktop()/clientGridLayout._returnMatrixSize());
       } else {
+        //mul = clientGridLayout._returnMatrixSize();
         mul = clientGridLayout._returnMatrixSize();
+      }
+      if (mul < 1) {
+        mul = 1;
       }
 
       clientGridLayout.children[c].height = clientGridLayout.children[c].height * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].height/(mul);//clientGridLayout._onDesktop());
