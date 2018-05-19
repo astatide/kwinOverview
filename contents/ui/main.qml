@@ -839,7 +839,7 @@ import "../code/createClients.js" as CreateClients
 				activeDesktopIndicatorShiftAnim.restart();
 				//searchFieldAndResults.children[1].forceActiveFocus();
 				if (mainBackground.state == 'visible') {
-					workspace.slotToggleShowDesktop();
+					//workspace.slotToggleShowDesktop();
 					dashboard.requestActivate();
 					timer.restart();
 					//dashboard.height = dashboard.screenHeight;
@@ -898,7 +898,7 @@ import "../code/createClients.js" as CreateClients
 			//dashboard.height = 0;
 			//dashboard.width = 0;
 			endAnim.restart();
-			workspace.slotToggleShowDesktop();
+			//workspace.slotToggleShowDesktop();
 			//workspace.slotToggleShowDesktop();
 			/*for (c = 0; c < currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children.length; c++) {
 				//
@@ -921,7 +921,7 @@ import "../code/createClients.js" as CreateClients
 			dashboard.height = dashboard.screenHeight;
 			dashboard.width = dashboard.screenWidth;
 			//dashboard.visible = true;
-			workspace.slotToggleShowDesktop();
+			//workspace.slotToggleShowDesktop();
 			initAnim.restart();
 			mainBackground.state = 'visible';
 			mainBackground.visible = true;
