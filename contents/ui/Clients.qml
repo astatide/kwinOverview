@@ -30,6 +30,7 @@ Item {
     scale: 1
 
     anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
     //rows: { return _returnMatrixSize() }
     // We dynamically update these.
     rows: 0
@@ -225,6 +226,23 @@ Item {
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
     console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
+    var clientArea;
+    //var clientWidth;
+    //var clientHeight;
+    clientArea = 0;
+    //clientWidth = 0;
+    //clientHeight = 0;
+    for (c = 0; c < clientGridLayout.children.length; c++) {
+      //console.log(clientArea);
+      //console.log((clientGridLayout.children[c].clientWidth));
+      clientArea = clientArea + (clientGridLayout.children[c].clientRealWidth*clientGridLayout.children[c].clientRealHeight);
+      //clientHeight = clientHeight + (clientGridLayout.children[c].clientRealHeight);
+      //clientWidth = clientWidth + (clientGridLayout.children[c].clientRealWidth);
+    }
+    console.log('CLIENT AREA');
+    //console.log(clientArea);
+    console.log(kwinDesktopThumbnailContainer.height*kwinDesktopThumbnailContainer.width);
+    //console.log(clientArea/(kwinDesktopThumbnailContainer.height*kwinDesktopThumbnailContainer.width));
     for (c = 0; c < clientGridLayout.children.length; c++) {
       //console.log(JSON.stringify(clientGridLayout.children[c].clientObject));
       //var client = clientGridLayout.children[c];
@@ -233,11 +251,31 @@ Item {
       //console.log('How big are we?');
       //console.log(clientGridLayout._returnMatrixSize());
       //console.log(kwinDesktopThumbnailContainer.width, kwinDesktopThumbnailContainer.height);
-      clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
+      /*clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
-      clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
+      clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();*/
+      clientGridLayout.children[c].height = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      clientGridLayout.children[c].width = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+
+      clientGridLayout.children[c].height = clientGridLayout.children[c].height * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].height/(clientGridLayout._returnMatrixSize());//clientGridLayout._onDesktop());
+      //clientGridLayout.children[c].width = clientGridLayout.children[c].width * kwinDesktopThumbnailContainer.width/clientGridLayout.children[c].width/(clientGridLayout._returnMatrixSize()/clientGridLayout._onDesktop());
+      clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].originalHeight * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].originalHeight/(clientGridLayout._returnMatrixSize());//clientGridLayout._onDesktop());
+      //clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].originalWidth * kwinDesktopThumbnailContainer.width/clientGridLayout.children[c].originalWidth/(clientGridLayout._returnMatrixSize()/clientGridLayout._onDesktop());
+
+
+      //clientGridLayout.children[c].height = clientGridLayout.children[c].clientRealHeight * ((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/kwinDesktopThumbnailContainer.width;//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].width = clientGridLayout.children[c].clientRealWidth * ((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/kwinDesktopThumbnailContainer.height;//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].clientRealHeight * ((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/kwinDesktopThumbnailContainer.width;//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealWidth * ((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/kwinDesktopThumbnailContainer.height;//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].height = clientGridLayout.children[c].clientRealWidth * ((kwinDesktopThumbnailContainer.height)/(clientWidth));//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].width = clientGridLayout.children[c].clientRealHeight * ((kwinDesktopThumbnailContainer.width)/(clientHeight));//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].clientRealWidth * ((kwinDesktopThumbnailContainer.height)/(clientWidth));//Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealHeight * ((kwinDesktopThumbnailContainer.width)/(clientHeight));//Math.sqrt(clientGridLayout._returnMatrixSize());
       // Run the growth animation!
+      console.log(clientGridLayout.children[c].originalWidth);
       clientGridLayout.children[c].runGrowthAnim();
       //console.log(Object.getOwnPropertyNames(clientGridLayout.children[c]));
     }

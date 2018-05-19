@@ -415,8 +415,8 @@ import "../code/createClients.js" as CreateClients
 										desktop: littleDesktopContainer.desktop
 										x: dash.gridHeight*.025*dashboard.screenRatio
 										y: dash.gridHeight*.025
-										height: dash.gridHeight*.95
-										width: dash.gridHeight*dashboard.screenRatio*.95
+										height: dash.gridHeight*.85
+										width: dash.gridHeight*dashboard.screenRatio*.85
 										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
 									}
@@ -530,7 +530,8 @@ import "../code/createClients.js" as CreateClients
 								x: 0
 								// Leave a little room for the text!
 								y: dash.height + 30 + searchFieldAndResults.textHeight
-								scale: 1
+								//anchor.verticalCenter: currentDesktopGridThumbnailContainer.verticalCenter
+								//scale: 1
 								height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
 								width: dashboard.screenWidth
 								isMain: false
