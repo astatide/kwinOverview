@@ -532,8 +532,13 @@ Item {
             // But also check to make sure we're on the correct activity.
             kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
-            kwinClientThumbnail.visible = true;
+            //kwinClientThumbnail.visible = true;
+            //actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
             actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.visible = true;
+            kwinThumbnailRenderWindow.enabled = true;
+            kwinClientThumbnail.visible = true;
           }
         } else {
             // Go back to being in the original parent widget.
@@ -548,8 +553,13 @@ Item {
           if (kwinClientThumbnail.clientObject.desktop > -1) {
             // Reparent, then resize all the appropriate grids.
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
-            kwinClientThumbnail.visible = true;
+            //kwinClientThumbnail.visible = true;
+            //actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
             actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.visible = true;
+            kwinThumbnailRenderWindow.enabled = true;
+            kwinClientThumbnail.visible = true;
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           }
         } else {
