@@ -903,6 +903,8 @@ import "../code/createClients.js" as CreateClients
 			searchFieldAndResults.children[1].forceActiveFocus();
 			//searchFieldAndResults.forceActiveFocus();
 			dashboard.dockHeight = _getDockHeight();
+			// Perhaps these should be in toggleBoth?  Is it too much?
+			// I do want these to be updated, but.
 			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
 			dashboard.screenWidth = dashboard.activeScreen.width;
 			dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
@@ -998,6 +1000,40 @@ import "../code/createClients.js" as CreateClients
 				//	desktopThumbnailGrid.contentY = desktopThumbnailGrid.contentY + ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing));
 				//}
 			});
+			/*workspace.screenResized.connect(function() {
+				// Get the new size, etc.
+				dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
+				dashboard.screenWidth = dashboard.activeScreen.width;
+				dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+				dashboard.x = dashboard.activeScreen.x;
+				dashboard.y = dashboard.activeScreen.y-dashboard.dockHeight;
+			});
+			workspace.numberScreensChanged.connect(function() {
+				// Get the new size, etc.
+				dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
+				dashboard.screenWidth = dashboard.activeScreen.width;
+				dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+				dashboard.x = dashboard.activeScreen.x;
+				dashboard.y = dashboard.activeScreen.y-dashboard.dockHeight;
+			});
+			workspace.virtualScreenSizeChanged.connect(function() {
+				// Get the new size, etc.
+				console.log("CHANGING SCREEN SIZE");
+				dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
+				dashboard.screenWidth = dashboard.activeScreen.width;
+				dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+				dashboard.x = dashboard.activeScreen.x;
+				dashboard.y = dashboard.activeScreen.y-dashboard.dockHeight;
+			});
+			workspace.virtualScreenGeometryChanged.connect(function() {
+				// Get the new size, etc.
+				console.log("CHANGING VIRTUAL SCREEN GEOMTRY SIZE");
+				dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
+				dashboard.screenWidth = dashboard.activeScreen.width;
+				dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+				dashboard.x = dashboard.activeScreen.x;
+				dashboard.y = dashboard.activeScreen.y-dashboard.dockHeight;
+			});*/
 			//toggleBoth();
 			// Register all our clients.
 			//var c;
@@ -1016,9 +1052,9 @@ import "../code/createClients.js" as CreateClients
 		console.log('TESTING!');
 		console.log(workspace.activeClient);
 		//console.log(Object.getOwnPropertyNames(dashboard));
-		//console.log(Object.getOwnPropertyNames(workspace));
+		console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(dashboard.activeScreen));
-		//console.log(dashboard.activeScreen.x, dashboard.activeScreen.y, dashboard.activeScreen.top, dashboard.activeScreen.bottom);
+		console.log(dashboard.activeScreen.x, dashboard.activeScreen.y, dashboard.activeScreen.top, dashboard.activeScreen.bottom);
 		//console.log(Object.getOwnPropertyNames(dashboard.activeScreen));
 		//console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
 		/*console.log(Object.getOwnPropertyNames(workspace));
