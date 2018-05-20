@@ -11,7 +11,7 @@ In progress clone of GNOME's activities for KWin, as a QML/JS script (kwinOvervi
   ```
   git clone https://github.com/ajoshpratt/kwinOverview.git
   cd kwinOverview
-  plasmapkg --type kwinscript -i .
+  plasmapkg2 --type kwinscript -i .
   ```
   
 ## Activation
