@@ -24,11 +24,9 @@ Once you've hit Meta+A, you can start typing to search for applications to launc
 
 Hovering at the bottom of the screen brings the activity dock up (it then autohides after you move the mouse away), allowing you to switch between activities.
 
-Works incredibly well with https://github.com/rliang/kwin-dynamic-virtual-desktops, which is what I'm using to manage the addition/removal of desktops (as there's currently no button to do so).
+Works incredibly well with https://github.com/rliang/kwin-dynamic-virtual-desktops, although there are now also buttons to add/remove desktops.  You can still use the above mentioned script to handle your desktop creation/destruction.
 
-There are also buttons to add/remove desktops.  You can still use the above mentioned script to handle your desktop creation/destruction.
-
-Both of these will be made optional.
+Both the auto hiding and buttons will be made 'optional'.
 
 ## Design Decisions
 
