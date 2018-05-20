@@ -4,6 +4,7 @@ kwinOverview
 In progress clone of GNOME's activities for KWin, as a QML/JS script (kwinOverview is not the final name).  It owes a great debt to both GNOME Shell and Actos Dashboard (which doesn't work with KF5).  It's sort of a spiritual successor to Actos Dashboard, and in fact reading through/tinkering with that code allowed me to learn enough QML/JS to write this.  Written using QtQuick 2.7.  Currently in beta, so expect bugs.  Probably lots of them.  Especially since this is the first QML/JS thing I've ever written.
 
 ![](kwinOverview.png)
+![](kwinOverviewNew.png)
 
 ## Installation
 
@@ -21,7 +22,13 @@ Like most other KWin scripts, it can be activated from the KDE system settings. 
 
 Once you've hit Meta+A, you can start typing to search for applications to launch.  You can switch desktops by clicking/using the shortcut, and dragging/dropping applications to other desktops.  You can click on another activity on the bottom dash to switch to that activity (hover over for the activity name).  In addition, you can click and drag (or use the scroll wheel) the desktop dash above if there are more desktops than you have space available for!  So it supports the maximum number of desktops you can have on Plasma.
 
+Hovering at the bottom of the screen brings the activity dock up (it then autohides after you move the mouse away), allowing you to switch between activities.
+
 Works incredibly well with https://github.com/rliang/kwin-dynamic-virtual-desktops, which is what I'm using to manage the addition/removal of desktops (as there's currently no button to do so).
+
+There are also buttons to add/remove desktops.  You can still use the above mentioned script to handle your desktop creation/destruction.
+
+Both of these will be made optional.
 
 ## Design Decisions
 
