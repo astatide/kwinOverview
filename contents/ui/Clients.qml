@@ -118,7 +118,12 @@ Item {
       if (kwinDesktopThumbnailContainer.isLarge) {
         // If we're the main one, we actually just want to go invisible and let the other one in.
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
-      } /*else {
+      } else {
+        // we want our old desktop to disappear and reappear
+        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.hideGrids);
+      }
+
+        /*else {
         // If we're small, don't paint again.  Turns out that's rather slow.
         // This is really just for performance reasons.
         workspace.currentDesktopChanged.connect(function() {
@@ -188,6 +193,13 @@ Item {
     easing.amplitude: 2
     easing.type: Easing.InOutQuad
   }
+  Timer {
+    id: makeVisibleTimer
+    interval: 200
+    onTriggered: {
+      kwinDesktopThumbnailContainer.visible = true;
+    }
+  }
 
   function swapGrids(oldDesktop, newDesktop) {
     console.log('WHICH ONE IS WHICH!?');
@@ -219,6 +231,19 @@ Item {
         }
         kwinDesktopThumbnailContainer.isMain = false;
         //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
+    }
+  }
+
+  function hideGrids(oldDesktop, newDesktop) {
+    // If we're not the 'main', but we ARE current, we want to become visible and change our
+    // x position (to the right or left, don't care right now), then animate a change to 0, 0.
+    // Is this our new desktop?
+    if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+      kwinDesktopThumbnailContainer.visible = false;
+    }
+    // make the old one visible!
+    if ((workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) && (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop)) {
+      makeVisibleTimer.restart();
     }
   }
 
