@@ -659,14 +659,15 @@ import "../code/createClients.js" as CreateClients
 										//y: 0
 										//x: 0
 										anchors.top: activityThumbnail.top
-										height: 20
+										//height: 20
+										height: activityThumbnail.height
 										width: activityThumbnail.width
 										color: 'black'
 									}
 									Text {
 										//anchors.fill: parent
 										id: activityThumbnailTitleText
-										anchors.top: activityThumbnail.top
+										//anchors.top: activityThumbnail.top
 										anchors.horizontalCenter: activityThumbnail.horizontalCenter
 										anchors.verticalCenter: activityThumbnailBlackRectangle.verticalCenter
 										anchors.topMargin: 2
