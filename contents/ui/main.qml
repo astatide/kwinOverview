@@ -464,6 +464,95 @@ import "../code/createClients.js" as CreateClients
 							}*/
 						}
 					}
+					Item {
+						id: dashAddRemoveDesktopButtons
+						y: 0
+						x: dashboard.screenWidth-50
+						Rectangle {
+							height: 120
+							width: 50
+							//color: 'black'
+							color: 'transparent'
+							opacity: 0.5
+							LinearGradient {
+					        anchors.fill: parent
+					        start: Qt.point(0, 0)
+					        end: Qt.point(25, 0)
+					        gradient: Gradient {
+					            GradientStop { position: 0.0; color: 'transparent' }
+					            GradientStop { position: 1.0; color: 'black' }
+					        }
+					    }
+						}
+						Rectangle {
+							id: plusButton
+							//opacity: 0.5
+							//visible: dashboard.visible
+							height: 60
+							width: 50
+							//color: 'white'
+							color: 'transparent'
+							Text {
+								id: actualPlusButton
+								anchors.horizontalCenter: parent.horizontalCenter
+								anchors.verticalCenter: parent.verticalCenter
+								opacity: 1
+								text: "+"
+								font.pointSize: 25
+								font.bold: true
+								color: "white"
+								y: 0
+							}
+							MouseArea {
+								anchors.fill: parent
+								id: plusButtonMouseArea
+								onPressed: {
+									console.log('yay');
+									actualPlusButton.color = 'grey';
+								}
+								onReleased: {
+									actualPlusButton.color = 'white';
+									if (workspace.desktops < 20) {
+										workspace.desktops = workspace.desktops + 1;
+									}
+								}
+							}
+						}
+						Rectangle {
+							id: minusButton
+							anchors.top: plusButton.bottom
+							height: 60
+							width: 50
+							//color: 'white'
+							y: 60
+							color: 'transparent'
+							Text {
+								id: actualMinusButton
+								anchors.horizontalCenter: parent.horizontalCenter
+								anchors.verticalCenter: parent.verticalCenter
+								opacity: 1
+								text: "-"
+								font.pointSize: 25
+								font.bold: true
+								color: "white"
+								y: 0
+							}
+							MouseArea {
+								anchors.fill: parent
+								id: minusButtonMouseArea
+								onPressed: {
+									console.log('yay');
+									actualMinusButton.color = 'grey';
+								}
+								onReleased: {
+									actualMinusButton.color = 'white';
+									if (workspace.desktops > 1) {
+										workspace.desktops = workspace.desktops - 1;
+									}
+								}
+							}
+						}
+					}
 				}
 
 				// We'll create our normal desktop windows here with the same code.
