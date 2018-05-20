@@ -119,7 +119,7 @@ import "../code/createClients.js" as CreateClients
 				// These are just temporary to get it out of my way.  We'll change them later.
 				ParallelAnimation {
 					id: initAnim
-					NumberAnimation { target: dash; property: "y"; to: 0}
+					NumberAnimation { target: dash; property: "y"; to: 0 }
 					NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: 0}
 					//NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: dashboard.opacity}
 					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 1; from: dashboard.opacity}
@@ -906,6 +906,8 @@ import "../code/createClients.js" as CreateClients
 			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
 			dashboard.screenWidth = dashboard.activeScreen.width;
 			dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
+			dashboard.x = dashboard.activeScreen.x;
+			dashboard.y = dashboard.activeScreen.y-dashboard.dockHeight;
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
 			//dashboard.height = dashboard.screenHeight;
 			//dashboard.width = dashboard.screenWidth;
@@ -1013,8 +1015,11 @@ import "../code/createClients.js" as CreateClients
 		console.log(dashboard.activeFocusItem);
 		console.log('TESTING!');
 		console.log(workspace.activeClient);
-		console.log(Object.getOwnPropertyNames(dashboard));
-		console.log(Object.getOwnPropertyNames(workspace));
+		//console.log(Object.getOwnPropertyNames(dashboard));
+		//console.log(Object.getOwnPropertyNames(workspace));
+		console.log(Object.getOwnPropertyNames(dashboard.activeScreen));
+		//console.log(dashboard.activeScreen.x, dashboard.activeScreen.y, dashboard.activeScreen.top, dashboard.activeScreen.bottom);
+		//console.log(Object.getOwnPropertyNames(dashboard.activeScreen));
 		//console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
 		/*console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.activities));
