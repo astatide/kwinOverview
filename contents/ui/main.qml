@@ -598,6 +598,13 @@ import "../code/createClients.js" as CreateClients
 							property: "y"
 							to: dashboard.screenHeight - 20
 						}
+						Timer {
+							id: activitySwitcherDashTimer
+							interval: 500
+							onTriggered: {
+								hideActivitySwitcherDashAnim.restart();
+							}
+						}
 						Rectangle {
 							id: activitySwitcherDashBackground
 							scale: 1
@@ -617,7 +624,7 @@ import "../code/createClients.js" as CreateClients
 								showActivitySwitcherDashAnim.restart();
 							}
 							onExited: {
-								hideActivitySwitcherDashAnim.restart();
+								activitySwitcherDashTimer.restart();
 							}
 						}
 						Grid {
@@ -717,11 +724,15 @@ import "../code/createClients.js" as CreateClients
 										}
 										onEntered: {
 											//showActivitySwitcherDashAnim.start();
-											hideActivitySwitcherDashAnim.running = false;
+											//hideActivitySwitcherDashAnim.running = false;
+											//activitySwitcherDashMouseArea.stop();
+											activitySwitcherDashTimer.stop();
 											thumbnailHoverStart.restart();
 										}
 										onExited: {
-											hideActivitySwitcherDashAnim.running = true;
+											//hideActivitySwitcherDashAnim.running = true;
+											//activitySwitcherDashMouseArea.stop();
+											//activitySwitcherDashTimer.restart();
 											thumbnailHoverEnd.restart();
 										}
 									}
