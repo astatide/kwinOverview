@@ -569,8 +569,8 @@ import "../code/createClients.js" as CreateClients
 						//anchors.verticalCenter: parent.verticalCenter
 						//anchors.horizontalCenter: parent.horizontalCenter
 						//anchors.bottom: parent.top
-						anchors.top: currentDesktopGrid.bottom
-						anchors.topMargin: 40 + 24
+						//anchors.top: currentDesktopGrid.bottom
+						//anchors.topMargin: 40 + 24
 						x: 0
 						width: dashboard.screenWidth
 						//x: screenWidth/2-blahBlahBlah.width
@@ -581,7 +581,23 @@ import "../code/createClients.js" as CreateClients
 						//y: dashboard.screenHeight
 						//y: dashboard.screenHeight - dash.height + 10
 						height: 100
+						//y: 90
+						y: dashboard.screenHeight - 20
 						property int gridHeight: 80
+						NumberAnimation {
+							id: showActivitySwitcherDashAnim
+							running: false
+							target: activitySwitcherDash
+							property: "y"
+							to: dashboard.screenHeight - 105
+						}
+						NumberAnimation {
+							id: hideActivitySwitcherDashAnim
+							running: false
+							target: activitySwitcherDash
+							property: "y"
+							to: dashboard.screenHeight - 20
+						}
 						Rectangle {
 							id: activitySwitcherDashBackground
 							scale: 1
@@ -591,6 +607,18 @@ import "../code/createClients.js" as CreateClients
 							height: activitySwitcherDash.height
 							width: dashboard.screenWidth
 							color: 'black'
+						}
+						MouseArea {
+							id: activitySwitcherDashMouseArea
+							anchors.fill: parent
+							enabled: true
+							hoverEnabled: true
+							onEntered: {
+								showActivitySwitcherDashAnim.restart();
+							}
+							onExited: {
+								hideActivitySwitcherDashAnim.restart();
+							}
 						}
 						Grid {
 							id: activitySwitcherRepeaterGrid
@@ -674,6 +702,8 @@ import "../code/createClients.js" as CreateClients
 									}
 									MouseArea {
 										anchors.fill: parent
+										//anchors.fill: activityThumbnail
+										//parent: activitySwitcherDashMouseArea
 										enabled: true
 										hoverEnabled: true
 										onClicked: {
@@ -685,12 +715,16 @@ import "../code/createClients.js" as CreateClients
 											fadeFromBlack.restart();
 										}
 										onEntered: {
+											//showActivitySwitcherDashAnim.start();
+											hideActivitySwitcherDashAnim.running = false;
 											thumbnailHoverStart.restart();
 										}
 										onExited: {
 											thumbnailHoverEnd.restart();
 										}
 									}
+									// In case I ever figure out how to control the activities
+									// flag of the clients from here.
 									/*DropArea {
 										id: activityDropArea
 										anchors.fill: parent
@@ -704,15 +738,16 @@ import "../code/createClients.js" as CreateClients
 											//console.log(Object.getOwnPropertyNames(drag.source));
 											//drag.source.newDesktop = bigDesktopRepeater.desktop+1;
 											drag.source.newActivity = model.id;
-											console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
+											//console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
+											//console.log(Object.getOwnPropertyNames(workspace));
 											//con
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 										onExited: {
 											console.log('LEAVING ACTIVITY');
 											//drag.source.newDesktop = drag.source.currentDesktop;
 											drag.source.newActivity = drag.source.clientObject.activities;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 									}*/
 								}

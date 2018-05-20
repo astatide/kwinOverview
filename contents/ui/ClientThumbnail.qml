@@ -86,7 +86,7 @@ Item {
     //anchors.fill kwinClientThumbnail
     color: 'black'
     opacity: 0.5
-    visible: true
+    visible: false
     scale: 1
     clip: true
     //x: 0
@@ -391,6 +391,7 @@ Item {
       console.log(Drag.drop());
       console.log('TESTING');
       console.log(kwinClientThumbnail.newDesktop);
+      console.log(kwinClientThumbnail.newActivity);
       // Let's see if the dropArea can handle this.
       //var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
       //var newDesktop = 0;
@@ -403,7 +404,14 @@ Item {
       }
       if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
         //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
+        // This is a read-only property, and so we're unable to change it from here.
+        // Not sure if there's a model out there that would let us do it.
+        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
         //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
+        // for now, since we can't sort it.
+        var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
+        console.log(kwinClientThumbnail.clientObject.activities);
+        returnAnim.running = true;
       } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
