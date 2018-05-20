@@ -120,7 +120,7 @@ Item {
         workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       } else {
         // we want our old desktop to disappear and reappear
-        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.hideGrids);
+        //workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.hideGrids);
       }
 
         /*else {

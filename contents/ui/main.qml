@@ -384,6 +384,7 @@ import "../code/createClients.js" as CreateClients
 										width: dash.gridHeight*dashboard.screenRatio
 										x: 0
 										y: 0
+										//brightness: 2
 										// Maybe?
 										//asynchronous: true
 										//cache: false

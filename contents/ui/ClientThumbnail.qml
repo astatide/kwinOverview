@@ -555,19 +555,19 @@ Item {
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             //kwinClientThumbnail.visible = true;
             //actualThumbnail.visible = true;
-            if (kwinClientThumbnail.clientObject.currentDesktop != workspace.currentDesktop) {
+            //if (kwinClientThumbnail.clientObject.desktop != workspace.currentDesktop) {
               kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
               actualThumbnail.visible = true;
               kwinThumbnailRenderWindow.visible = true;
               kwinThumbnailRenderWindow.enabled = true;
               kwinClientThumbnail.visible = true;
-            } else {
+            /*} else {
               kwinThumbnailRenderWindow.wId = -1;
               actualThumbnail.visible = false;
               kwinThumbnailRenderWindow.visible = false;
               kwinThumbnailRenderWindow.enabled = false;
               kwinClientThumbnail.visible = false;
-            }
+            }*/
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           }
         } else {
