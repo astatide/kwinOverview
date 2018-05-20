@@ -720,6 +720,7 @@ import "../code/createClients.js" as CreateClients
 											thumbnailHoverStart.restart();
 										}
 										onExited: {
+											hideActivitySwitcherDashAnim.running = true;
 											thumbnailHoverEnd.restart();
 										}
 									}
