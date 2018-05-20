@@ -384,6 +384,7 @@ import "../code/createClients.js" as CreateClients
 										width: dash.gridHeight*dashboard.screenRatio
 										x: 0
 										y: 0
+										//brightness: 2
 										// Maybe?
 										//asynchronous: true
 										//cache: false
@@ -413,10 +414,10 @@ import "../code/createClients.js" as CreateClients
 										//anchors.fill: parent
 										id: littleDesktopGrid
 										desktop: littleDesktopContainer.desktop
-										x: dash.gridHeight*.025*dashboard.screenRatio
-										y: dash.gridHeight*.025
-										height: dash.gridHeight*.95
-										width: dash.gridHeight*dashboard.screenRatio*.95
+										//x: dash.gridHeight*.025*dashboard.screenRatio
+										//y: dash.gridHeight*.025
+										height: dash.gridHeight
+										width: dash.gridHeight*dashboard.screenRatio
 										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
 									}
@@ -461,6 +462,95 @@ import "../code/createClients.js" as CreateClients
 									littleDesktopRepeater.model = workspace.desktops;
 								});
 							}*/
+						}
+					}
+					Item {
+						id: dashAddRemoveDesktopButtons
+						y: 0
+						x: dashboard.screenWidth-50
+						Rectangle {
+							height: 120
+							width: 50
+							//color: 'black'
+							color: 'transparent'
+							opacity: 0.5
+							LinearGradient {
+					        anchors.fill: parent
+					        start: Qt.point(0, 0)
+					        end: Qt.point(25, 0)
+					        gradient: Gradient {
+					            GradientStop { position: 0.0; color: 'transparent' }
+					            GradientStop { position: 1.0; color: 'black' }
+					        }
+					    }
+						}
+						Rectangle {
+							id: plusButton
+							//opacity: 0.5
+							//visible: dashboard.visible
+							height: 60
+							width: 50
+							//color: 'white'
+							color: 'transparent'
+							Text {
+								id: actualPlusButton
+								anchors.horizontalCenter: parent.horizontalCenter
+								anchors.verticalCenter: parent.verticalCenter
+								opacity: 1
+								text: "+"
+								font.pointSize: 25
+								font.bold: true
+								color: "white"
+								y: 0
+							}
+							MouseArea {
+								anchors.fill: parent
+								id: plusButtonMouseArea
+								onPressed: {
+									console.log('yay');
+									actualPlusButton.color = 'grey';
+								}
+								onReleased: {
+									actualPlusButton.color = 'white';
+									if (workspace.desktops < 20) {
+										workspace.desktops = workspace.desktops + 1;
+									}
+								}
+							}
+						}
+						Rectangle {
+							id: minusButton
+							anchors.top: plusButton.bottom
+							height: 60
+							width: 50
+							//color: 'white'
+							y: 60
+							color: 'transparent'
+							Text {
+								id: actualMinusButton
+								anchors.horizontalCenter: parent.horizontalCenter
+								anchors.verticalCenter: parent.verticalCenter
+								opacity: 1
+								text: "-"
+								font.pointSize: 25
+								font.bold: true
+								color: "white"
+								y: 0
+							}
+							MouseArea {
+								anchors.fill: parent
+								id: minusButtonMouseArea
+								onPressed: {
+									console.log('yay');
+									actualMinusButton.color = 'grey';
+								}
+								onReleased: {
+									actualMinusButton.color = 'white';
+									if (workspace.desktops > 1) {
+										workspace.desktops = workspace.desktops - 1;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -530,7 +620,8 @@ import "../code/createClients.js" as CreateClients
 								x: 0
 								// Leave a little room for the text!
 								y: dash.height + 30 + searchFieldAndResults.textHeight
-								scale: 1
+								//anchor.verticalCenter: currentDesktopGridThumbnailContainer.verticalCenter
+								//scale: 1
 								height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
 								width: dashboard.screenWidth
 								isMain: false
@@ -568,8 +659,8 @@ import "../code/createClients.js" as CreateClients
 						//anchors.verticalCenter: parent.verticalCenter
 						//anchors.horizontalCenter: parent.horizontalCenter
 						//anchors.bottom: parent.top
-						anchors.top: currentDesktopGrid.bottom
-						anchors.topMargin: 40 + 24
+						//anchors.top: currentDesktopGrid.bottom
+						//anchors.topMargin: 40 + 24
 						x: 0
 						width: dashboard.screenWidth
 						//x: screenWidth/2-blahBlahBlah.width
@@ -580,7 +671,30 @@ import "../code/createClients.js" as CreateClients
 						//y: dashboard.screenHeight
 						//y: dashboard.screenHeight - dash.height + 10
 						height: 100
+						//y: 90
+						y: dashboard.screenHeight - 20
 						property int gridHeight: 80
+						NumberAnimation {
+							id: showActivitySwitcherDashAnim
+							running: false
+							target: activitySwitcherDash
+							property: "y"
+							to: dashboard.screenHeight - 105
+						}
+						NumberAnimation {
+							id: hideActivitySwitcherDashAnim
+							running: false
+							target: activitySwitcherDash
+							property: "y"
+							to: dashboard.screenHeight - 20
+						}
+						Timer {
+							id: activitySwitcherDashTimer
+							interval: 500
+							onTriggered: {
+								hideActivitySwitcherDashAnim.restart();
+							}
+						}
 						Rectangle {
 							id: activitySwitcherDashBackground
 							scale: 1
@@ -590,6 +704,18 @@ import "../code/createClients.js" as CreateClients
 							height: activitySwitcherDash.height
 							width: dashboard.screenWidth
 							color: 'black'
+						}
+						MouseArea {
+							id: activitySwitcherDashMouseArea
+							anchors.fill: parent
+							enabled: true
+							hoverEnabled: true
+							onEntered: {
+								showActivitySwitcherDashAnim.restart();
+							}
+							onExited: {
+								activitySwitcherDashTimer.restart();
+							}
 						}
 						Grid {
 							id: activitySwitcherRepeaterGrid
@@ -630,14 +756,15 @@ import "../code/createClients.js" as CreateClients
 										//y: 0
 										//x: 0
 										anchors.top: activityThumbnail.top
-										height: 20
+										//height: 20
+										height: activityThumbnail.height
 										width: activityThumbnail.width
 										color: 'black'
 									}
 									Text {
 										//anchors.fill: parent
 										id: activityThumbnailTitleText
-										anchors.top: activityThumbnail.top
+										//anchors.top: activityThumbnail.top
 										anchors.horizontalCenter: activityThumbnail.horizontalCenter
 										anchors.verticalCenter: activityThumbnailBlackRectangle.verticalCenter
 										anchors.topMargin: 2
@@ -673,6 +800,8 @@ import "../code/createClients.js" as CreateClients
 									}
 									MouseArea {
 										anchors.fill: parent
+										//anchors.fill: activityThumbnail
+										//parent: activitySwitcherDashMouseArea
 										enabled: true
 										hoverEnabled: true
 										onClicked: {
@@ -684,12 +813,21 @@ import "../code/createClients.js" as CreateClients
 											fadeFromBlack.restart();
 										}
 										onEntered: {
+											//showActivitySwitcherDashAnim.start();
+											//hideActivitySwitcherDashAnim.running = false;
+											//activitySwitcherDashMouseArea.stop();
+											activitySwitcherDashTimer.stop();
 											thumbnailHoverStart.restart();
 										}
 										onExited: {
+											//hideActivitySwitcherDashAnim.running = true;
+											//activitySwitcherDashMouseArea.stop();
+											//activitySwitcherDashTimer.restart();
 											thumbnailHoverEnd.restart();
 										}
 									}
+									// In case I ever figure out how to control the activities
+									// flag of the clients from here.
 									/*DropArea {
 										id: activityDropArea
 										anchors.fill: parent
@@ -703,15 +841,16 @@ import "../code/createClients.js" as CreateClients
 											//console.log(Object.getOwnPropertyNames(drag.source));
 											//drag.source.newDesktop = bigDesktopRepeater.desktop+1;
 											drag.source.newActivity = model.id;
-											console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
+											//console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
+											//console.log(Object.getOwnPropertyNames(workspace));
 											//con
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 										onExited: {
 											console.log('LEAVING ACTIVITY');
 											//drag.source.newDesktop = drag.source.currentDesktop;
 											drag.source.newActivity = drag.source.clientObject.activities;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 									}*/
 								}

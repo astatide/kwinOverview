@@ -391,6 +391,7 @@ Item {
       console.log(Drag.drop());
       console.log('TESTING');
       console.log(kwinClientThumbnail.newDesktop);
+      console.log(kwinClientThumbnail.newActivity);
       // Let's see if the dropArea can handle this.
       //var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
       //var newDesktop = 0;
@@ -403,7 +404,14 @@ Item {
       }
       if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
         //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
+        // This is a read-only property, and so we're unable to change it from here.
+        // Not sure if there's a model out there that would let us do it.
+        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
         //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
+        // for now, since we can't sort it.
+        var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
+        console.log(kwinClientThumbnail.clientObject.activities);
+        returnAnim.running = true;
       } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
@@ -524,8 +532,13 @@ Item {
             // But also check to make sure we're on the correct activity.
             kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0];
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
-            kwinClientThumbnail.visible = true;
+            //kwinClientThumbnail.visible = true;
+            //actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
             actualThumbnail.visible = true;
+            kwinThumbnailRenderWindow.visible = true;
+            kwinThumbnailRenderWindow.enabled = true;
+            kwinClientThumbnail.visible = true;
           }
         } else {
             // Go back to being in the original parent widget.
@@ -540,8 +553,21 @@ Item {
           if (kwinClientThumbnail.clientObject.desktop > -1) {
             // Reparent, then resize all the appropriate grids.
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
-            kwinClientThumbnail.visible = true;
-            actualThumbnail.visible = true;
+            //kwinClientThumbnail.visible = true;
+            //actualThumbnail.visible = true;
+            //if (kwinClientThumbnail.clientObject.desktop != workspace.currentDesktop) {
+              kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
+              actualThumbnail.visible = true;
+              kwinThumbnailRenderWindow.visible = true;
+              kwinThumbnailRenderWindow.enabled = true;
+              kwinClientThumbnail.visible = true;
+            /*} else {
+              kwinThumbnailRenderWindow.wId = -1;
+              actualThumbnail.visible = false;
+              kwinThumbnailRenderWindow.visible = false;
+              kwinThumbnailRenderWindow.enabled = false;
+              kwinClientThumbnail.visible = false;
+            }*/
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           }
         } else {
