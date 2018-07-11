@@ -67,39 +67,17 @@ import "../code/createClients.js" as CreateClients
 				width: dashboard.screenWidth
 				anchors.fill: parent
 				focus: true
-				//height: main.screenHeight
 		    height: dashboard.screenHeight
 				x: 0
 				y: 0
-				//visible: true
 				opacity: 1
-
-				/*Keys.onPressed: {
-			    console.log(event.key);
-			    console.log('WHEEEE');
-			    //searchFieldAndResults.focus = true;
-			    //searchField.text = ""
-			    //currentDesktopGrid.visible = !currentDesktopGrid.visible;
-			  }*/
 
 				// This creates a mouseArea for the rectangle.  We change the height of our dock.
 				MouseArea {
 					anchors.fill: parent
 					enabled: true
 					onClicked: {
-						/*if (mainBackground.state == 'visible') {
-							//endAnim.running = true;
-							//dashboardBackground.visible = false;
-							//dashboard.visible = false;
-							mainBackground.state = 'invisible';
-						} else if (mainBackground.state == 'invisible') {
-							//initAnim.running = true;
-							//dashboardBackground.visible = true;
-							//dashboard.visible = true;
-							mainBackground.state = 'visible';
-						}*/
 						toggleBoth();
-						//dashboard.visible = false;
 					}
 				}
 
@@ -107,11 +85,9 @@ import "../code/createClients.js" as CreateClients
 				states: [
 					State {
 						name: 'visible'
-						//PropertyChanges { target: dashboard; visible: true }
 					},
 					State {
 						name: 'invisible'
-						//PropertyChanges { target: dashboard; visible: false }
 					}
 				]
 				NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
@@ -121,8 +97,6 @@ import "../code/createClients.js" as CreateClients
 					id: initAnim
 					NumberAnimation { target: dash; property: "y"; to: 0}
 					NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: 0}
-					//NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: dashboard.opacity}
-					//NumberAnimation { target: dashboardBackground; property: "opacity"; to: 1; from: dashboard.opacity}
 					// Expensive!
 					SequentialAnimation {
 						ParallelAnimation {
@@ -268,8 +242,10 @@ import "../code/createClients.js" as CreateClients
 					// When y is set, we start this animation.  This gracefully moves the dock into position, ignoring the whole 'slide' thing.
 					width: dashboard.screenWidth
 					//height: main.screenHeight
-					height: 100
-					property int gridHeight: 100
+					property int scale: 2
+					height: 100*dash.scale
+					property int gridHeight: 100*dash.scale
+					property int border: 20*dash.scale
 					y: 0
 					anchors.fill: mainBackground
 					//anchors.fill: parent
@@ -277,7 +253,7 @@ import "../code/createClients.js" as CreateClients
 					Rectangle {
 						opacity: 0.5
 						//visible: dashboard.visible
-						height: dash.height + 20
+						height: dash.height + dash.border
 						width: dashboard.screenWidth
 						color: 'black'
 					}
@@ -293,7 +269,7 @@ import "../code/createClients.js" as CreateClients
 						anchors.leftMargin: 5
 						//anchors.fill: parent
 
-						property int spacing: 10
+						property int spacing: 10*dash.scale
 						height: dash.gridHeight
 						contentHeight: desktopThumbnailGridBackgrounds.height
 						contentWidth: desktopThumbnailGridBackgrounds.width
@@ -314,7 +290,7 @@ import "../code/createClients.js" as CreateClients
 							clip: true
 							//x: -2
 							x: ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
-							y: 8
+							y: 9*dash.scale
 							//height: desktopThumbnailGridBackgrounds.height
 							//width: desktopThumbnailGridBackgrounds.width
 							height: desktopThumbnailGrid.height+4
@@ -338,7 +314,7 @@ import "../code/createClients.js" as CreateClients
 							id: desktopThumbnailGridBackgrounds
 							rows: 1
 							x: 0
-							y: 10
+							y: 10*dash.scale
 							spacing: desktopThumbnailGrid.spacing
 							//anchors.fill: parent
 
@@ -469,7 +445,7 @@ import "../code/createClients.js" as CreateClients
 						y: 0
 						x: dashboard.screenWidth-50
 						Rectangle {
-							height: 120
+							height: dash.height+dash.border
 							width: 50
 							//color: 'black'
 							color: 'transparent'
@@ -488,7 +464,7 @@ import "../code/createClients.js" as CreateClients
 							id: plusButton
 							//opacity: 0.5
 							//visible: dashboard.visible
-							height: 60
+							height: (dash.height+dash.border)/2
 							width: 50
 							//color: 'white'
 							color: 'transparent'
@@ -585,7 +561,7 @@ import "../code/createClients.js" as CreateClients
 						id: searchFieldAndResults
 						// Don't show until we start typing.
 						visible: false
-						y: dash.height + 30
+						y: dash.height + 30*dash.scale
 						//x: 0
 						height: (dashboard.screenHeight - dash.height - 30 - 15)
 						width: dashboard.screenWidth
@@ -656,37 +632,31 @@ import "../code/createClients.js" as CreateClients
 					}
 					Item {
 						id: activitySwitcherDash
-						//anchors.verticalCenter: parent.verticalCenter
-						//anchors.horizontalCenter: parent.horizontalCenter
-						//anchors.bottom: parent.top
-						//anchors.top: currentDesktopGrid.bottom
-						//anchors.topMargin: 40 + 24
 						x: 0
 						width: dashboard.screenWidth
-						//x: screenWidth/2-blahBlahBlah.width
-						//y: 124
-						//anchors.bottom: mainBackground.bottom
-						//y: (dashboard.screenHeight - 80)
 						scale: 1
 						//y: dashboard.screenHeight
 						//y: dashboard.screenHeight - dash.height + 10
-						height: 100
+						height: (dash.height*dash.scale)+(dash.border*2)//+dash.border
 						//y: 90
-						y: dashboard.screenHeight - 20
-						property int gridHeight: 80
+						//y: dashboard.screenHeight - dash.border*dash.scale
+						y: dashboard.screenHeight - (dash.height*dash.scale)-(dash.border*dash.scale)
+						property int gridHeight: dash.height-dash.border
 						NumberAnimation {
 							id: showActivitySwitcherDashAnim
 							running: false
 							target: activitySwitcherDash
 							property: "y"
-							to: dashboard.screenHeight - 105
+							to: dashboard.screenHeight - (dash.scale*dash.height)-(dash.border*dash.scale) //- dash.height*dash.scale
+
 						}
 						NumberAnimation {
 							id: hideActivitySwitcherDashAnim
 							running: false
 							target: activitySwitcherDash
 							property: "y"
-							to: dashboard.screenHeight - 20
+							to: dashboard.screenHeight - (dash.height-dash.border)*dash.scale
+
 						}
 						Timer {
 							id: activitySwitcherDashTimer
@@ -723,7 +693,7 @@ import "../code/createClients.js" as CreateClients
 							anchors.verticalCenter: parent.verticalCenter
 							anchors.horizontalCenter: parent.horizontalCenter
 							anchors.top: activitySwitcherDashBackground.top
-							anchors.topMargin: 5
+							anchors.topMargin: dash.border
 							rows: 1
 							columns:  10
 							spacing: desktopThumbnailGrid.spacing
@@ -805,9 +775,6 @@ import "../code/createClients.js" as CreateClients
 										enabled: true
 										hoverEnabled: true
 										onClicked: {
-											//console.log(Object.getOwnPropertyNames(workspace));
-											//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
-											//workspace.currentActivity = model.id;
 											fadeToBlack.restart();
 											ActivitySwitcher.Backend.setCurrentActivity(model.id)
 											fadeFromBlack.restart();

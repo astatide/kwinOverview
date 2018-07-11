@@ -247,14 +247,14 @@ Item {
       target: actualThumbnail
       //target: kwinClientThumbnail
       property: "height"
-      to: 100
+      to: 100*dash.scale
       duration: 100
     }
     PropertyAnimation {
       target: actualThumbnail
       //target: kwinClientThumbnail
       property: "width"
-      to: 100*dashboard.screenRatio
+      to: 100*dashboard.screenRatio*dash.scale
       duration: 100
   }
 
@@ -298,8 +298,8 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 128; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 128; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
     onStopped: {
       mouseArea.enabled = true;
       //kwinClientThumbnail.isSmall = false;
@@ -349,7 +349,9 @@ Item {
       //console.log(Drag.hotSpot);
       //if (actualThumbnail.height != dash.gridHeight) {
       if (kwinClientThumbnail.state == 'isHeld') {
-        shrinkAnim.restart()
+        if (kwinClientThumbnail.isSmall == false) {
+          shrinkAnim.restart();
+        }
       }
 
       /*if (kwinClientThumbnail.state == 'isHeld') {
