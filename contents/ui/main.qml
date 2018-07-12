@@ -23,7 +23,7 @@ import "../code/createClients.js" as CreateClients
 			id: dashboard
 			opacity: 1
 			flags: Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
-			visible: true
+			visible: false
 			x: 0
 			y: 0
 			color: 'black'
@@ -46,6 +46,7 @@ import "../code/createClients.js" as CreateClients
 			property int screenHeight: 0
 			property var screenRatio: 0
 			property int dockHeight: 0
+			property int currentDesktop: workspace.currentDesktop
 
 			property var clientsVisible: { new Array }
 
@@ -287,7 +288,7 @@ import "../code/createClients.js" as CreateClients
 							opacity: 1
 							visible: true
 							scale: 1
-							clip: true
+							//clip: true
 							//x: -2
 							x: ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
 							y: 9*dash.scale
@@ -340,18 +341,7 @@ import "../code/createClients.js" as CreateClients
 									width: dash.gridHeight*dashboard.screenRatio
 									Image {
 										id: littleDesktopBackground
-										//anchors.fill: dashboard
-										//anchors.fill: parent
-										//smooth: true
-										// Better scaling
 										mipmap: true
-										//border { left: 30; top: 30; right: 30; bottom: 30 }
-										//horizontalTileMode: BorderImage.Stretch
-  									//verticalTileMode: BorderImage.Stretch
-										//clip: true
-										//visible: true
-										//source: "wallhaven-567367.jpg"
-										//source: "image://wallpaperthumbnail/" + dashboardBackground.background
 										fillMode: Image.PreserveAspectCrop
 										source: dashboardBackground.background
 										//height: dashboard.screenHeight
@@ -360,17 +350,10 @@ import "../code/createClients.js" as CreateClients
 										width: dash.gridHeight*dashboard.screenRatio
 										x: 0
 										y: 0
-										//brightness: 2
-										// Maybe?
-										//asynchronous: true
-										//cache: false
 									}
 									  MouseArea {
 									    id: littleDesktopGridMouseArea
 									    anchors.fill: parent
-									    //drag.axis: 'XAndYAxis'
-									    //drag.target: kwinClientThumbnail
-									    //hoverEnabled: true
 									    onClicked: {
 									      // We only want to disable the dashboard when we double click on the item
 									      // or when we're currently on said desktop and are 'sure'.
@@ -420,15 +403,15 @@ import "../code/createClients.js" as CreateClients
 											color: "green"
 										}
 										onEntered: {
-											console.log('ENTERING!');
+											//console.log('ENTERING!');
 											//console.log(Object.getOwnPropertyNames(drag.source));
 											drag.source.newDesktop = littleDesktopContainer.desktop+1;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 										onExited: {
-											console.log('LEAVING');
+											//console.log('LEAVING');
 											drag.source.newDesktop = drag.source.currentDesktop;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 									}
 								}
@@ -483,7 +466,7 @@ import "../code/createClients.js" as CreateClients
 								anchors.fill: parent
 								id: plusButtonMouseArea
 								onPressed: {
-									console.log('yay');
+									//console.log('yay');
 									actualPlusButton.color = 'grey';
 								}
 								onReleased: {
@@ -517,7 +500,7 @@ import "../code/createClients.js" as CreateClients
 								anchors.fill: parent
 								id: minusButtonMouseArea
 								onPressed: {
-									console.log('yay');
+									//console.log('yay');
 									actualMinusButton.color = 'grey';
 								}
 								onReleased: {
@@ -610,21 +593,21 @@ import "../code/createClients.js" as CreateClients
 									//y: dash.height + 30
 									//height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
 									//width: dashboard.screenWidth
-									Rectangle {
+									/*Rectangle {
 										anchors.fill: parent
 										visible: false
 										color: "green"
-									}
+									}*/
 									onEntered: {
-										console.log('ENTERING LARGE DESKTOP!');
+										//console.log('ENTERING LARGE DESKTOP!');
 										//console.log(Object.getOwnPropertyNames(drag.source));
 										drag.source.newDesktop = bigDesktopRepeater.desktop+1;
-										console.log(drag.source.newDesktop);
+										//console.log(drag.source.newDesktop);
 									}
 									onExited: {
-										console.log('LEAVING');
+										//console.log('LEAVING');
 										drag.source.newDesktop = drag.source.currentDesktop;
-										console.log(drag.source.newDesktop);
+										//console.log(drag.source.newDesktop);
 									}
 								}
 							}
@@ -637,17 +620,17 @@ import "../code/createClients.js" as CreateClients
 						scale: 1
 						//y: dashboard.screenHeight
 						//y: dashboard.screenHeight - dash.height + 10
-						height: (dash.height*dash.scale)+(dash.border*2)//+dash.border
+						height: (dash.height+dash.border)//+dash.border
 						//y: 90
 						//y: dashboard.screenHeight - dash.border*dash.scale
-						y: dashboard.screenHeight - (dash.height*dash.scale)-(dash.border*dash.scale)
+						y: dashboard.screenHeight - (dash.height+dash.border)
 						property int gridHeight: dash.height-dash.border
 						NumberAnimation {
 							id: showActivitySwitcherDashAnim
 							running: false
 							target: activitySwitcherDash
 							property: "y"
-							to: dashboard.screenHeight - (dash.scale*dash.height)-(dash.border*dash.scale) //- dash.height*dash.scale
+							to: dashboard.screenHeight - (dash.border+dash.height) //- dash.height*dash.scale
 
 						}
 						NumberAnimation {
@@ -655,7 +638,7 @@ import "../code/createClients.js" as CreateClients
 							running: false
 							target: activitySwitcherDash
 							property: "y"
-							to: dashboard.screenHeight - (dash.height-dash.border)*dash.scale
+							to: dashboard.screenHeight - (dash.border)
 
 						}
 						Timer {
@@ -852,7 +835,7 @@ import "../code/createClients.js" as CreateClients
 		//onTriggered: TextField.searchTextChanged()
 		onTriggered: {
 			// I suspect that we have problems reacquiring focus on a desktop change.
-			console.log('DESKTOPCHANGED');
+			//console.log('DESKTOPCHANGED');
 			dashboard.requestActivate();
 			//workspace.activeClient = dashboard.windowId;
 			//dashboard.height = dashboard.screenHeight-1;
@@ -864,6 +847,7 @@ import "../code/createClients.js" as CreateClients
 	}
 
 		Component.onCompleted: {
+			dashboard.visible = true;
 			dashboard.requestActivate();
 			//dashboard.windowId = workspace.activeClient;
 			//mainBackground.focus = true;
@@ -917,7 +901,7 @@ import "../code/createClients.js" as CreateClients
 			)
 			// Make sure we add new thumbnails as necessary.
 			workspace.clientAdded.connect(function (c) {
-				console.log(c);
+				//console.log(c);
 				CreateClients.createNewClientThumbnails(
 					desktopThumbnailGrid,
 					dashboard,
@@ -976,12 +960,12 @@ import "../code/createClients.js" as CreateClients
 		// Okay, NOW this works.
 		// but everything still sort of sucks.
 		//mainBackground.forceActiveFocus();
-		console.log('Who has focus?');
-		console.log(dashboard.activeFocusItem);
-		console.log('TESTING!');
-		console.log(workspace.activeClient);
-		console.log(Object.getOwnPropertyNames(dashboard));
-		console.log(Object.getOwnPropertyNames(workspace));
+		//console.log('Who has focus?');
+		//console.log(dashboard.activeFocusItem);
+		//console.log('TESTING!');
+		//console.log(workspace.activeClient);
+		//console.log(Object.getOwnPropertyNames(dashboard));
+		//console.log(Object.getOwnPropertyNames(workspace));
 		//console.log(Object.getOwnPropertyNames(workspace.clientList()[0]));
 		/*console.log(Object.getOwnPropertyNames(workspace));
 		console.log(Object.getOwnPropertyNames(workspace.activities));
