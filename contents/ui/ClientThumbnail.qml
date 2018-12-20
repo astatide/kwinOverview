@@ -65,16 +65,18 @@ Item {
     State {
       name: 'isHeld'
       PropertyChanges {
-        target: kwinClientThumbnail
+        //target: kwinClientThumbnail
         //parent: mainBackground
-        z: 10000
+        target: dashboardDesktopChanger
+        height: 1920
       }
     },
     State {
       name: 'notHeld'
       PropertyChanges {
-        target: kwinClientThumbnail
-        z: 0
+        //target: kwinClientThumbnail
+        target: dashboardDesktopChanger
+        height: (100+20) * dashboard.scalingFactor
         //parent: clientGridLayout
       }
     }
@@ -586,6 +588,8 @@ Item {
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
       if (y > dash.gridHeight) {
+        console.log('Baby bitch');
+        console.log(workspace.currentDesktop);
         return workspace.currentDesktop;
       }
       for (var d = 0; d <= workspace.desktops; d++) {

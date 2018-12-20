@@ -92,7 +92,9 @@ Item {
       //console.log(workspace.currentDesktop);
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
-      if (y > dash.gridHeight) {
+      if (y > dash.y + dash.height) {
+        console.log('Baby bitch');
+        console.log(workspace.currentDesktop);
         return workspace.currentDesktop;
       }
       for (var d = 1; d <= workspace.desktops; d++) {
@@ -295,6 +297,7 @@ Item {
             //console.log(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y));
             console.log('New Desktop!');
             console.log(newDesktop);
+
             // Hey, it works.  Yay.
             //console.log(Object.getOwnPropertyNames(workspace));
             //console.log(Object.getOwnPropertyNames(clientObject));
