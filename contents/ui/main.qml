@@ -242,7 +242,7 @@ Window {
 		//height: 100 * dashboard.ScalingFactor
 		//width: dashboard.screenWidth
 		height: (100+20) * dashboard.scalingFactor
-		width: 0
+		width: dashboard.screenWidth
 		//height: 1080
 		//maximumHeight: (100+20) * dashboard.scalingFactor
 		//maximumWidth: 1980
@@ -257,19 +257,32 @@ Window {
 			// When y is set, we start this animation.  This gracefully moves the dock into position, ignoring the whole 'slide' thing.
 			width: dashboard.screenWidth
 			//height: main.screenHeight
-			height: 100 * dashboard.scalingFactor
+			height: 120 * dashboard.scalingFactor
 			property int gridHeight: 100 * dashboard.scalingFactor
-			y: -120 * dashboard.scalingFactor
+			y: 0 //-120 * dashboard.scalingFactor
 			//anchors.fill: dashboard.mainBackground
 			//anchors.fill: parent
 
-			Rectangle {
-				opacity: 0.85
-				//visible: dashboard.visible
+			PlasmaCore.Dialog {
+				id: dashPlasmaBack
 				visible: true
-				height: dash.height + 20
-				width: dashboard.screenWidth
-				color: '#282828'
+				//height: 120*dashboard.scalingFactor
+				//width: dashboard.screenWidth
+				opacity: 0.5
+				y: 0
+				x: 0
+				flags: Qt.X11BypassWindowManagerHint
+				//anchors.fill: parent
+				Rectangle {
+					opacity: 0
+					//visible: dashboard.visible
+					visible: false
+					height: dash.height - 10
+					width: dashboard.screenWidth
+					color: 'black'
+					x: 0
+					y: 0
+				}
 			}
 			//  This is where wesetWindowFlags(Qt::X11BypassWindowManagerHint)'ll build up the grid.  I like to think, anyway.
 
@@ -612,10 +625,10 @@ Window {
 			color: '#00000000'
 			visible: true
 			x: 0
-			y: dashboard.screenHeight - (100*dashboard.scalingFactor)
+			y: dashboard.screenHeight //- (100*dashboard.scalingFactor)
 			// Start disabled.  toggleBoth sets this appropriately.
 			height: 100 * dashboard.scalingFactor
-			width: 0
+			width: dashboard.screenWidth
 			Item {
 				id: activitySwitcherDash
 				x: 0
@@ -629,7 +642,7 @@ Window {
 				//y: dashboard.screenHeight - dash.height + 10
 				height: 100 * dashboard.scalingFactor
 				//y: 90
-				y: 100 * dashboard.scalingFactor
+				y: 0 //100 * dashboard.scalingFactor
 				property int gridHeight: 80 * dashboard.scalingFactor
 				NumberAnimation {
 					id: showActivitySwitcherDashAnim
@@ -652,8 +665,30 @@ Window {
 						//hideActivitySwitcherDashAnim.restart();
 					}
 				}
+				PlasmaCore.Dialog {
+					id: activitySwitcherPlasmaBack
+					visible: true
+					//height: 120*dashboard.scalingFactor
+					//width: dashboard.screenWidth
+					opacity: 0.5
+					y: dashboard.screenHeight
+					x: 0
+					flags: Qt.X11BypassWindowManagerHint
+					//anchors.fill: parent
+					Rectangle {
+						opacity: 0
+						//visible: dashboard.visible
+						visible: false
+						height: activitySwitcherDash.height
+						width: dashboard.screenWidth
+						color: 'black'
+						x: 0
+						y: 0
+					}
+				}
 				Rectangle {
 					id: activitySwitcherDashBackground
+					visible: false
 					scale: 1
 					opacity: 0.80
 					y: 0
@@ -850,8 +885,10 @@ Window {
 		}
 		ParallelAnimation {
 			id: initAnim
-			NumberAnimation { target: dash; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
-			NumberAnimation { target: activitySwitcherDash; property: "y"; from: (100*dashboard.scalingFactor); to: 0}
+			NumberAnimation { target: dashboardDesktopChanger; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
+			NumberAnimation { target: dashPlasmaBack; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
+			NumberAnimation { target: dashboardActivityChanger; property: "y"; from: dashboard.screenHeight; to: dashboard.screenHeight - (100*dashboard.scalingFactor)}
+			NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; from: dashboard.screenHeight; to: dashboard.screenHeight - (100*dashboard.scalingFactor)}
 			NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: 0}
 			// Expensive!
 			SequentialAnimation {
@@ -879,8 +916,10 @@ Window {
 				}
 				ParallelAnimation {
 					NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
-					NumberAnimation { target: dash; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
-					NumberAnimation { target: activitySwitcherDash; property: "y"; from: 0; to: (100*dashboard.scalingFactor); duration: 100}
+					NumberAnimation { target: dashboardDesktopChanger; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
+					NumberAnimation { target: dashPlasmaBack; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
+					NumberAnimation { target: dashboardActivityChanger; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
+					NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
 					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
 					NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
 					NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0; duration: 100}
@@ -891,8 +930,8 @@ Window {
 				if (!endAnim.running) {
 					dashboard.height = 0;
 					dashboard.width = 0;
-					dashboardDesktopChanger.width = 0;
-					dashboardActivityChanger.width = 0;
+					//dashboardDesktopChanger.width = 0;
+					//dashboardActivityChanger.width = 0;
 					mainBackground.state = 'invisible';
 					//dashboard.visible = false;
 					mainBackground.visible = false;
