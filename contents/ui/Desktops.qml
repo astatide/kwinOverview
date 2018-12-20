@@ -242,8 +242,8 @@ Item {
         }
         ParallelAnimation {
           id: returnAnim
-          NumberAnimation { target: kwinClientThumbnail; property: "x"; from: x; to: kwinClientThumbnail.originalX}
-          NumberAnimation { target: kwinClientThumbnail; property: "y"; from: y; to: kwinClientThumbnail.originalY}
+          //NumberAnimation { target: kwinClientThumbnail; property: "x"; from: x; to: kwinClientThumbnail.originalX}
+          //NumberAnimation { target: kwinClientThumbnail; property: "y"; from: y; to: kwinClientThumbnail.originalY}
           //NumberAnimation { target: actualThumbnail; property: "width"; from: width; to: width/2}
           //NumberAnimation { target: actualThumbnail; property: "height"; from: height; to: height/2}
         }

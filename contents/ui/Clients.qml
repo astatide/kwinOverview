@@ -41,13 +41,13 @@ Item {
     //columns: { return _returnMatrixSize() }
     // These should apparently have their own thread.
 
-    add: Transition {
-      NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    }
+    //add: Transition {
+    //  NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    //}
 
-    move: Transition {
-        NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
-    }
+    //move: Transition {
+    //    NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+    //}
 
     onRowsChanged: {
       testRows.start();

@@ -35,6 +35,7 @@ Item {
   property var currentDesktop: 0
   property var newDesktop: 0
   property var newActivity: 0
+  property var oldParent: 0
   Drag.active: mouseArea.drag.active
   //Drag.hotSpot: Qt.point(50,50)
 
@@ -67,8 +68,9 @@ Item {
       PropertyChanges {
         //target: kwinClientThumbnail
         //parent: mainBackground
+        // This allows the visual to drag!
         target: dashboardDesktopChanger
-        height: 1920
+        height: dashboard.screenHeight //- 120*dashboard.scalingFactor
       }
     },
     State {
@@ -166,8 +168,8 @@ Item {
       property: "width";
       from: clientRealWidth//*dashboard.screenWidth//currentDesktopGrid.width);
       to: kwinClientThumbnail.originalWidth;
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
     NumberAnimation {
@@ -177,8 +179,8 @@ Item {
       //from: clientRealHeight//*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
       from: clientRealHeight//*dashboard.screenHeight///currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
       to: kwinClientThumbnail.originalHeight;
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
   }
@@ -191,8 +193,8 @@ Item {
       property: "width";
       to: clientRealWidth;
       from: kwinClientThumbnail.width;
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
     NumberAnimation {
@@ -201,8 +203,8 @@ Item {
       property: "height";
       to: clientRealHeight*(dashboard.screenHeight/currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].height);
       from: kwinClientThumbnail.height;
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
     NumberAnimation {
@@ -212,8 +214,8 @@ Item {
       to: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).x-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).x;
       from: kwinClientThumbnail.originalX;
       //to: 0
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
     NumberAnimation {
@@ -227,8 +229,8 @@ Item {
       to: kwinClientThumbnail.mapFromGlobal(clientRealX, clientRealY).y-actualThumbnail.mapFromItem(kwinClientThumbnail.parent, x, y).y;
       from: kwinClientThumbnail.originalY;
       //to: 0
-      easing.amplitude: 2;
-      easing.type: Easing.InOutQuad;
+      //easing.amplitude: 2;
+      //easing.type: Easing.InOutQuad;
       //duration: 1000
     }
   }
@@ -300,8 +302,8 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 32; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 32;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 32;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
     onStopped: {
       mouseArea.enabled = true;
       //kwinClientThumbnail.isSmall = false;
@@ -313,8 +315,8 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-    PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 100; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 100; easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 100;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
+    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 100;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
     onStopped: {
       mouseArea.enabled = true;
       //kwinClientThumbnail.isSmall = false;
@@ -353,6 +355,10 @@ Item {
       if (kwinClientThumbnail.state == 'isHeld') {
         shrinkAnim.restart()
       }
+      //ParentChange {
+      //  target: kwinClientThumbnail
+      //  parent: mainContainer
+      //}
 
       /*if (kwinClientThumbnail.state == 'isHeld') {
         if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.gridHeight + 30) {
@@ -386,6 +392,9 @@ Item {
       kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
       kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
       kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
+      //kwinClientThumbnail.oldParent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+      //kwinClientThumbnail.parent = dragHolder;
+      console.log('BLAHBLAHBLAH');
     }
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
@@ -404,11 +413,15 @@ Item {
         growthAnim.restart();
         kwinClientThumbnail.isSmall = false;
       }
+      //console.log()
+      //kwinClientThumbnail.clientObject.setOnActivities(kwinClientThumbnail.newActivity);
+      //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
+      //console.log(Object.getOwnPropertyNames(ActivitySwitcher))
       if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
         //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
         // This is a read-only property, and so we're unable to change it from here.
         // Not sure if there's a model out there that would let us do it.
-        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
+        console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
         //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
         // for now, since we can't sort it.
         var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
@@ -426,7 +439,7 @@ Item {
         kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
-        returnAnim.running = true;
+        //returnAnim.running = true;
         kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
         // We want the others to pop up, so.
       }
@@ -444,9 +457,9 @@ Item {
             kwinClientThumbnail.originalY = kwinClientThumbnail.y;
           }
         }
-        moveToThumbnail.running = true;
+        //moveToThumbnail.running = true;
       } else {
-        moveFromThumbnail.running = true;
+        //moveFromThumbnail.running = true;
       }
     }
   }
@@ -580,7 +593,7 @@ Item {
           kwinClientThumbnail.parent = desktopThumbnailGrid;
         }
       }
-      searchFieldAndResults.children[1].forceActiveFocus();
+      //searchFieldAndResults.children[1].forceActiveFocus();
     }
 
     function _overlapsDesktop(x, y) {

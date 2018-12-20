@@ -28,6 +28,9 @@ Window {
 	y: 0
 	flags: Qt.WindowTransparentForInput //| Qt.X11BypassWindowManagerHint
 	//flags: Qt.X11BypassWindowManagerHint //| Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
+	Item {
+		id: dragHolder
+	}
 	Window {
 			id: dashboard
 			opacity: 1
@@ -783,14 +786,14 @@ Window {
 							}
 							// In case I ever figure out how to control the activities
 							// flag of the clients from here.
-							/*DropArea {
+							DropArea {
 								id: activityDropArea
 								anchors.fill: parent
-								Rectangle {
+								/*Rectangle {
 									anchors.fill: parent
 									visible: true
 									color: "green"
-								}
+								}*/
 								onEntered: {
 									console.log('ENTERING ACTIVITY!');
 									//console.log(Object.getOwnPropertyNames(drag.source));
@@ -807,7 +810,7 @@ Window {
 									drag.source.newActivity = drag.source.clientObject.activities;
 									//console.log(drag.source.newDesktop);
 								}
-							}*/
+							}
 						}
 					}
 				}
