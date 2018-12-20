@@ -224,7 +224,7 @@ Window {
 		//flags: Qt.ToolTip
 		//flags: Qt.X11BypassWindowManagerHint
 		//flags: Qt.X11BypassWindowManagerHint | Qt.WA_TranslucentBackground | Qt.WindowTransparentForInput | Qt.WA_OpaquePaintEvent | Qt.WA_PaintOnScreen
-		flags: Qt.WA_TranslucentBackground | Qt.WA_OpaquePaintEvent | Qt.FramelessWindowHint | Qt.WindowMaximized | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
+		flags: Qt.WA_TranslucentBackground | Qt.WA_OpaquePaintEvent | Qt.WindowMaximized | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
 		color: '#00000000'
 		visible: true
 		title: "Yay"
@@ -242,7 +242,7 @@ Window {
 		//height: 100 * dashboard.ScalingFactor
 		//width: dashboard.screenWidth
 		height: (100+20) * dashboard.scalingFactor
-		width: 1980
+		width: 0
 		//height: 1080
 		//maximumHeight: (100+20) * dashboard.scalingFactor
 		//maximumWidth: 1980
@@ -615,7 +615,7 @@ Window {
 			y: dashboard.screenHeight - (100*dashboard.scalingFactor)
 			// Start disabled.  toggleBoth sets this appropriately.
 			height: 100 * dashboard.scalingFactor
-			width: dashboard.screenWidth
+			width: 0
 			Item {
 				id: activitySwitcherDash
 				x: 0
