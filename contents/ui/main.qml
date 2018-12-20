@@ -231,7 +231,7 @@ Window {
 		//location: Qt.application.layoutDirection === Qt.RightToLeft ? PlasmaCore.Types.RightEdge : PlasmaCore.Types.LeftEdge
 		x: 0
 		//BackgroundHints: 1
-		y: dashboard.dockHeight
+		y: 0
 		//color: 'black'
 		opacity: 1
 		//visibility: Window.Fullscreen
@@ -256,7 +256,7 @@ Window {
 			//height: main.screenHeight
 			height: 100 * dashboard.scalingFactor
 			property int gridHeight: 100 * dashboard.scalingFactor
-			y: -dash.height - dashboard.dockHeight
+			y: -120 * dashboard.scalingFactor
 			//anchors.fill: dashboard.mainBackground
 			//anchors.fill: parent
 
@@ -430,8 +430,8 @@ Window {
 				id: dashAddRemoveDesktopButtons
 				y: 0
 				x: dashboard.screenWidth-50
+				height: 120
 				Rectangle {
-					height: 120 * dashboard.scalingFactor
 					width: 50
 					//color: 'black'
 					color: 'transparent'
@@ -450,8 +450,8 @@ Window {
 					id: plusButton
 					//opacity: 0.5
 					//visible: dashboard.visible
-					height: 60 * dashboard.scalingFactor
-					width: 50
+					height: 55 * dashboard.scalingFactor
+					width: 40 * dashboard.scalingFactor
 					//color: 'white'
 					color: 'transparent'
 					Text {
@@ -483,10 +483,10 @@ Window {
 				Rectangle {
 					id: minusButton
 					anchors.top: plusButton.bottom
-					height: 60 * dashboard.scalingFactor
-					width: 50
+					height: 55 * dashboard.scalingFactor
+					width: 40 * dashboard.scalingFactor
 					//color: 'white'
-					y: 60
+					y: 50
 					color: 'transparent'
 					Text {
 						id: actualMinusButton
@@ -626,7 +626,7 @@ Window {
 				//y: dashboard.screenHeight - dash.height + 10
 				height: 100 * dashboard.scalingFactor
 				//y: 90
-				y: 0
+				y: 100 * dashboard.scalingFactor
 				property int gridHeight: 80 * dashboard.scalingFactor
 				NumberAnimation {
 					id: showActivitySwitcherDashAnim
@@ -678,6 +678,7 @@ Window {
 					anchors.horizontalCenter: parent.horizontalCenter
 					//anchors.top: activitySwitcherDashBackground.top
 					anchors.topMargin: 10 * dashboard.scalingFactor
+					anchors.leftMargin: desktopThumbnailGrid.spacing
 					rows: 1
 					columns:  10
 					spacing: desktopThumbnailGrid.spacing
@@ -846,7 +847,7 @@ Window {
 		}
 		ParallelAnimation {
 			id: initAnim
-			NumberAnimation { target: dash; property: "y"; from: -dash.height*dashboard.scalingFactor - dashboard.dockHeight; to: 0}
+			NumberAnimation { target: dash; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
 			NumberAnimation { target: activitySwitcherDash; property: "y"; from: (100*dashboard.scalingFactor); to: 0}
 			NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: 0}
 			// Expensive!
@@ -870,12 +871,12 @@ Window {
 					target: dashboard.currentDesktopGridThumbnailContainer
 					property: "y"
 					from: 15
-					to: dashboard.screenHeight - dashboard.dockHeight
+					to: dashboard.screenHeight
 					duration: 100
 				}
 				ParallelAnimation {
 					NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
-					NumberAnimation { target: dash; property: "y"; to: -dash.height*dashboard.scalingFactor - dashboard.dockHeight; duration: 100}
+					NumberAnimation { target: dash; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: activitySwitcherDash; property: "y"; from: 0; to: (100*dashboard.scalingFactor); duration: 100}
 					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
 					NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
