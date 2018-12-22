@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import QtQuick.Layouts 1.12
 import org.kde.kwin 2.0 as KWinLib
 //import org.kde.kwin 2.0;
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -24,15 +25,15 @@ Item {
   y: 0
   scale: 1
 
-  Grid {
+  GridLayout {
     id: clientGridLayout
     visible: true
-    scale: 1
-
+    //scale: 1
+    //flow: Grid.TopToBottom
     anchors.verticalCenter: parent.verticalCenter
     anchors.horizontalCenter: parent.horizontalCenter
-    horizontalItemAlignment: Grid.AlignHCenter
-    verticalItemAlignment: Grid.AlignVCenter
+    //horizontalItemAlignment: Grid.AlignHCenter
+    //verticalItemAlignment: Grid.AlignVCenter
     //rows: { return _returnMatrixSize() }
     // We dynamically update these.
     rows: 0
@@ -56,7 +57,7 @@ Item {
     NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
 
     onChildrenChanged: {
-      kwinDesktopThumbnailContainer.updateGrid();
+      //kwinDesktopThumbnailContainer.updateGrid();
     }
 
     function _onDesktop() {
@@ -90,6 +91,7 @@ Item {
     Component.onCompleted: {
       //updateClients();
       //kwinDesktopThumbnailContainer.updateGrid();
+      //kwinDesktopThumbnailContainer.onAdd.connect(kwinDesktopThumbnailContainer.updateGrid());
 
       // Register for the state change.
       currentDesktopGridThumbnailContainer.onStateChanged.connect(function() {
@@ -115,9 +117,10 @@ Item {
           kwinDesktopThumbnailContainer.visible = true;
         }
       }
+      workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids)
       if (kwinDesktopThumbnailContainer.isLarge) {
         // If we're the main one, we actually just want to go invisible and let the other one in.
-        workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
+        //workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       } else {
         // we want our old desktop to disappear and reappear
         //workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.hideGrids);
@@ -140,6 +143,7 @@ Item {
       // We'll probably sort this out later, as well.
       //workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       //workspace.currentActivityChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //updateGrid();
     }
   }
 
@@ -154,7 +158,20 @@ Item {
     easing.amplitude: 2
     easing.type: Easing.InOutQuad
     onStopped: {
-      kwinDesktopThumbnailContainer.visible = false;
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = true;
+      }
+    }
+    onStarted: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
     }
   }
   PropertyAnimation {
@@ -168,7 +185,20 @@ Item {
     easing.amplitude: 2
     easing.type: Easing.InOutQuad
     onStopped: {
-      kwinDesktopThumbnailContainer.visible = false;
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = true;
+      }
+    }
+    onStarted: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
     }
   }
   PropertyAnimation {
@@ -181,6 +211,22 @@ Item {
     to: 0
     easing.amplitude: 2
     easing.type: Easing.InOutQuad
+    onStopped: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = true;
+      }
+    }
+    onStarted: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
+    }
   }
   PropertyAnimation {
     id: moveNewToRight
@@ -192,10 +238,26 @@ Item {
     to: 0
     easing.amplitude: 2
     easing.type: Easing.InOutQuad
+    onStopped: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = true;
+      }
+    }
+    onStarted: {
+      if (kwinDesktopThumbnailContainer.isLarge) {
+        //kwinDesktopThumbnailContainer.visible = false;
+      }
+      else {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
+    }
   }
   Timer {
     id: makeVisibleTimer
-    interval: 200
+    interval: 1000
     onTriggered: {
       kwinDesktopThumbnailContainer.visible = true;
     }
@@ -204,33 +266,45 @@ Item {
   function swapGrids(oldDesktop, newDesktop) {
     console.log('WHICH ONE IS WHICH!?');
     console.log(oldDesktop, newDesktop);
-    // If we're not the 'main', but we ARE current, we want to become visible and change our
-    // x position (to the right or left, don't care right now), then animate a change to 0, 0.
-    if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-      if (!kwinDesktopThumbnailContainer.isMain) {
-        // We need to know which way we're moving.  But, ah, hmmm.
-        // Which one is the old one?
-        if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
-          moveNewToLeft.restart();
-        } else {
-          moveNewToRight.restart();
+    if (kwinDesktopThumbnailContainer.isLarge) {
+      // If we're not the 'main', but we ARE current, we want to become visible and change our
+      // x position (to the right or left, don't care right now), then animate a change to 0, 0.
+      if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+        if (!kwinDesktopThumbnailContainer.isMain) {
+          // We need to know which way we're moving.  But, ah, hmmm.
+          // Which one is the old one?
+          if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
+            moveNewToLeft.restart();
+          } else {
+            moveNewToRight.restart();
+          }
+          kwinDesktopThumbnailContainer.isMain = true;
+          if (currentDesktopGridThumbnailContainer.state == 'showDesktop') {
+            kwinDesktopThumbnailContainer.visible = true;
+          }
+          //kwinDesktopThumbnailContainer.x = -dashboard.screenWidth;
         }
-        kwinDesktopThumbnailContainer.isMain = true;
-        if (currentDesktopGridThumbnailContainer.state == 'showDesktop') {
-          kwinDesktopThumbnailContainer.visible = true;
-        }
-        //kwinDesktopThumbnailContainer.x = -dashboard.screenWidth;
       }
-    }
-    if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
-        // Now, handle moving the OTHER one.
-        if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
-          moveMainToLeft.restart();
-        } else {
-          moveMainToRight.restart();
-        }
-        kwinDesktopThumbnailContainer.isMain = false;
-        //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
+      if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
+          // Now, handle moving the OTHER one.
+          if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
+            moveMainToLeft.restart();
+          } else {
+            moveMainToRight.restart();
+          }
+          kwinDesktopThumbnailContainer.isMain = false;
+          //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
+      }
+    } else {
+      if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+        kwinDesktopThumbnailContainer.visible = false;
+      }
+      if (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+        //if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop || oldDesktop+1 < kwinDesktopThumbnailContainer) {
+          kwinDesktopThumbnailContainer.visible = false;
+          makeVisibleTimer.restart();
+        //}
+      }
     }
   }
 
@@ -282,10 +356,15 @@ Item {
       clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();*/
-      clientGridLayout.children[c].height = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
-      clientGridLayout.children[c].width = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
-      clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
-      clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].height = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].width = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].clientRealHeight * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      //clientGridLayout.children[c].originalWidth = clientGridLayout.children[c].clientRealWidth * Math.sqrt((kwinDesktopThumbnailContainer.width*kwinDesktopThumbnailContainer.height)/(clientArea))/Math.sqrt(clientGridLayout._returnMatrixSize());
+      clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.rows);
+      clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / (clientGridLayout.columns);
+      clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout.rows;
+      clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout.columns;
+
 
       var mul = 0;
       if (clientGridLayout._onDesktop()/Math.pow(clientGridLayout._returnMatrixSize(),2) <= 1) {
@@ -304,8 +383,8 @@ Item {
         mul = 1;
       }
 
-      clientGridLayout.children[c].height = clientGridLayout.children[c].height * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].height/(mul);//clientGridLayout._onDesktop());
-      clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].originalHeight * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].originalHeight/(mul);//clientGridLayout._onDesktop());
+      //clientGridLayout.children[c].height = clientGridLayout.children[c].height * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].height/(mul);//clientGridLayout._onDesktop());
+      //clientGridLayout.children[c].originalHeight = clientGridLayout.children[c].originalHeight * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].originalHeight/(mul);//clientGridLayout._onDesktop());
 
 
       //clientGridLayout.children[c].height = clientGridLayout.children[c].height * kwinDesktopThumbnailContainer.height/clientGridLayout.children[c].height/(clientGridLayout._returnMatrixSize());//clientGridLayout._onDesktop());

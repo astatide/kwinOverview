@@ -22,8 +22,8 @@ import "../code/createClients.js" as CreateClients
 Window {
 	id: mainContainer
 	visible: true
-	height: dashboard.height
-	width: dashboard.width
+	height: dashboard.screenHeight
+	width: dashboard.screenWidth
 	x: 0
 	y: 0
 	flags: Qt.WindowTransparentForInput //| Qt.X11BypassWindowManagerHint
@@ -34,15 +34,18 @@ Window {
 	Window {
 			id: dashboard
 			opacity: 1
-			visible: false
+			visible: true
 			x: 0
-			y: dashboard.dockHeight
-			color: 'black'
+			//anchors.fill: parent
+			y: 0
+			//color: 'black'
 			//flags: Qt.X11BypassWindowManagerHint //| Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
 			// Start disabled.  toggleBoth sets this appropriately.
-			flags: Qt.ToolTip
-			height: 0
-			width: 0
+			//flags: Qt.ToolTip
+			flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
+			height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+			width: dashboard.screenWidth
+			color: '#00000000'
 			property var windowId: 0
 			property var scalingFactor: 1.2
 			property var activeScreen: 0
@@ -67,12 +70,13 @@ Window {
 
 			Item {
 				id: mainBackground
-				width: dashboard.screenWidth
+				//width: dashboard.screenWidth
 				anchors.fill: parent
 				//focus: true
-		    height: dashboard.screenHeight //+ dashboard.dockHeight
+		    //height: dashboard.height //+ dashboard.dockHeight
+				//width: dashboard.width
 				x: 0
-				y: -dashboard.dockHeight
+				y: 0
 				opacity: 1
 
 
@@ -106,11 +110,12 @@ Window {
 				Item {
 					id: dashboardBackground
 					anchors.fill: parent
-					height: dashboard.screenHeight - dashboard.dockHeight
-					width: dashboard.screenWidth
+					//height: dashboard.height
+					//width: dashboard.width
 					property string background: { return allActivities.getCurrentBackground() }
 					x: 0
-					y: -dashboard.dockHeight
+					y: 0
+					visible: true
 					Image {
 						id: firstBackgroundDesktop
 						anchors.fill: parent
@@ -123,6 +128,7 @@ Window {
 						// Maybe?
 						asynchronous: true
 						cache: false
+						visible: false
 					}
 
 					Image {
@@ -137,6 +143,8 @@ Window {
 						// Maybe?
 						asynchronous: true
 						cache: false
+						visible: false
+
 					}
 
 					// Doesn't seem to like this.
@@ -145,6 +153,8 @@ Window {
 						anchors.fill: secondBackgroundDesktop
 						source: secondBackgroundDesktop
 						radius: 32
+						visible: false
+
 					}
 
 					Rectangle {
@@ -152,17 +162,22 @@ Window {
 						id: backgroundDarken
 						opacity: 0.5
 						color: 'black'
-						height: dashboard.screenHeight + dashboard.dockHeight
+						height: dashboard.screenHeight + dashboard.dockHeigh
 						width: dashboard.screenWidth
+						visible: false
+
 					}
 				//}
 
 
 				Item {
 					id: currentDesktopGridThumbnailContainer
-					y: dashboard.screenHeight
-					visible: false
-					height: (dashboard.screenHeight - dashboardDesktopChanger.dash.height - 30) - dashboard.dockHeight
+					y: 0
+					x: 0
+					visible: true
+					//height: dashboard.height
+					//width: dashboard.width
+					anchors.fill: parent
 					//y: 15
 					states: [
 						State {
@@ -173,6 +188,65 @@ Window {
 						}
 					]
 					// Instantiate the search container.
+					Repeater {
+				// Now, we build up our desktops.
+				//model: dashboard.returnNumberOfDesktops()
+				//model: KWin.Switcher.model
+				model: workspace.desktops
+				id: currentDesktopGrid
+				// We're leaving a little room for the text search area!
+				//height: dashboard.screenHeight
+				//width: dashboard.screenWidth
+				scale: 1
+				visible: true
+				Item {
+					id: bigDesktopRepeater
+					//id: bigDesktopContainer
+					visible: true
+					property int desktop: model.index
+					//height: dashboard.height //- dash.gridHeight - 30
+					//width: dashboard.width
+					Clients {
+						id: bigDesktopClients
+						desktop: bigDesktopRepeater.desktop
+						visible: false
+						x: 0
+						// Leave a little room for the text!
+						y: 0
+						//anchor.verticalCenter: currentDesktopGridThumbnailContainer.verticalCenter
+						//scale: 1
+						height: dashboard.height
+						width: dashboard.width
+						isMain: false
+						isLarge: true
+						DropArea {
+							id: bigDesktopDropArea
+							//anchors.fill: littleDesktopBackground
+							anchors.fill: parent
+							//x: 0
+							//y: dash.height + 30
+							//height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30)
+							//width: dashboard.screenWidth
+							Rectangle {
+								anchors.fill: parent
+								visible: false
+								color: "green"
+							}
+							onEntered: {
+								console.log('ENTERING LARGE DESKTOP!');
+								//console.log(Object.getOwnPropertyNames(drag.source));
+								drag.source.newDesktop = bigDesktopRepeater.desktop+1;
+								console.log(drag.source.newDesktop);
+							}
+							onExited: {
+								console.log('LEAVING');
+								drag.source.newDesktop = drag.source.currentDesktop;
+								console.log(drag.source.newDesktop);
+							}
+						}
+					}
+				}
+			}
 					Search {
 						id: searchFieldAndResults
 						// Don't show until we start typing.
@@ -220,7 +294,7 @@ Window {
 		//opacity: 1
 		//flags: Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint // won't work without it, apparently.
 		//flags: Qt.SplashScreen || Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
-		//flags: Qt.FramelessWindowHint || Qt.SplashScreen
+		//flags: Qt.FramelessWindowHint
 		//flags: Qt.ToolTip
 		//flags: Qt.X11BypassWindowManagerHint
 		//flags: Qt.X11BypassWindowManagerHint | Qt.WA_TranslucentBackground | Qt.WindowTransparentForInput | Qt.WA_OpaquePaintEvent | Qt.WA_PaintOnScreen
@@ -601,17 +675,23 @@ Window {
 
 		function disableVisibleClients() {
 			var c;
+			console.log('BLAHLABLAH');
+							//workspace.showDesktop()
 			for (c = 0; c < workspace.clientList().length; c++) {
 				// We're just hiding it by making it invisible.
 				workspace.clientList()[c].opacity = 0;
+				workspace.clientList()[c].minimized = true;
 			}
 		}
 		function enableVisibleClients() {
 			var c;
+								//workspace.showDesktop();
 			for (c = 0; c < workspace.clientList().length; c++) {
 				if (dashboard.clientsVisible[c] == false) {
 					// Better than hiding!
 					workspace.clientList()[c].opacity = 1;
+					workspace.clientList()[c].minimized = false;
+
 				}
 			}
 		}
@@ -856,6 +936,7 @@ Window {
 			console.log(dashboardDesktopChanger.flags)
 			console.log(Qt.X11BypassWindowManagerHint)
 			if (mainBackground.state == 'visible') {
+				dashboardDesktopChanger.enableVisibleClients();
 				endAnim.restart();
 				//mainContainer.height = 0
 				//mainContainer.width = 0
@@ -866,10 +947,11 @@ Window {
 			} else if (mainBackground.state == 'invisible') {
 				//dashboard.flags = Qt.X11BypassWindowManagerHint;
 				//dashboard.requestActivate();
+				dashboardDesktopChanger.disableVisibleClients();
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
-				//dashboard.height = dashboard.screenHeight;
-				//dashboard.width = dashboard.screenWidth;
+				dashboard.height = dashboard.screenHeight;
+				dashboard.width = dashboard.screenWidth;
 				mainContainer.height = dashboard.screenHeight;
 				mainContainer.width = dashboard.screenWidth;
 
@@ -881,6 +963,10 @@ Window {
 				timer.restart();
 				//searchFieldAndResults.children[1].forceActiveFocus();
 					currentDesktopGrid.itemAt(workspace.currentDesktop-1).children[0].children[c].startMoveToThumbnail();
+					dashboardActivityChanger.requestActivate();
+					dashboardDesktopChanger.requestActivate();
+					dashboardActivityChanger.raise();
+					dashboardDesktopChanger.raise();
 			}
 		}
 		ParallelAnimation {

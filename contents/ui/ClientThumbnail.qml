@@ -90,7 +90,7 @@ Item {
     //anchors.fill kwinClientThumbnail
     color: 'black'
     opacity: 0.5
-    visible: false
+    visible: true
     scale: 1
     clip: true
     //x: 0
@@ -479,6 +479,7 @@ Item {
     // We just need to make sure we're calling correct parent signals when
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     workspace.numberDesktopsChanged.connect(callUpdateGrid);
+    workspace.currentDesktopChanged.connect(callUpdateGrid);
     workspace.clientRemoved.connect(disconnectAllSignals);
     callUpdateGrid();
     searchFieldAndResults.children[1].forceActiveFocus();
@@ -492,6 +493,7 @@ Item {
         // Yes, we even have to disconnect this.
         workspace.clientRemoved.disconnect(disconnectAllSignals);
         workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
+        workspace.currentDesktopChanged.disconnect(callUpdateGrid);
         mainBackground.onStateChanged.disconnect(toggleVisible);
         clientObject.desktopChanged.disconnect(callUpdateGrid);
         clientObject.activitiesChanged.disconnect(callUpdateGrid);
@@ -570,19 +572,20 @@ Item {
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             //kwinClientThumbnail.visible = true;
             //actualThumbnail.visible = true;
-            //if (kwinClientThumbnail.clientObject.desktop != workspace.currentDesktop) {
+            // CHANGE THIS FOR AN OPTION TO NOT HIDE THINGS
+            if (kwinClientThumbnail.currentDesktop != workspace.currentDesktop) {
               kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
               actualThumbnail.visible = true;
-              kwinThumbnailRenderWindow.visible = true;
+              //kwinThumbnailRenderWindow.visible = true;
               kwinThumbnailRenderWindow.enabled = true;
               kwinClientThumbnail.visible = true;
-            /*} else {
+            } else {
               kwinThumbnailRenderWindow.wId = -1;
               actualThumbnail.visible = false;
-              kwinThumbnailRenderWindow.visible = false;
+              //kwinThumbnailRenderWindow.visible = false;
               kwinThumbnailRenderWindow.enabled = false;
               kwinClientThumbnail.visible = false;
-            }*/
+            }
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
           }
         } else {

@@ -18,9 +18,9 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     {id: 'clientId' + c,
                                     //'background': model.get(0).background,
                                     'clientObject': workspace.clientList()[c],
-                                    'originalWidth': width / columns,
-                                    'originalHeight': height / columns,
-                                    'scale': (height / width) / (dashboard.screenHeight/dashboard.screenWidth),
+                                    'originalWidth':  10, //workspace.clientList()[c].width / columns,
+                                    'originalHeight': 10, //workspace.clientList()[c].height / columns,
+                                    'scale': (height / width) / (dashboard.height/dashboard.width),
                                     'clientId': workspace.clientList()[c].windowId,
                                     // We'll use this to determine where to switch from.
                                     'currentDesktop': workspace.clientList()[c].desktop,
@@ -36,8 +36,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'clientRealY': workspace.clientList()[c].y,
                                     'clientRealWidth': workspace.clientList()[c].width,
                                     'clientRealHeight': workspace.clientList()[c].height,
-                                    'height': height / columns,
-                                    'width': width / columns});
+                                    'height': 10, //height / columns,
+                                    'width': 10}); //width / columns});
       console.log('Client created!');
       }
     }
@@ -58,9 +58,9 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 {id: 'clientId' + c,
                                 //'background': model.get(0).background,
                                 'clientObject': c,
-                                'originalWidth': width / columns,
-                                'originalHeight': height / columns,
-                                'scale': (height / width) / (dashboard.screenHeight/dashboard.screenWidth),
+                                'originalWidth': 10, // width / columns,
+                                'originalHeight': 10, //height / columns,
+                                'scale': (height / width) / (dashboard.height/dashboard.width),
                                 'clientId': c.windowId,
                                 'currentDesktop': c.desktop,
                                 'newDesktop': c.desktop,
@@ -75,7 +75,7 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 'clientRealY': c.y,
                                 'clientRealWidth': c.width,
                                 'clientRealHeight': c.height,
-                                'height': height / columns,
-                                'width': width / columns});
+                                'height': 10, //height / columns,
+                                'width': 10}); //width / columns});
   }
 }

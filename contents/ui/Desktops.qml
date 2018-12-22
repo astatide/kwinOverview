@@ -18,7 +18,7 @@ import org.kde.activities 0.1 as Activities
 Item {
   id: kwinDesktopThumbnailContainer
   x: 0
-  y: 10
+  y: 0
   property int desktop: 0
   property string background: ''
   property string activityId: ''
@@ -82,7 +82,7 @@ Item {
     y: 0
     //anchors.fill: parent
     //rows: workspace.clientList().length
-    anchors.verticalCenter: parent.verticalCenter
+    //anchors.verticalCenter: parent.verticalCenter
     rows: { return _returnMatrixSize() }
     // No order guaranteed, here.
     columns: { return _returnMatrixSize() }
@@ -155,7 +155,7 @@ Item {
         visible: true
         // We need to dynamically set these.
         property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
-        property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
+        property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.rows
         // Setting the height/width seems to break EVERYTHING, as the thumbnails are busted.
         //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
         //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
