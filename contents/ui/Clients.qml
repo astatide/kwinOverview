@@ -28,6 +28,9 @@ Item {
   property var columns: clientGridLayout._returnMatrixSize()
   height: parent.height
   width: parent.width
+  onChildrenChanged: {
+    kwinDesktopThumbnailContainer.updateGrid();
+  }
 
   GridLayout {
     id: clientGridLayout
@@ -37,16 +40,14 @@ Item {
     // We dynamically update these.
     rows: _returnMatrixSize()
     columns: _returnMatrixSize()
+    height: parent.height
+    width: parent.width
 
     onRowsChanged: {
       testRows.start();
     }
     NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
     NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
-
-    //onChildrenChanged: {
-    //  kwinDesktopThumbnailContainer.updateGrid();
-    //}
 
     function _onDesktop() {
       return clientGridLayout.children.length;
@@ -69,6 +70,7 @@ Item {
       kwinDesktopThumbnailContainer.isMain = true;
       kwinDesktopThumbnailContainer.visible = true;
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
+      // This doesn't seem to actually... work.  Not sure why.
       kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
 
@@ -151,14 +153,15 @@ Item {
     console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
-      clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.columns);
+      clientGridLayout.children[c].updateSize(kwinDesktopThumbnailContainer.height / (clientGridLayout.columns), kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))
+      /*clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.columns);
       clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / (clientGridLayout.rows);
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].originalWidth = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].children[1].children[1].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].children[1].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].children[1].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
-      clientGridLayout.children[c].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
+      clientGridLayout.children[c].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();*/
     }
     console.log('END: YOU SHOULD SEE THIS');
   }

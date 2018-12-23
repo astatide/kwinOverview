@@ -427,6 +427,12 @@ Item {
     }
   }
 
+  function updateSize(height, width) {
+    kwinClientThumbnail.height = height;
+    kwinClientThumbnail.width = width;
+    actualThumbnail.height = height;
+    actualThumbnail.width = width;
+  }
 
   function toggleVisible(state) {
     if (state == 'visible') {
