@@ -257,7 +257,7 @@ Window {
 										width: dash.gridHeight*dashboard.screenRatio
 										Rectangle {
 											anchors.fill: parent
-											visible: true
+											visible: false
 											color: "green"
 											opacity: 0.5
 										}

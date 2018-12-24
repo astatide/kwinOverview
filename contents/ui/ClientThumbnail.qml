@@ -127,6 +127,30 @@ Item {
       x: 0
       y: 0
     }*/
+    Behavior on height {
+      NumberAnimation {
+         duration: 250
+         //easing.type: Easing.OutBounce
+        }
+    }
+    Behavior on width {
+      NumberAnimation {
+         duration: 250
+         //easing.type: Easing.OutBounce
+        }
+    }
+    Behavior on x {
+      NumberAnimation {
+         duration: 250
+         //easing.type: Easing.OutBounce
+        }
+    }
+    Behavior on y {
+      NumberAnimation {
+         duration: 250
+         //easing.type: Easing.OutBounce
+        }
+    }
     Rectangle {
       id: thumbnailBackgroundRectangle
       // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
@@ -161,6 +185,25 @@ Item {
       z: 0
       visible: false
       clip: false
+    }
+    Rectangle {
+      id: hoverRectangle
+      // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
+      anchors.fill: parent
+      //anchors.fill kwinClientThumbnail
+      color: 'white'
+      opacity: 0.5
+      visible: false
+      scale: 1
+      clip: true
+      //x: 0
+      //y: 0
+      height: kwinClientThumbnail.height+4
+      width: kwinClientThumbnail.width+4
+      // Are THESE breaking it?  What the shit.
+      // These DO seem to break it!  What the fuck.
+      // Something about the way they're painted, maybe?  Not so good.
+      // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
     }
   }
   ParallelAnimation {
@@ -264,6 +307,13 @@ Item {
       workspace.activeClient = clientObject;
     }
 
+    onEntered: {
+      // Show a rectangle!
+      hoverRectangle.visible = true;
+    }
+    onExited: {
+      hoverRectangle.visible = false;
+    }
     onPositionChanged: {
       // Let's do this proper.
       //console.log('CHANGING POSITIONS');

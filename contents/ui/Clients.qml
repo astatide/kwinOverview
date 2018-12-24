@@ -44,6 +44,7 @@ Item {
     property var columns: _returnMatrixSize()
     height: parent.height
     width: parent.width
+    spacing: 20 * (parent.height/dashboard.screenHeight)
 
     onRowsChanged: {
       testRows.start();
@@ -168,7 +169,7 @@ Item {
     console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
-      clientGridLayout.children[c].updateSize(kwinDesktopThumbnailContainer.height / (clientGridLayout.columns), kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))
+      clientGridLayout.children[c].updateSize((kwinDesktopThumbnailContainer.height / (clientGridLayout.columns))-clientGridLayout.spacing, (kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))-clientGridLayout.spacing);
       /*clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.columns);
       clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / (clientGridLayout.rows);
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
