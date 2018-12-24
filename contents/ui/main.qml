@@ -34,7 +34,7 @@ Window {
 			x: 0
 			y: 0
 			flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
-			height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+			height: dashboard.screenHeight //- (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 			width: dashboard.screenWidth
 			color: '#00000000'
 			property var windowId: 0
@@ -165,10 +165,11 @@ Window {
 						anchors.fill: parent
 
 						property int spacing: 10
-						height: dashboard.height
+						//height: dashboard.height
+						height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						width: dashboard.width
 						//contentX: workspace.desktop+1 * dashboard.screenWidth
-						contentHeight: dashboard.height
+						contentHeight: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						contentWidth: dashboard.width*workspace.desktops
 						interactive: false
 

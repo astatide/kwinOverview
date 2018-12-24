@@ -430,6 +430,8 @@ Item {
   function updateSize(height, width) {
     kwinClientThumbnail.height = height;
     kwinClientThumbnail.width = width;
+    kwinClientThumbnail.originalHeight = height;
+    kwinClientThumbnail.originalWidth = width;
     actualThumbnail.height = height;
     actualThumbnail.width = width;
   }

@@ -32,14 +32,16 @@ Item {
     kwinDesktopThumbnailContainer.updateGrid();
   }
 
-  GridLayout {
+  Flow{
     id: clientGridLayout
     visible: true
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
+    //anchors.verticalCenter: parent.verticalCenter
+    //anchors.horizontalCenter: parent.horizontalCenter
     // We dynamically update these.
-    rows: _returnMatrixSize()
-    columns: _returnMatrixSize()
+    //rows: _returnMatrixSize()
+    //columns: _returnMatrixSize()
+    property var rows: _returnMatrixSize()
+    property var columns: _returnMatrixSize()
     height: parent.height
     width: parent.width
 
