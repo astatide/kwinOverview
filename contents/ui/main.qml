@@ -168,11 +168,35 @@ Window {
 						height: dashboard.height
 						width: dashboard.width
 						//contentX: workspace.desktop+1 * dashboard.screenWidth
-						//contentHeight: desktopThumbnailGridBackgrounds.height
-						//contentWidth: desktopThumbnailGridBackgrounds.width
+						contentHeight: dashboard.height
+						contentWidth: dashboard.width*workspace.desktops
+						interactive: false
 
 						y: 0
 						x: 0
+						// Aha, this is a pointer
+						contentX: (workspace.currentDesktop-1) * (dashboard.screenWidth+spacing)
+						Behavior on contentX {
+					 		NumberAnimation {
+								 duration: 250
+								 //easing.type: Easing.OutBounce
+						 		}
+			 			}
+
+						MouseArea {
+							enabled: true
+							id: flickTest
+							anchors.fill: parent
+							onClicked: {
+								// We only want to disable the dashboard when we double click on the item
+								// or when we'r100, //e currently on said desktop and are 'sure'.
+								if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
+									workspace.currentDesktop = bigDesktopContainer.desktop+1;
+								} else {
+										toggleBoth();
+								}
+							}
+						}
 						Grid {
 							// This is just for each of our desktops.
 							//id: newRepeater
@@ -197,10 +221,10 @@ Window {
 									height: dashboard.height
 									width: dashboard.width
 										MouseArea {
-											enabled: true
+											enabled: false
 											id: bigDesktopGridMouseArea
 											anchors.fill: parent
-											/*onClicked: {
+											onClicked: {
 												// We only want to disable the dashboard when we double click on the item
 												// or when we'r100, //e currently on said desktop and are 'sure'.
 												if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
@@ -208,7 +232,7 @@ Window {
 												} else {
 														toggleBoth();
 												}
-											}*/
+											}
 										}
 									Clients {
 										//anchors.fill: parent
@@ -217,7 +241,7 @@ Window {
 										height: dashboard.height
 										width: dashboard.width
 										visible: false
-										//isLarge: true
+										isLarge: true
 										//height: dashboard.screenHeight - dash.gridHeight - 30
 										//width: dashboard.screenWidth
 									}
@@ -254,7 +278,11 @@ Window {
 						Component.onCompleted: {
 							workspace.currentDesktopChanged.connect(function () {
 								console.log(Object.getOwnPropertyNames(currentDesktopGridThumbnailContainer));
-								currentDesktopGridThumbnailContainer.contentX = workspace.desktop+1 * dashboard.screenWidth;
+								console.log("Fuck offffffffffff");
+								//currentDesktopGridThumbnailContainer.contentX = (workspace.currentDesktop-1) * dashboard.screenWidth;
+								console.log(currentDesktopGridThumbnailContainer.contentX);
+								//currentDesktopGridThumbnailContainer.flick(-dashboard.screenWidth*100, 0);
+								//currentDesktopGridThumbnailContainer.x = workspace.desktop+1 * dashboard.screenWidth;
 							});
 						}
 				}

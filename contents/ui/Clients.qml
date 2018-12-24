@@ -118,14 +118,25 @@ Item {
           kwinDesktopThumbnailContainer.isMain = false;
           //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
       }    } else {*/
-      //if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-      //  kwinDesktopThumbnailContainer.visible = false;
-      //}
-      if (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-        //if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop || oldDesktop+1 < kwinDesktopThumbnailContainer) {
+      // Show everything except for the current desktop and the one we're transitioning into.
+      if (!kwinDesktopThumbnailContainer.isLarge) {
+        if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
           kwinDesktopThumbnailContainer.visible = false;
-          makeVisibleTimer.restart();
-        //}
+        }
+        if (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
+          //if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop || oldDesktop+1 < kwinDesktopThumbnailContainer.desktop) {
+            kwinDesktopThumbnailContainer.visible = false;
+            makeVisibleTimer.restart();
+          //}
+        }
+      } else {
+        // Hide everything except for the current desktop and the one we're transitioning into.
+        if (workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
+          kwinDesktopThumbnailContainer.visible = false;
+        } else {
+          kwinDesktopThumbnailContainer.visible = true;
+        }
+
       }
     //}
     //kwinDesktopThumbnailContainer.updateGrid();
@@ -139,8 +150,10 @@ Item {
     //  kwinDesktopThumbnailContainer.visible = false;
     //}
     // make the old one visible!
-    if ((workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) && (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop)) {
-      makeVisibleTimer.restart();
+    if (!kwinDesktopThumbnailContainer.isLarge) {
+      if ((workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) && (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop)) {
+        makeVisibleTimer.restart();
+      }
     }
   }
 

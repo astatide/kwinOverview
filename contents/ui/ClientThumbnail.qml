@@ -482,7 +482,7 @@ Item {
             if (kwinClientThumbnail.currentDesktop != workspace.currentDesktop) {
               kwinClientThumbnail.toggleVisible('visible');
             } else {
-              kwinClientThumbnail.toggleVisible('invisible');
+              //kwinClientThumbnail.toggleVisible('invisible');
             }
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
             littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
