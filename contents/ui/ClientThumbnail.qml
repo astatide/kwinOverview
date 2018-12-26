@@ -85,6 +85,43 @@ Item {
       }
     }
   ]
+  Behavior on height {
+    NumberAnimation {
+       duration: 250
+       //easing.type: Easing.OutBounce
+      }
+  }
+  Behavior on width {
+    NumberAnimation {
+       duration: 250
+       //easing.type: Easing.OutBounce
+      }
+  }
+  Behavior on x {
+    NumberAnimation {
+       duration: 250
+       //easing.type: Easing.OutBounce
+      }
+  }
+  Behavior on y {
+    NumberAnimation {
+       duration: 250
+       //easing.type: Easing.OutBounce
+      }
+  }
+  transitions: Transition {
+    ParentAnimation {
+      ParallelAnimation {
+        NumberAnimation { properties: "x,y"; duration: 1000 }
+        NumberAnimation { target: actualThumbnail; property: "x"; from: kwinClientThumbnail.clientRealX; to: x}
+        NumberAnimation { target: actualThumbnail; property: "y"; from: kwinClientThumbnail.clientRealY; to: y}
+        NumberAnimation { target: kwinClientThumbnail; property: "x"; from: kwinClientThumbnail.clientRealX; to: x}
+        NumberAnimation { target: kwinClientThumbnail; property: "y"; from: kwinClientThumbnail.clientRealY; to: y}
+        NumberAnimation { target: kwinClientThumbnail; property: "height"; from: kwinClientThumbnail.clientRealHeight; to: height}
+        NumberAnimation { target: kwinClientThumbnail; property: "width"; from: kwinClientThumbnail.clientRealWidth; to: width}
+      }
+    }
+  }
   Rectangle {
     //id: thumbnailBackgroundRectangle
     // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
@@ -94,7 +131,7 @@ Item {
     //anchors.fill kwinClientThumbnail
     color: 'black'
     opacity: 0.5
-    visible: true
+    visible: false
     scale: 1
     clip: true
     //x: 0
@@ -114,8 +151,8 @@ Item {
     //width: kwinClientThumbnail.originalWidth
     visible: false
     opacity: 1
-    //x: 0
-    //y: 0
+    x: 2
+    y: 2
     /*Image {
       anchors.fill: parent
       smooth: true
@@ -158,8 +195,8 @@ Item {
       //anchors.fill kwinClientThumbnail
       color: 'black'
       opacity: 0.5
-      visible: false
       scale: 1
+      visible: true
       clip: true
       //x: 0
       //y: 0
@@ -180,8 +217,8 @@ Item {
       wId: kwinClientThumbnail.clientId
       height: kwinClientThumbnail.height
       width: kwinClientThumbnail.width
-      x: 0
-      y: 0
+      x: 2
+      y: 2
       z: 0
       visible: false
       clip: false
@@ -192,7 +229,7 @@ Item {
       anchors.fill: parent
       //anchors.fill kwinClientThumbnail
       color: 'white'
-      opacity: 0.5
+      opacity: 0
       visible: false
       scale: 1
       clip: true
@@ -200,6 +237,12 @@ Item {
       //y: 0
       height: kwinClientThumbnail.height+4
       width: kwinClientThumbnail.width+4
+      Behavior on opacity {
+        NumberAnimation {
+           duration: 250
+           //easing.type: Easing.OutBounce
+          }
+      }
       // Are THESE breaking it?  What the shit.
       // These DO seem to break it!  What the fuck.
       // Something about the way they're painted, maybe?  Not so good.
@@ -249,13 +292,13 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-    NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight; duration: 100}
-    NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth; duration: 100}
+    NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight-2; duration: 100}
+    NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth-2; duration: 100}
 
     //PropertyAnimation { target: actualThumbnail; property: "x"; from: growthAnim.animX; to: 0; duration: 1000}
     //PropertyAnimation { target: actualThumbnail; property: "y"; from: growthAnim.animY; to: 0; duration: 1000}
-    PropertyAnimation { target: actualThumbnail; property: "x"; to: 0; duration: 100}
-    PropertyAnimation { target: actualThumbnail; property: "y"; to: 0; duration: 100}
+    PropertyAnimation { target: actualThumbnail; property: "x"; to: 2; duration: 100}
+    PropertyAnimation { target: actualThumbnail; property: "y"; to: 2; duration: 100}
 
 
     onStopped: {
@@ -310,9 +353,11 @@ Item {
     onEntered: {
       // Show a rectangle!
       hoverRectangle.visible = true;
+      hoverRectangle.opacity = 0.95;
     }
     onExited: {
       hoverRectangle.visible = false;
+      hoverRectangle.opacity = 0;
     }
     onPositionChanged: {
       // Let's do this proper.
@@ -328,6 +373,10 @@ Item {
       //if (actualThumbnail.height != dash.gridHeight) {
       if (kwinClientThumbnail.state == 'isHeld') {
         shrinkAnim.restart()
+        //actualThumbnail.height = 100;
+        //actualThumbnail.width = 100;
+        //actualThumbnail.x = shrinkAnim.animX//-(dash.gridHeight/2*dashboard.screenRatio);
+        //actualThumbnail.y = shrinkAnim.animY//-dash.gridHeight/2;
       }
       //ParentChange {
       //  target: kwinClientThumbnail
@@ -385,6 +434,10 @@ Item {
       if (kwinClientThumbnail.isSmall) {
         //growthAnim.running = true;
         growthAnim.restart();
+        //actualThumbnail.height = kwinClientThumbnail.originalHeight;
+        //actualThumbnail.width = kwinClientThumbnail.originalWidth;
+        //actualThumbnail.x = kwinClientThumbnail.originalX;
+        //actualThumbnail.y = kwinClientThumbnail.originalY;
         kwinClientThumbnail.isSmall = false;
       }
       //console.log()
@@ -400,20 +453,26 @@ Item {
         // for now, since we can't sort it.
         var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
         console.log(kwinClientThumbnail.clientObject.activities);
-        returnAnim.running = true;
+        //returnAnim.running = true;
+        kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
         returnAnim.running = true;
         //growthAnim.running = true;
+        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (newDesktop == 0) {
         returnAnim.running = true;
-        //growthAnim.running = true;
+        growthAnim.running = true;
       } else {
         kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
-        //returnAnim.running = true;
+        returnAnim.running = true;
+        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
         kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
         // We want the others to pop up, so.
       }
@@ -455,7 +514,7 @@ Item {
     workspace.numberDesktopsChanged.connect(callUpdateGrid);
     workspace.currentDesktopChanged.connect(callUpdateGrid);
     workspace.clientRemoved.connect(disconnectAllSignals);
-    searchFieldAndResults.children[1].forceActiveFocus();
+    //searchFieldAndResults.children[1].forceActiveFocus();
     callUpdateGrid();
   }
 
@@ -478,12 +537,22 @@ Item {
   }
 
   function updateSize(height, width) {
-    kwinClientThumbnail.height = height;
-    kwinClientThumbnail.width = width;
-    kwinClientThumbnail.originalHeight = height;
-    kwinClientThumbnail.originalWidth = width;
-    actualThumbnail.height = height;
-    actualThumbnail.width = width;
+    var scale = clientRealWidth/clientRealHeight
+    if (height < clientRealHeight) {
+      kwinClientThumbnail.height = height - 4;
+      kwinClientThumbnail.width = (height * scale) - 4;
+      kwinClientThumbnail.originalHeight = height - 4;
+      kwinClientThumbnail.originalWidth = (height * scale) - 4;
+      actualThumbnail.height = (height) - 4;
+      actualThumbnail.width = (height * scale) - 4;
+    } else {
+      kwinClientThumbnail.height = clientRealHeight;
+      kwinClientThumbnail.width = clientRealWidth;
+      kwinClientThumbnail.originalHeight = clientRealHeight;
+      kwinClientThumbnail.originalWidth = clientRealWidth;
+      actualThumbnail.height = clientRealHeight;
+      actualThumbnail.width = clientRealWidth;
+    }
   }
 
   function toggleVisible(state) {
@@ -508,7 +577,7 @@ Item {
     }
   }
 
-  function resizeToLarge(){
+  function resizeToLarge() {
     kwinClientThumbnail.width = clientRealWidth;
     kwinClientThumbnail.height = clientRealHeight;
     kwinClientThumbnail.x = actualThumbnail.mapFromGlobal(clientRealX, clientRealY).x;

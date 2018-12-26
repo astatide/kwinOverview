@@ -32,7 +32,7 @@ Item {
     kwinDesktopThumbnailContainer.updateGrid();
   }
 
-  Flow{
+  Flow {
     id: clientGridLayout
     visible: true
     //anchors.verticalCenter: parent.verticalCenter

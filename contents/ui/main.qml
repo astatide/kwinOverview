@@ -34,7 +34,7 @@ Window {
 			x: 0
 			y: 0
 			flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
-			height: dashboard.screenHeight //- (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+			height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 			width: dashboard.screenWidth
 			color: '#00000000'
 			property var windowId: 0
@@ -166,10 +166,10 @@ Window {
 
 						property int spacing: 10
 						//height: dashboard.height
-						height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+						height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						width: dashboard.width
 						//contentX: workspace.desktop+1 * dashboard.screenWidth
-						contentHeight: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+						contentHeight: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						contentWidth: dashboard.width*workspace.desktops
 						interactive: false
 
@@ -206,6 +206,8 @@ Window {
 							x: 0
 							y: 0
 							spacing: currentDesktopGridThumbnailContainer.spacing
+							height: currentDesktopGridThumbnailContainer.height
+							width: currentDesktopGridThumbnailContainer.width
 
 							columns: {
 									return workspace.desktops;
@@ -219,8 +221,8 @@ Window {
 									id: bigDesktopContainer
 									visible: true
 									property int desktop: model.index
-									height: dashboard.height
-									width: dashboard.width
+									height: currentDesktopGridThumbnailContainer.height
+									width: currentDesktopGridThumbnailContainer.width
 										MouseArea {
 											enabled: false
 											id: bigDesktopGridMouseArea
@@ -239,8 +241,8 @@ Window {
 										//anchors.fill: parent
 										id: bigDesktopClients
 										desktop: bigDesktopContainer.desktop
-										height: dashboard.height
-										width: dashboard.width
+										height: currentDesktopGridThumbnailContainer.height
+										width: currentDesktopGridThumbnailContainer.width
 										visible: false
 										isLarge: true
 										//height: dashboard.screenHeight - dash.gridHeight - 30
@@ -254,7 +256,7 @@ Window {
 										x: 0
 										y: 0
 										height: currentDesktopGridThumbnailContainer.height
-										width: dash.gridHeight*dashboard.screenRatio
+										width: currentDesktopGridThumbnailContainer.width
 										Rectangle {
 											anchors.fill: parent
 											visible: false

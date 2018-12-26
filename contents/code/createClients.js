@@ -18,8 +18,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     {id: 'clientId' + c,
                                     //'background': model.get(0).background,
                                     'clientObject': workspace.clientList()[c],
-                                    'originalWidth':  0, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
-                                    'originalHeight': 0, //parentContainer.height, //workspace.clientList()[c].height / columns,
+                                    'originalWidth':  workspace.clientList()[c].width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
+                                    'originalHeight': workspace.clientList()[c].height, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                     'scale': (height / width) / (dashboard.height/dashboard.width),
                                     'clientId': workspace.clientList()[c].windowId,
                                     // We'll use this to determine where to switch from.
@@ -29,15 +29,15 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'newActivity': workspace.clientList()[c].activities,
                                     // We don't want to actually SHOW these, yet.
                                     // We'll just distribute them accordingly.
-                                    'visible': false,
-                                    'x': 0, 'y': 0,
+                                    'visible': true,
+                                    'x': workspace.clientList()[c].x, 'y': workspace.clientList()[c].y,
                                     'clientRealX': workspace.clientList()[c].x,
                                     // Account for the fucking dock, if any.
                                     'clientRealY': workspace.clientList()[c].y,
                                     'clientRealWidth': workspace.clientList()[c].width,
                                     'clientRealHeight': workspace.clientList()[c].height,
-                                    'height': 0, //parentContainer.height, //height / columns,
-                                    'width': 0});//parentContainer.width}); //width / columns});
+                                    'height': workspace.clientList()[c].height, //parentContainer.height, //height / columns,
+                                    'width': workspace.clientList()[c].height});//parentContainer.width}); //width / columns});
       console.log('Client created!');
       }
     }
@@ -58,8 +58,8 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 {id: 'clientId' + c,
                                 //'background': model.get(0).background,
                                 'clientObject': c,
-                                'originalWidth':  0, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
-                                'originalHeight': 0, //parentContainer.height, //workspace.clientList()[c].height / columns,
+                                'originalWidth':  c.width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
+                                'originalHeight': c.height, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                 'scale': (height / width) / (dashboard.height/dashboard.width),
                                 'clientId': c.windowId,
                                 'currentDesktop': c.desktop,
@@ -69,13 +69,13 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 // We don't want to actually SHOW these, yet.
                                 // We'll just distribute them accordingly.
                                 'visible': false,
-                                'x': 0, 'y': 0,
+                                'x': c.x, 'y': c.y,
                                 'clientRealX': c.x,
                                 // Account for the fucking dock, if any.
                                 'clientRealY': c.y,
                                 'clientRealWidth': c.width,
                                 'clientRealHeight': c.height,
-                                'height': 0,//parentContainer.height, //height / columns,
-                                'width': 0});//parentContainer.width}); //width / columns});
+                                'height': c.height,//parentContainer.height, //height / columns,
+                                'width': c.width});//parentContainer.width}); //width / columns});
   }
 }
