@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import org.kde.kwin 2.0 as KWinLib
+import QtQuick.Window 2.2
 //import org.kde.kwin 2.0;
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Plasma
@@ -18,15 +19,18 @@ import org.kde.activities 0.1 as Activities
 Item {
   id: kwinClientThumbnail
   visible: true
+  //flags: Qt.WA_TranslucentBackground | Qt.X11BypassWindowManagerHint
   // We need to dynamically set these.
   //property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
   //property int originalHeight: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
   property int originalWidth: 0
   property int originalHeight: 0
+
   //height: originalHeight
   //width: originalWidth
   // This seems to be necessary to set everything appropriately.  Not 100% sure why.
   property int scale: 1
+  property var cId: 0
   property var originalParent: parent
   // Setting the height/width seems to break EVERYTHING, as the thumbnails are busted.
   //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
@@ -52,6 +56,7 @@ Item {
   property int clientRealY: 0
   property int clientRealWidth: 0
   property int clientRealHeight: 0
+  property var noBorder: false
   x: 0
   y: 0
   z: 0
@@ -85,31 +90,11 @@ Item {
       }
     }
   ]
-  Behavior on height {
-    NumberAnimation {
-       duration: 250
-       //easing.type: Easing.OutBounce
-      }
-  }
-  Behavior on width {
-    NumberAnimation {
-       duration: 250
-       //easing.type: Easing.OutBounce
-      }
-  }
-  Behavior on x {
-    NumberAnimation {
-       duration: 250
-       //easing.type: Easing.OutBounce
-      }
-  }
-  Behavior on y {
-    NumberAnimation {
-       duration: 250
-       //easing.type: Easing.OutBounce
-      }
-  }
-  transitions: Transition {
+  Behavior on height { NumberAnimation { duration: 250 } }
+  Behavior on width { NumberAnimation { duration: 250 } }
+  Behavior on x { NumberAnimation { duration: 250 } }
+  Behavior on y { NumberAnimation { duration: 250 } }
+  /*transitions: Transition {
     ParentAnimation {
       ParallelAnimation {
         NumberAnimation { properties: "x,y"; duration: 1000 }
@@ -121,72 +106,46 @@ Item {
         NumberAnimation { target: kwinClientThumbnail; property: "width"; from: kwinClientThumbnail.clientRealWidth; to: width}
       }
     }
-  }
-  Rectangle {
-    //id: thumbnailBackgroundRectangle
-    // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
-    anchors.fill: parent
-    //height: kwinClientThumbnail.originalHeight
-    //width: kwinClientThumbnail.originalWidth
-    //anchors.fill kwinClientThumbnail
-    color: 'black'
-    opacity: 0.5
-    visible: false
-    scale: 1
-    clip: true
-    //x: 0
-    //y: 0
-    //height: kwinClientThumbnail.height
-    //width: kwinClientThumbnail.width
-    // Are THESE breaking it?  What the shit.
-    // These DO seem to break it!  What the fuck.
-    // Something about the way they're painted, maybe?  Not so good.
-    // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
-  }
+  }*/
 
   Item {
     id: actualThumbnail
-    //anchors.fill kwinClientThumbnail
-    //height: kwinClientThumbnail.originalHeight
-    //width: kwinClientThumbnail.originalWidth
     visible: false
+    //flags: Qt.WA_TranslucentBackground | Qt.X11BypassWindowManagerHint
     opacity: 1
-    x: 2
-    y: 2
-    /*Image {
-      anchors.fill: parent
-      smooth: true
-      visible: true
-      fillMode: Image.PreserveAspectCrop
-      source: dashboardBackground.background
-      height: kwinClientThumbnail.height
-      width: kwinClientThumbnail.width
-      x: 0
-      y: 0
-    }*/
-    Behavior on height {
-      NumberAnimation {
-         duration: 250
-         //easing.type: Easing.OutBounce
-        }
-    }
-    Behavior on width {
-      NumberAnimation {
-         duration: 250
-         //easing.type: Easing.OutBounce
-        }
-    }
-    Behavior on x {
-      NumberAnimation {
-         duration: 250
-         //easing.type: Easing.OutBounce
-        }
-    }
-    Behavior on y {
-      NumberAnimation {
-         duration: 250
-         //easing.type: Easing.OutBounce
-        }
+    //color: '#00000000'
+    x: -2
+    y: -2
+    Behavior on height { NumberAnimation { duration: 250 } }
+    Behavior on width { NumberAnimation { duration: 250 } }
+    Behavior on x { NumberAnimation { duration: 250 } }
+    Behavior on y { NumberAnimation { duration: 250 } }
+    clip: false
+    scale: 1
+    KWinLib.ThumbnailItem {
+      // Basically, this 'fills up' to the parent object, so we encapsulate it
+      // so that we can shrink the thumbnail without messing with the grid itself.
+      id: kwinThumbnailRenderWindow
+      anchors.fill: actualThumbnail
+      //anchors.fill: parent
+      property var multi: ((clientRealWidth*clientRealHeight)/(dashboard.screenWidth*(dashboard.screenHeight+dashboard.dockHeight)))
+      //anchors.fill: kwinClientThumbnail
+      //wId: workspace.clientList()[clientId].windowId
+      wId: kwinClientThumbnail.clientId
+      //height: kwinClientThumbnail.height // multi
+      //width: kwinClientThumbnail.width // multi
+      height: actualThumbnail.height
+      width: actualThumbnail.width
+      //height: kwinClientThumbnail.clientRealHeight
+      //width: kwinClientThumbnail.clientRealWidth
+      //clipTo: kwinClientThumbnail
+      //saturation: 1
+      //scale: 1
+      x: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).x
+      y: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
+      z: 0
+      visible: false
+      clip: false
     }
     Rectangle {
       id: thumbnailBackgroundRectangle
@@ -198,61 +157,24 @@ Item {
       scale: 1
       visible: true
       clip: true
-      //x: 0
-      //y: 0
-      //height: kwinClientThumbnail.height
-      //width: kwinClientThumbnail.width
-      // Are THESE breaking it?  What the shit.
-      // These DO seem to break it!  What the fuck.
-      // Something about the way they're painted, maybe?  Not so good.
-      // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
-    }
-    KWinLib.ThumbnailItem {
-      // Basically, this 'fills up' to the parent object, so we encapsulate it
-      // so that we can shrink the thumbnail without messing with the grid itself.
-      id: kwinThumbnailRenderWindow
-      //anchors.fill: actualThumbnail
-      anchors.fill: actualThumbnail
-      //wId: workspace.clientList()[clientId].windowId
-      wId: kwinClientThumbnail.clientId
-      height: kwinClientThumbnail.height
-      width: kwinClientThumbnail.width
-      x: 2
-      y: 2
-      z: 0
-      visible: false
-      clip: false
     }
     Rectangle {
+      // This is a background rectangle useful for highlighting the item under the mouse.
       id: hoverRectangle
-      // This is a test rectangle.  Ultimately, I'd like to show this when compositing is off.
       anchors.fill: parent
-      //anchors.fill kwinClientThumbnail
       color: 'white'
       opacity: 0
       visible: false
       scale: 1
       clip: true
-      //x: 0
-      //y: 0
       height: kwinClientThumbnail.height+4
       width: kwinClientThumbnail.width+4
       Behavior on opacity {
         NumberAnimation {
            duration: 250
-           //easing.type: Easing.OutBounce
           }
       }
-      // Are THESE breaking it?  What the shit.
-      // These DO seem to break it!  What the fuck.
-      // Something about the way they're painted, maybe?  Not so good.
-      // I think this is actually quite slow, but it's hard to say.  Can I speed it up?
     }
-  }
-  ParallelAnimation {
-    id: returnAnim
-    NumberAnimation { target: kwinClientThumbnail; property: "x"; from: x; to: kwinClientThumbnail.originalX}
-    NumberAnimation { target: kwinClientThumbnail; property: "y"; from: y; to: kwinClientThumbnail.originalY}
   }
 
   ParallelAnimation {
@@ -294,9 +216,6 @@ Item {
     property int animY: 0
     NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight-2; duration: 100}
     NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth-2; duration: 100}
-
-    //PropertyAnimation { target: actualThumbnail; property: "x"; from: growthAnim.animX; to: 0; duration: 1000}
-    //PropertyAnimation { target: actualThumbnail; property: "y"; from: growthAnim.animY; to: 0; duration: 1000}
     PropertyAnimation { target: actualThumbnail; property: "x"; to: 2; duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: 2; duration: 100}
 
@@ -304,32 +223,6 @@ Item {
     onStopped: {
       mouseArea.enabled = true;
       kwinClientThumbnail.isSmall = false;
-    }
-  }
-  ParallelAnimation {
-    id: moveAnim
-    alwaysRunToEnd: false
-    running: false
-    property int animX: 0
-    property int animY: 0
-    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 32;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 32;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    onStopped: {
-      mouseArea.enabled = true;
-      //kwinClientThumbnail.isSmall = false;
-    }
-  }
-  ParallelAnimation {
-    id: initMoveAnim
-    alwaysRunToEnd: false
-    running: false
-    property int animX: 0
-    property int animY: 0
-    //PropertyAnimation { target: kwinClientThumbnail; property: "y"; to: moveAnim.animY; duration: 100;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    //PropertyAnimation { target: kwinClientThumbnail; property: "x"; to: moveAnim.animX; duration: 100;} // easing.amplitude: 2; easing.type: Easing.InOutQuad;}
-    onStopped: {
-      mouseArea.enabled = true;
-      //kwinClientThumbnail.isSmall = false;
     }
   }
 
@@ -373,30 +266,7 @@ Item {
       //if (actualThumbnail.height != dash.gridHeight) {
       if (kwinClientThumbnail.state == 'isHeld') {
         shrinkAnim.restart()
-        //actualThumbnail.height = 100;
-        //actualThumbnail.width = 100;
-        //actualThumbnail.x = shrinkAnim.animX//-(dash.gridHeight/2*dashboard.screenRatio);
-        //actualThumbnail.y = shrinkAnim.animY//-dash.gridHeight/2;
       }
-      //ParentChange {
-      //  target: kwinClientThumbnail
-      //  parent: mainContainer
-      //}
-
-      /*if (kwinClientThumbnail.state == 'isHeld') {
-        if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y < dash.gridHeight + 30) {
-              if (actualThumbnail.height != dash.gridHeight) {
-              shrinkAnim.restart()
-              ranAnimation = true;
-          }
-        } else if (kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y > dash.gridHeight + 30) {
-              if (actualThumbnail.height != originalHeight) {
-              kwinClientThumbnail.isSmall = false;
-              ranAnimation = true;
-              growthAnim.restart();
-            }
-          }
-      }*/
     }
 
     onPressed: {
@@ -406,17 +276,18 @@ Item {
       kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
       kwinClientThumbnail.clientObject.keepAbove = true;
       // So doesn't work.
-      kwinClientThumbnail.z = 1000;
+      //kwinClientThumbnail.z = 1000+kwinClientThumbnail.z;
       kwinClientThumbnail.state = 'isHeld';
       // This works!
       //kwinClientThumbnail.Drag.hotSpot.x = mouse.x-(dash.gridHeight/2*dashboard.screenRatio);
       //kwinClientThumbnail.Drag.hotSpot.y = mouse.y-dash.gridHeight/2;
-      kwinClientThumbnail.Drag.hotSpot.x = mouse.x;
-      kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
+      //kwinClientThumbnail.Drag.hotSpot.x = mouse.x;
+      //kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
       kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
       kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
       //kwinClientThumbnail.oldParent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
       //kwinClientThumbnail.parent = dragHolder;
+      //kwinClientThumbnail.();
       console.log('BLAHBLAHBLAH');
     }
     onReleased: {
@@ -427,17 +298,9 @@ Item {
       console.log(kwinClientThumbnail.newDesktop);
       console.log(kwinClientThumbnail.newActivity);
       // Let's see if the dropArea can handle this.
-      //var newDesktop = _overlapsDesktop(kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).x, kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y).y);
-      //var newDesktop = 0;
-      //growthAnim.animX = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).x;
-      //growthAnim.animY = kwinClientThumbnail.mapToGlobal(mouseX, mouseY).y;
       if (kwinClientThumbnail.isSmall) {
-        //growthAnim.running = true;
         growthAnim.restart();
-        //actualThumbnail.height = kwinClientThumbnail.originalHeight;
-        //actualThumbnail.width = kwinClientThumbnail.originalWidth;
-        //actualThumbnail.x = kwinClientThumbnail.originalX;
-        //actualThumbnail.y = kwinClientThumbnail.originalY;
+        //updateSize(kwinClientThumbnail.originalHeight, kwinClientThumbnail.originalWidth);
         kwinClientThumbnail.isSmall = false;
       }
       //console.log()
@@ -458,41 +321,26 @@ Item {
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
         //console.log(newDesktop);
-        returnAnim.running = true;
+        //returnAnim.running = true;
         //growthAnim.running = true;
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
+        kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (newDesktop == 0) {
-        returnAnim.running = true;
+        //returnAnim.running = true;
         growthAnim.running = true;
+        //updateSize(kwinClientThumbnail.originalHeight, kwinClientThumbnail.originalWidth);
+        kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else {
         kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         // We need to make it invisible, as well.
         //kwinClientThumbnail.visible = false;
-        returnAnim.running = true;
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
+        //returnAnim.running = true;
+        kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+        kwinClientThumbnail.y = kwinClientThumbnail.originalY;
         kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
         // We want the others to pop up, so.
-      }
-    }
-  }
-
-  function runAnimations() {
-    if (visible) {
-      if (mainBackground.state == 'visible') {
-        if (kwinClientThumbnail.originalX == 0) {
-          if (kwinClientThumbnail.originalY == 0) {
-            // Why does this hack work?  Can I make it a copy?
-            // WHERE is it fucking updating!?
-            kwinClientThumbnail.originalX = kwinClientThumbnail.x;
-            kwinClientThumbnail.originalY = kwinClientThumbnail.y;
-          }
-        }
-        //moveToThumbnail.running = true;
-      } else {
-        //moveFromThumbnail.running = true;
       }
     }
   }
@@ -527,7 +375,8 @@ Item {
         workspace.clientRemoved.disconnect(disconnectAllSignals);
         workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
         workspace.currentDesktopChanged.disconnect(callUpdateGrid);
-        mainBackground.onStateChanged.disconnect(toggleVisible);
+        mainBackground.onStateChanged.disconnect(callUpdateGrid);
+        //dashboard.onStateChanged.disconnect(callUpdateGrid);
         clientObject.desktopChanged.disconnect(callUpdateGrid);
         clientObject.activitiesChanged.disconnect(callUpdateGrid);
         workspace.currentActivityChanged.disconnect(callUpdateGrid);
@@ -537,21 +386,34 @@ Item {
   }
 
   function updateSize(height, width) {
-    var scale = clientRealWidth/clientRealHeight
-    if (height < clientRealHeight) {
-      kwinClientThumbnail.height = height - 4;
-      kwinClientThumbnail.width = (height * scale) - 4;
-      kwinClientThumbnail.originalHeight = height - 4;
-      kwinClientThumbnail.originalWidth = (height * scale) - 4;
-      actualThumbnail.height = (height) - 4;
-      actualThumbnail.width = (height * scale) - 4;
+    var scale = (clientRealWidth/clientRealHeight);
+    //var multi = ((clientRealWidth*clientRealHeight)/(dashboard.screenWidth*(dashboard.screenHeight+dashboard.dockHeight)));
+    var multi = 1;
+    if (kwinClientThumbnail.isLarge) {
+      if (height <= clientRealHeight) {
+        kwinClientThumbnail.height = height;// - 4;
+        kwinClientThumbnail.width = (height * scale);// - 4;
+        kwinClientThumbnail.originalHeight = height;// - 4;
+        kwinClientThumbnail.originalWidth = (height * scale);// - 4;
+        actualThumbnail.height = (height) + 4;// - 4;
+        actualThumbnail.width = (height * scale) + 4;// - 4;
+        //actualThumbnail.height = (dashboard.screenHeight) * multi;// - 4;
+        //actualThumbnail.width = (dashboard.screenWidth) * multi;// - 4;
+      } else {
+        kwinClientThumbnail.height = clientRealHeight-12;
+        kwinClientThumbnail.width = (clientRealHeight-12) * scale;
+        kwinClientThumbnail.originalHeight = clientRealHeight - 12;
+        kwinClientThumbnail.originalWidth = (clientRealHeight-12) * scale;
+        actualThumbnail.height = clientRealHeight + 4 - 12;
+        actualThumbnail.width = (clientRealHeight * scale) + 4;
+      }
     } else {
-      kwinClientThumbnail.height = clientRealHeight;
-      kwinClientThumbnail.width = clientRealWidth;
-      kwinClientThumbnail.originalHeight = clientRealHeight;
-      kwinClientThumbnail.originalWidth = clientRealWidth;
-      actualThumbnail.height = clientRealHeight;
-      actualThumbnail.width = clientRealWidth;
+      kwinClientThumbnail.height = height;// - 4;
+      kwinClientThumbnail.width = (height * scale);// - 4;
+      kwinClientThumbnail.originalHeight = height;// - 4;
+      kwinClientThumbnail.originalWidth = (height * scale);// - 4;
+      actualThumbnail.height = (height);// - 4;
+      actualThumbnail.width = (height * scale);// - 4;
     }
   }
 
@@ -578,22 +440,42 @@ Item {
   }
 
   function resizeToLarge() {
-    kwinClientThumbnail.width = clientRealWidth;
-    kwinClientThumbnail.height = clientRealHeight;
-    kwinClientThumbnail.x = actualThumbnail.mapFromGlobal(clientRealX, clientRealY).x;
-    kwinClientThumbnail.y = actualThumbnail.mapFromGlobal(clientRealX, clientRealY).y;
+    kwinClientThumbnail.x = kwinClientThumbnail.clientRealX; //- (kwinClientThumbnail.currentDesktop*(dashboard.screenWidth+10));
+    kwinClientThumbnail.y = kwinClientThumbnail.clientRealY;
+    console.log(kwinClientThumbnail.clientRealX);
+    console.log('ABOVE ME');
+    updateSize(kwinClientThumbnail.clientRealHeight, kwinClientThumbnail.clientRealWidth);
+    //kwinClientThumbnail.width = kwinClientThumbnail.clientRealWidth;
+    //kwinClientThumbnail.height = kwinClientThumbnail.clientRealHeight;
   }
 
     function callUpdateGrid() {
       // It seems that when we move a large to a small and vice versa, we don't
       // always properly trigger updates.
       // Actually, it seems we don't update our new parent properly.  WHAT.
-      if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
+      console.log('client!');
+      console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
+      // First, update the client size.
+      kwinClientThumbnail.clientRealX = kwinClientThumbnail.clientObject.x;
+      kwinClientThumbnail.clientRealY = kwinClientThumbnail.clientObject.y;
+      kwinClientThumbnail.clientRealHeight = workspace.clientList()[cId].height;
+      kwinClientThumbnail.clientRealWidth = workspace.clientList()[cId].width;
+      if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '')) {
         if (kwinClientThumbnail.isLarge) {
+          //kwinClientThumbnail.toggleVisible('visible');
+          if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
+            //kwinClientThumbnail.clientObject.noBorder = true;
+            kwinClientThumbnail.toggleVisible('visible');
+          } else {
+            //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
+          }
           if (kwinClientThumbnail.clientObject.desktop > -1) {
             //if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
               kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
-              kwinClientThumbnail.toggleVisible('visible');
+              // Now we'll try and adjust for the whole... thing.
+              kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width;
+              kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height;
+              kwinClientThumbnail.resizeToLarge();
               currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].updateGrid();
           }
         } else {
@@ -601,9 +483,11 @@ Item {
             kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
             // CHANGE THIS FOR AN OPTION TO NOT HIDE THINGS
             if (kwinClientThumbnail.currentDesktop != workspace.currentDesktop) {
+              //kwinClientThumbnail.clientObject.noBorder = true;
               kwinClientThumbnail.toggleVisible('visible');
             } else {
               //kwinClientThumbnail.toggleVisible('invisible');
+              //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
             }
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
             littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
@@ -620,7 +504,8 @@ Item {
         console.log('MAKE ME INVISIBLE');
         kwinClientThumbnail.visible = false;
         actualThumbnail.visible = false;
-        kwinClientThumbnail.parent = desktopThumbnailGrid;
+        //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
+        //kwinClientThumbnail.parent = desktopThumbnailGrid;
       }
     }
 
@@ -647,30 +532,6 @@ Item {
         //  return d;
         }
         return 0;
-      }
-
-      function runGrowthAnim() {
-        // We set the global mouse position when we released the item.
-        // This is called when we reparent.  Now, we want to change our global mouse
-        // coordinates to the local coordinates.
-        //growthAnim.animX = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).x;
-        //growthAnim.animY = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).y;
-        growthAnim.restart();
-      }
-      function runMoveToThumbnailAnim() {
-        // We set the global mouse position when we released the item.
-        // This is called when we reparent.  Now, we want to change our global mouse
-        // coordinates to the local coordinates.
-        //growthAnim.animX = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).x;
-        //growthAnim.animY = kwinClientThumbnail.mapFromGlobal(growthAnim.animX, growthAnim.animY).y;
-        if (isLarge) {
-          //if (kwinClientThumbnail.parent.isMain) {
-          if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
-          //if (!currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[0].children[0].isMain) {
-            // This is too slow.
-            //moveToThumbnail.restart();
-          }
-        }
       }
 
 }

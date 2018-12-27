@@ -17,6 +17,7 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     // Custom ID for destruction later.
                                     {id: 'clientId' + c,
                                     //'background': model.get(0).background,
+                                    'cId': c,
                                     'clientObject': workspace.clientList()[c],
                                     'originalWidth':  workspace.clientList()[c].width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
                                     'originalHeight': workspace.clientList()[c].height, //parentContainer.height, //workspace.clientList()[c].height / columns,
@@ -24,13 +25,14 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'clientId': workspace.clientList()[c].windowId,
                                     // We'll use this to determine where to switch from.
                                     'currentDesktop': workspace.clientList()[c].desktop,
+                                    'noBorder': workspace.clientList()[c].noBorder,
                                     'newDesktop': workspace.clientList()[c].desktop,
                                     'isLarge': isLarge,
                                     'newActivity': workspace.clientList()[c].activities,
                                     // We don't want to actually SHOW these, yet.
                                     // We'll just distribute them accordingly.
                                     'visible': true,
-                                    'x': workspace.clientList()[c].x, 'y': workspace.clientList()[c].y,
+                                    'x': workspace.clientList()[c].x, 'y': workspace.clientList()[c].y,// - dashboard.dockHeight,
                                     'clientRealX': workspace.clientList()[c].x,
                                     // Account for the fucking dock, if any.
                                     'clientRealY': workspace.clientList()[c].y,
@@ -57,19 +59,21 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 // Custom ID for destruction later.
                                 {id: 'clientId' + c,
                                 //'background': model.get(0).background,
+                                'cId': c.windowId,
                                 'clientObject': c,
                                 'originalWidth':  c.width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
                                 'originalHeight': c.height, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                 'scale': (height / width) / (dashboard.height/dashboard.width),
                                 'clientId': c.windowId,
                                 'currentDesktop': c.desktop,
+                                'noBorder': c.noBorder,
                                 'newDesktop': c.desktop,
                                 'isLarge': isLarge,
                                 'newActivity': c.activities,
                                 // We don't want to actually SHOW these, yet.
                                 // We'll just distribute them accordingly.
                                 'visible': false,
-                                'x': c.x, 'y': c.y,
+                                'x': c.x, 'y': c.y,// - dashboard.dockHeight,
                                 'clientRealX': c.x,
                                 // Account for the fucking dock, if any.
                                 'clientRealY': c.y,

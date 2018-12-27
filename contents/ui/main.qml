@@ -165,6 +165,7 @@ Window {
 						anchors.fill: parent
 
 						property int spacing: 10
+						visible: true
 						//height: dashboard.height
 						height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						width: dashboard.width
@@ -202,6 +203,7 @@ Window {
 							// This is just for each of our desktops.
 							//id: newRepeater
 							id: bigDesktopThumbnailGridBackgrounds
+							visible: true
 							rows: 1
 							x: 0
 							y: 0
@@ -727,6 +729,10 @@ Window {
 				// We're just hiding it by making it invisible.
 				workspace.clientList()[c].opacity = 0;
 				workspace.clientList()[c].minimized = true;
+				//workspace.clientList()[c].clientSideDecorated = !workspace.clientList()[c].clientSideDecorated;
+				workspace.clientList()[c].oldNoBorder = workspace.clientList()[c].noBorder;
+				workspace.clientList()[c].noBorder = true;
+
 			}
 		}
 		function enableVisibleClients() {
@@ -737,6 +743,11 @@ Window {
 					// Better than hiding!
 					workspace.clientList()[c].opacity = 1;
 					workspace.clientList()[c].minimized = false;
+					// FINALLY!  noBorder removes the decoration
+					// If we leave the decoration up, then the thumbnail sizing is really weird.
+					// We'll have to sort out the issues regarding borders and spacing and blah blah blah, but.
+					workspace.clientList()[c].noBorder = workspace.clientList()[c].oldNoBorder;
+					//workspace.clientList()[c].clientSideDecorated = !workspace.clientList()[c].clientSideDecorated;
 
 				}
 			}
@@ -998,13 +1009,14 @@ Window {
 				dashboardActivityChanger.width = dashboard.screenWidth;
 				dashboard.height = dashboard.screenHeight;
 				dashboard.width = dashboard.screenWidth;
+				dashboard.y = 0;
+				//dashboard.visible = true;
 				mainContainer.height = dashboard.screenHeight;
 				mainContainer.width = dashboard.screenWidth;
-
+				mainBackground.state = 'visible';
 				initAnim.restart();
 				//dashboardDesktopChanger.requestActivate();
 				//dashboardDesktopChanger.dashInitAnim.restart();
-				mainBackground.state = 'visible';
 				mainBackground.visible = true;
 				timer.restart();
 				dashboardActivityChanger.requestActivate();
@@ -1027,6 +1039,19 @@ Window {
 					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: 0}
 				}
 			}
+			onRunningChanged: {
+				if (!initAnim.running) {
+					//dashboard.height = 0;
+					//dashboard.width = 0;
+					//dashboard.visible = false;
+					//dashboard.y = dashboard.screenHeight;
+					//dashboardDesktopChanger.width = 0;
+					//dashboardActivityChanger.width = 0;
+					//mainBackground.state = 'visible';
+					//dashboard.visible = false;
+					//mainBackground.visible = false;
+				}
+			}
 		}
 		ParallelAnimation {
 			id: endAnim
@@ -1045,8 +1070,10 @@ Window {
 
 			onRunningChanged: {
 				if (!endAnim.running) {
-					dashboard.height = 0;
-					dashboard.width = 0;
+					//dashboard.height = 0;
+					//dashboard.width = 0;
+					//dashboard.visible = false;
+					dashboard.y = dashboard.screenHeight;
 					//dashboardDesktopChanger.width = 0;
 					//dashboardActivityChanger.width = 0;
 					mainBackground.state = 'invisible';

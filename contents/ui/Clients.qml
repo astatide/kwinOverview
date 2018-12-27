@@ -32,9 +32,9 @@ Item {
     kwinDesktopThumbnailContainer.updateGrid();
   }
 
-  Flow {
+  Item {
     id: clientGridLayout
-    visible: true
+    //visible: true
     //anchors.verticalCenter: parent.verticalCenter
     //anchors.horizontalCenter: parent.horizontalCenter
     // We dynamically update these.
@@ -44,7 +44,7 @@ Item {
     property var columns: _returnMatrixSize()
     height: parent.height
     width: parent.width
-    spacing: 20 * (parent.height/dashboard.screenHeight)
+    property var spacing: 20 * (parent.height/dashboard.screenHeight)
 
     onRowsChanged: {
       testRows.start();
@@ -178,6 +178,7 @@ Item {
       clientGridLayout.children[c].children[1].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].children[1].height = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();
       clientGridLayout.children[c].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();*/
+      // We should also calculate the x, y pos.
     }
     console.log('END: YOU SHOULD SEE THIS');
   }
