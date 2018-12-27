@@ -156,7 +156,6 @@ Item {
     var r;
     var currentWidth = 0;
     var oldRows = 1;
-    var newRows = 1;
     rows = 1;
     cols = 1;
     for (d = 0; d < clientGridLayout.children.length; d++) {
@@ -164,18 +163,15 @@ Item {
       currentWidth = currentWidth + ((height/(oldRows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
       if ((currentWidth > kwinDesktopThumbnailContainer.width)) {
         rows = rows + 1;
-        if (rows > newRows) {
-          newRows = rows;
-        }
         currentWidth = ((height/oldRows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;;
       }
       if ((oldRows < rows)) {
-        newRows = rows;
         oldRows = rows;
         rows = 0;
         d = 0;
       }
     }
+    rows = oldRows;
     if (clientGridLayout.children.length == 1) {
         rows = 1;
     }
