@@ -74,7 +74,7 @@ Item {
       kwinDesktopThumbnailContainer.visible = true;
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       // This doesn't seem to actually... work.  Not sure why.
-      //kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
 
     }
@@ -112,8 +112,6 @@ Item {
         }
 
       }
-    //}
-    //kwinDesktopThumbnailContainer.updateGrid();
   }
 
   function hideGrids(oldDesktop, newDesktop) {
@@ -131,6 +129,30 @@ Item {
     }
   }
 
+  function posClient (c) {
+    // Function which calculates the appropriate x,y for client ID c.
+    // We assume that we don't touch the docks.  Soooo.  We'll also calculate the appropriate size.
+    var rows = clientGridLayout._returnMatrixSize();
+    var cols = clientGridLayout._returnMatrixSize();
+    var height = 0
+    var width = 0
+    var spacing = clientGridLayout.spacing;
+    if (!isLarge) {
+      height = kwinDesktopThumbnailContainer.height;
+      width = kwinDesktopThumbnailContainer.width;
+    } else {
+      height = kwinDesktopThumbnailContainer.height - dashboardActivityChanger.height - dashboardDesktopChanger.height - (spacing*3);
+      width = kwinDesktopThumbnailContainer.width;
+    }
+    // if we're large, we'll adjust for that later.
+    var nHeight = (height)/rows;
+    var nWidth = (width)/cols;
+    // First, calculate the slot ID, then turn those into coordinates.  Also, center!
+    var y = ((Math.floor(c/rows)) * (nHeight+spacing));
+    var x = ((c % rows) * (nWidth+spacing));
+    return [nHeight, nWidth, x, y];
+  }
+
   function updateGrid() {
     // This function is responsible for resizing all the children.  The children currently call this function when necessary,
     // which is not ideal.  I would like for the children to be ignorant of their size and parent, and instead let the grid clients
@@ -140,8 +162,12 @@ Item {
     console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
-      clientGridLayout.children[c].updateSize((kwinDesktopThumbnailContainer.height / (clientGridLayout.columns))-clientGridLayout.spacing, (kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))-clientGridLayout.spacing);
-      //clientGridLayout.children[c].toggleVisible();
+      //clientGridLayout.children[c].updateSize((kwinDesktopThumbnailContainer.height / (clientGridLayout.columns))-clientGridLayout.spacing, (kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))-clientGridLayout.spacing);
+      var coords = posClient(c);
+      clientGridLayout.children[c].updateSize(coords[0], coords[1]);
+      // Clients are responsible for determining their grid spacing, as their dimensions must be taken into account.
+      clientGridLayout.children[c].updatePos(coords[2], coords[3], clientGridLayout.rows, clientGridLayout.columns,kwinDesktopThumbnailContainer.height);
+      //clientGridLayout.children[c].toggleVisible('visible');
       /*clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.columns);
       clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / (clientGridLayout.rows);
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();

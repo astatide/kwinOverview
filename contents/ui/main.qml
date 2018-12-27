@@ -165,6 +165,7 @@ Window {
 						anchors.fill: parent
 
 						property int spacing: 10
+						opacity: 1
 						visible: true
 						//height: dashboard.height
 						height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
@@ -653,6 +654,7 @@ Window {
 			//dashboard.requestActivate();
 			//searchFieldAndResults.children[1].forceActiveFocus();
 			populateVisibleClients();
+			disableVisibleClients();
 
 			// disable!
 
@@ -675,6 +677,7 @@ Window {
 				dash.gridHeight*dashboard.screenRatio*.95,
 				false
 			)
+			enableVisibleClients();
 			// Make sure we add new thumbnails as necessary.
 			workspace.clientAdded.connect(function (c) {
 				console.log(c);
@@ -993,8 +996,9 @@ Window {
 			console.log(dashboardDesktopChanger.flags)
 			console.log(Qt.X11BypassWindowManagerHint)
 			if (mainBackground.state == 'visible') {
-				dashboardDesktopChanger.enableVisibleClients();
+				//mainBackground.state = 'invisible';
 				endAnim.restart();
+				dashboardDesktopChanger.enableVisibleClients();
 				//mainContainer.height = 0
 				//mainContainer.width = 0
 				//mainContainer.visible = false
@@ -1013,8 +1017,8 @@ Window {
 				//dashboard.visible = true;
 				mainContainer.height = dashboard.screenHeight;
 				mainContainer.width = dashboard.screenWidth;
-				mainBackground.state = 'visible';
 				initAnim.restart();
+				mainBackground.state = 'visible';
 				//dashboardDesktopChanger.requestActivate();
 				//dashboardDesktopChanger.dashInitAnim.restart();
 				mainBackground.visible = true;
@@ -1057,14 +1061,14 @@ Window {
 			id: endAnim
 			SequentialAnimation {
 				ParallelAnimation {
-					NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
+					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
 					NumberAnimation { target: dashboardDesktopChanger; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: dashPlasmaBack; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: dashboardActivityChanger; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
 					NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
-					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
-					NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
-					NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0; duration: 100}
+					//NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
+					//NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
+					//NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0; duration: 100}
 				}
 			}
 

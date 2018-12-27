@@ -88,8 +88,8 @@ Item {
       }
     }
   ]
-  Behavior on height { PropertyAnimation { duration: 2500 } }
-  Behavior on width { PropertyAnimation { duration: 2500 } }
+  Behavior on height { PropertyAnimation { duration: 1000 } }
+  Behavior on width { PropertyAnimation { duration: 1000 } }
   Behavior on x { NumberAnimation { duration: 250 } }
   Behavior on y { NumberAnimation { duration: 250 } }
 
@@ -117,24 +117,26 @@ Item {
     opacity: 1
     x: 2
     y: 2
-    Behavior on height { NumberAnimation { duration: 100 } }
-    Behavior on width { NumberAnimation { duration: 100 } }
+    Behavior on height { NumberAnimation { duration: 1000 } }
+    Behavior on width { NumberAnimation { duration: 1000 } }
     Behavior on x { NumberAnimation { duration: 100 } }
     Behavior on y { NumberAnimation { duration: 100 } }
     clip: false
     scale: 1
     height: kwinClientThumbnail.clientRealHeight
     width: kwinClientThumbnail.clientRealWidth
+    //anchors.horizontalCenter: kwinClientThumbnail.horizontalCenter
+    //anchors.verticalCenter: kwinClientThumbnail.verticalCenter
     KWinLib.ThumbnailItem {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
       id: kwinThumbnailRenderWindow
       anchors.fill: actualThumbnail
       wId: kwinClientThumbnail.clientId
-      height: actualThumbnail.height-20
+      height: actualThumbnail.height
       width: actualThumbnail.width
       x: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).x
-      y: -20 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
+      y: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
       z: 0
       visible: false
       clip: false
@@ -147,7 +149,7 @@ Item {
       color: 'black'
       opacity: 0.5
       scale: 1
-      visible: false
+      visible: true
       clip: true
     }
   }
@@ -233,7 +235,7 @@ Item {
       // We only want to disable the dashboard when we double click on the item
       // or when we're currently on said desktop and are 'sure'.
       if (currentDesktop == workspace.currentDesktop) {
-        dashboard.toggleBoth();
+        mainContainer.toggleBoth();
       }
       workspace.activeClient = clientObject;
     }
@@ -311,6 +313,7 @@ Item {
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
         kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
+        kwinClientThumbnail.callUpdateGrid();
       }
     }
   }
@@ -324,6 +327,7 @@ Item {
     shrinkAnim.running = false;
     clientObject.desktopChanged.connect(callUpdateGrid);
     clientObject.activitiesChanged.connect(callUpdateGrid);
+    //kwinClientThumbnail.onParentChanged.connect(callUpdateGrid);
     // It seems that occasionally, this might not fire off.  Unsure as to why.
     workspace.currentActivityChanged.connect(callUpdateGrid);
     mainBackground.onStateChanged.connect(callUpdateGrid);
@@ -343,6 +347,7 @@ Item {
         console.log('KILLING MYSELF');
         // Yes, we even have to disconnect this.
         workspace.clientRemoved.disconnect(disconnectAllSignals);
+        //kwinClientThumbnail.onParentChanged.disconnect(callUpdateGrid);
         workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
         workspace.currentDesktopChanged.disconnect(callUpdateGrid);
         mainBackground.onStateChanged.disconnect(callUpdateGrid);
@@ -353,6 +358,15 @@ Item {
         kwinClientThumbnail.destroy();
       }
     }
+  }
+
+  function updatePos(x, y, rows, cols, pHeight) {
+    var scale = (clientRealWidth/clientRealHeight);
+    var height = kwinClientThumbnail.height;
+    kwinClientThumbnail.x = x + ((width - kwinClientThumbnail.width)/2);
+    kwinClientThumbnail.y = y;
+    kwinClientThumbnail.originalX = x + ((width - kwinClientThumbnail.width)/2);
+    kwinClientThumbnail.originalY = y;
   }
 
   function updateSize(height, width) {
@@ -425,16 +439,17 @@ Item {
       // First, update the client size.
       if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') && mainBackground.state == 'visible') {
         if (kwinClientThumbnail.isLarge) {
-          if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
-            kwinClientThumbnail.toggleVisible('visible');
-          } else {
-          }
           if (kwinClientThumbnail.clientObject.desktop > -1) {
-              kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
+            kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
+            if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
+                kwinClientThumbnail.toggleVisible('visible');
+                kwinClientThumbnail.resizeToLarge();
+              } else {
+                //kwinClientThumbnail.toggleVisible('invisible');
+              }
               // Now we'll try and adjust for the whole... thing.
               //kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width+4;
               //kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height+4;
-              kwinClientThumbnail.resizeToLarge();
               currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].updateGrid();
           }
         } else {
@@ -453,7 +468,7 @@ Item {
       } else {
         console.log('REPARENTING');
         console.log('MAKE ME INVISIBLE');
-        kwinClientThumbnail.toggleVisible();
+        kwinClientThumbnail.toggleVisible('invisible');
         //kwinClientThumbnail.visible = false;
         //actualThumbnail.visible = false;
       }
