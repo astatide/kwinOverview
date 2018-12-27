@@ -141,15 +141,49 @@ Item {
       height = kwinDesktopThumbnailContainer.height;
       width = kwinDesktopThumbnailContainer.width;
     } else {
-      height = kwinDesktopThumbnailContainer.height - dashboardActivityChanger.height - dashboardDesktopChanger.height - (spacing*3);
+      height = kwinDesktopThumbnailContainer.height - dashboardActivityChanger.height - dashboardDesktopChanger.height - (spacing);
       width = kwinDesktopThumbnailContainer.width;
     }
     // if we're large, we'll adjust for that later.
     var nHeight = (height)/rows;
     var nWidth = (width)/cols;
     // First, calculate the slot ID, then turn those into coordinates.  Also, center!
-    var y = ((Math.floor(c/rows)) * (nHeight+spacing));
+    var y = ((Math.floor(c/rows)) * (nHeight+spacing)) + (kwinDesktopThumbnailContainer.height - height)/2;
     var x = ((c % rows) * (nWidth+spacing));
+
+    // Let's try something a little different.  See if we can pack them all into one row; if not, add another one, and recalculate.
+    var d;
+    var r;
+    var currentWidth = 0;
+    rows = 1;
+    cols = 1;
+    for (d = 0; d < clientGridLayout.children.length; d++) {
+      // See what the size would be if we stopped here.
+      currentWidth = currentWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height)));
+      if (currentWidth > kwinDesktopThumbnailContainer.width) {
+        rows = rows + 1;
+        currentWidth = 0;
+      }
+    }
+    var row = 0;
+    currentWidth = 0;
+    var cWidth = [0];
+    var cHeight = [0];
+    for (d = 0; d < clientGridLayout.children.length; d++) {
+      // See what the size would be if we stopped here.
+      currentWidth = currentWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height)));
+      if (currentWidth > kwinDesktopThumbnailContainer.width) {
+        currentWidth = 0;
+        row = row + 1
+      }
+      cWidth.push(currentWidth);
+      cHeight.push(row);
+    }
+    nHeight = (height)/rows;
+    nWidth = height/rows*(clientGridLayout.children[c].width/clientGridLayout.children[c].height);
+    y = cHeight[c]*nHeight;
+    x = cWidth[c];
+
     return [nHeight, nWidth, x, y];
   }
 
