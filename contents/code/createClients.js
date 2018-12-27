@@ -19,8 +19,8 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     //'background': model.get(0).background,
                                     'cId': c,
                                     'clientObject': workspace.clientList()[c],
-                                    'originalWidth':  workspace.clientList()[c].width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
-                                    'originalHeight': workspace.clientList()[c].height, //parentContainer.height, //workspace.clientList()[c].height / columns,
+                                    'originalWidth':  workspace.clientList()[c].width+4, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
+                                    'originalHeight': workspace.clientList()[c].height+4, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                     'scale': (height / width) / (dashboard.height/dashboard.width),
                                     'clientId': workspace.clientList()[c].windowId,
                                     // We'll use this to determine where to switch from.
@@ -36,10 +36,10 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     'clientRealX': workspace.clientList()[c].x,
                                     // Account for the fucking dock, if any.
                                     'clientRealY': workspace.clientList()[c].y,
-                                    'clientRealWidth': workspace.clientList()[c].width,
-                                    'clientRealHeight': workspace.clientList()[c].height,
-                                    'height': workspace.clientList()[c].height, //parentContainer.height, //height / columns,
-                                    'width': workspace.clientList()[c].height});//parentContainer.width}); //width / columns});
+                                    'clientRealWidth': workspace.clientList()[c].width+4,
+                                    'clientRealHeight': workspace.clientList()[c].height+4,
+                                    'height': workspace.clientList()[c].height+4, //parentContainer.height, //height / columns,
+                                    'width': workspace.clientList()[c].width+4});//parentContainer.width}); //width / columns});
       console.log('Client created!');
       }
     }
@@ -61,8 +61,8 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 //'background': model.get(0).background,
                                 'cId': c.windowId,
                                 'clientObject': c,
-                                'originalWidth':  c.width, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
-                                'originalHeight': c.height, //parentContainer.height, //workspace.clientList()[c].height / columns,
+                                'originalWidth':  c.width+4, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
+                                'originalHeight': c.height+4, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                 'scale': (height / width) / (dashboard.height/dashboard.width),
                                 'clientId': c.windowId,
                                 'currentDesktop': c.desktop,
@@ -77,9 +77,9 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 'clientRealX': c.x,
                                 // Account for the fucking dock, if any.
                                 'clientRealY': c.y,
-                                'clientRealWidth': c.width,
-                                'clientRealHeight': c.height,
-                                'height': c.height,//parentContainer.height, //height / columns,
-                                'width': c.width});//parentContainer.width}); //width / columns});
+                                'clientRealWidth': c.width + 4,
+                                'clientRealHeight': c.height + 4,
+                                'height': c.height + 4,//parentContainer.height, //height / columns,
+                                'width': c.width + 4});//parentContainer.width}); //width / columns});
   }
 }

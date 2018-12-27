@@ -74,7 +74,7 @@ Item {
       kwinDesktopThumbnailContainer.visible = true;
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       // This doesn't seem to actually... work.  Not sure why.
-      kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
       console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
 
     }
@@ -92,35 +92,6 @@ Item {
   function swapGrids(oldDesktop, newDesktop) {
     console.log('WHICH ONE IS WHICH!?');
     console.log(oldDesktop, newDesktop);
-    /*if (kwinDesktopThumbnailContainer.isLarge) {
-      // If we're not the 'main', but we ARE current, we want to become visible and change our
-      // x position (to the right or left, don't care right now), then animate a change to 0, 0.
-      if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-        if (!kwinDesktopThumbnailContainer.isMain) {
-          // We need to know which way we're moving.  But, ah, hmmm.
-          // Which one is the old one?
-          if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop) {
-            moveNewToLeft.restart();
-          } else {
-            moveNewToRight.restart();
-          }
-          kwinDesktopThumbnailContainer.isMain = true;
-          if (currentDesktopGridThumbnailContainer.state == 'showDesktop') {
-            kwinDesktopThumbnailContainer.visible = true;
-          }
-          //kwinDesktopThumbnailContainer.x = -dashboard.screenWidth;
-        }
-      }
-      if (isMain && workspace.currentDesktop-1 != kwinDesktopThumbnailContainer.desktop) {
-          // Now, handle moving the OTHER one.
-          if (workspace.currentDesktop-1 > kwinDesktopThumbnailContainer.desktop) {
-            moveMainToLeft.restart();
-          } else {
-            moveMainToRight.restart();
-          }
-          kwinDesktopThumbnailContainer.isMain = false;
-          //kwinDesktopThumbnailContainer.x = dashboard.screenWidth;
-      }    } else {*/
       // Show everything except for the current desktop and the one we're transitioning into.
       if (!kwinDesktopThumbnailContainer.isLarge) {
         if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
@@ -170,6 +141,7 @@ Item {
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
       clientGridLayout.children[c].updateSize((kwinDesktopThumbnailContainer.height / (clientGridLayout.columns))-clientGridLayout.spacing, (kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))-clientGridLayout.spacing);
+      //clientGridLayout.children[c].toggleVisible();
       /*clientGridLayout.children[c].height = kwinDesktopThumbnailContainer.height / (clientGridLayout.columns);
       clientGridLayout.children[c].width = kwinDesktopThumbnailContainer.width / (clientGridLayout.rows);
       clientGridLayout.children[c].originalHeight = kwinDesktopThumbnailContainer.height / clientGridLayout._returnMatrixSize();

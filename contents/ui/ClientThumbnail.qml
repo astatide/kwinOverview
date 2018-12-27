@@ -76,73 +76,65 @@ Item {
         //target: kwinClientThumbnail
         //parent: mainBackground
         // This allows the visual to drag!
-        target: dashboardDesktopChanger
-        height: dashboard.screenHeight //- 120*dashboard.scalingFactor
+        //target: dashboardDesktopChanger
+        //height: dashboard.screenHeight //- 120*dashboard.scalingFactor
       }
     },
     State {
       name: 'notHeld'
       PropertyChanges {
-        //target: kwinClientThumbnail
         target: dashboardDesktopChanger
         height: (100+20) * dashboard.scalingFactor
-        //parent: clientGridLayout
       }
     }
   ]
-  Behavior on height { NumberAnimation { duration: 250 } }
-  Behavior on width { NumberAnimation { duration: 250 } }
+  Behavior on height { PropertyAnimation { duration: 2500 } }
+  Behavior on width { PropertyAnimation { duration: 2500 } }
   Behavior on x { NumberAnimation { duration: 250 } }
   Behavior on y { NumberAnimation { duration: 250 } }
-  /*transitions: Transition {
-    ParentAnimation {
-      ParallelAnimation {
-        NumberAnimation { properties: "x,y"; duration: 1000 }
-        NumberAnimation { target: actualThumbnail; property: "x"; from: kwinClientThumbnail.clientRealX; to: x}
-        NumberAnimation { target: actualThumbnail; property: "y"; from: kwinClientThumbnail.clientRealY; to: y}
-        NumberAnimation { target: kwinClientThumbnail; property: "x"; from: kwinClientThumbnail.clientRealX; to: x}
-        NumberAnimation { target: kwinClientThumbnail; property: "y"; from: kwinClientThumbnail.clientRealY; to: y}
-        NumberAnimation { target: kwinClientThumbnail; property: "height"; from: kwinClientThumbnail.clientRealHeight; to: height}
-        NumberAnimation { target: kwinClientThumbnail; property: "width"; from: kwinClientThumbnail.clientRealWidth; to: width}
-      }
+
+  Rectangle {
+    // This is a background rectangle useful for highlighting the item under the mouse.
+    id: hoverRectangle
+    anchors.fill: parent
+    color: 'white'
+    opacity: 0
+    visible: false
+    scale: 1
+    clip: true
+    height: kwinClientThumbnail.height
+    width: kwinClientThumbnail.width
+    Behavior on opacity {
+      NumberAnimation {
+         duration: 250
+        }
     }
-  }*/
+  }
 
   Item {
     id: actualThumbnail
     visible: false
-    //flags: Qt.WA_TranslucentBackground | Qt.X11BypassWindowManagerHint
     opacity: 1
-    //color: '#00000000'
-    x: -2
-    y: -2
-    Behavior on height { NumberAnimation { duration: 250 } }
-    Behavior on width { NumberAnimation { duration: 250 } }
-    Behavior on x { NumberAnimation { duration: 250 } }
-    Behavior on y { NumberAnimation { duration: 250 } }
+    x: 2
+    y: 2
+    Behavior on height { NumberAnimation { duration: 100 } }
+    Behavior on width { NumberAnimation { duration: 100 } }
+    Behavior on x { NumberAnimation { duration: 100 } }
+    Behavior on y { NumberAnimation { duration: 100 } }
     clip: false
     scale: 1
+    height: kwinClientThumbnail.clientRealHeight
+    width: kwinClientThumbnail.clientRealWidth
     KWinLib.ThumbnailItem {
       // Basically, this 'fills up' to the parent object, so we encapsulate it
       // so that we can shrink the thumbnail without messing with the grid itself.
       id: kwinThumbnailRenderWindow
       anchors.fill: actualThumbnail
-      //anchors.fill: parent
-      property var multi: ((clientRealWidth*clientRealHeight)/(dashboard.screenWidth*(dashboard.screenHeight+dashboard.dockHeight)))
-      //anchors.fill: kwinClientThumbnail
-      //wId: workspace.clientList()[clientId].windowId
       wId: kwinClientThumbnail.clientId
-      //height: kwinClientThumbnail.height // multi
-      //width: kwinClientThumbnail.width // multi
-      height: actualThumbnail.height
+      height: actualThumbnail.height-20
       width: actualThumbnail.width
-      //height: kwinClientThumbnail.clientRealHeight
-      //width: kwinClientThumbnail.clientRealWidth
-      //clipTo: kwinClientThumbnail
-      //saturation: 1
-      //scale: 1
       x: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).x
-      y: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
+      y: -20 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
       z: 0
       visible: false
       clip: false
@@ -155,25 +147,8 @@ Item {
       color: 'black'
       opacity: 0.5
       scale: 1
-      visible: true
-      clip: true
-    }
-    Rectangle {
-      // This is a background rectangle useful for highlighting the item under the mouse.
-      id: hoverRectangle
-      anchors.fill: parent
-      color: 'white'
-      opacity: 0
       visible: false
-      scale: 1
       clip: true
-      height: kwinClientThumbnail.height+4
-      width: kwinClientThumbnail.width+4
-      Behavior on opacity {
-        NumberAnimation {
-           duration: 250
-          }
-      }
     }
   }
 
@@ -183,7 +158,20 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-
+    PropertyAnimation {
+      target: hoverRectangle
+      //target: kwinClientThumbnail
+      property: "height"
+      to: 100
+      duration: 100
+    }
+    PropertyAnimation {
+      target: hoverRectangle
+      //target: kwinClientThumbnail
+      property: "width"
+      to: (100*dashboard.screenRatio)
+      duration: 100
+    }
     PropertyAnimation {
       target: actualThumbnail
       //target: kwinClientThumbnail
@@ -197,10 +185,12 @@ Item {
       property: "width"
       to: 100*dashboard.screenRatio
       duration: 100
-  }
+    }
 
     PropertyAnimation { target: actualThumbnail; property: "x"; to: shrinkAnim.animX-(dash.gridHeight/2*dashboard.screenRatio); duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: shrinkAnim.animY-dash.gridHeight/2; duration: 100}
+    PropertyAnimation { target: hoverRectangle; property: "x"; to: (shrinkAnim.animX-(dash.gridHeight/2*dashboard.screenRatio))-2; duration: 100}
+    PropertyAnimation { target: hoverRectangle; property: "y"; to: (shrinkAnim.animY-dash.gridHeight/2)-2; duration: 100}
 
 
     onStopped: {
@@ -214,15 +204,20 @@ Item {
     running: false
     property int animX: 0
     property int animY: 0
-    NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight-2; duration: 100}
-    NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth-2; duration: 100}
+    NumberAnimation { target: actualThumbnail; property: "height"; to: originalHeight; duration: 100}
+    NumberAnimation { target: actualThumbnail; property: "width"; to: originalWidth; duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "x"; to: 2; duration: 100}
     PropertyAnimation { target: actualThumbnail; property: "y"; to: 2; duration: 100}
+    NumberAnimation { target: hoverRectangle; property: "height"; to: originalHeight+4; duration: 100}
+    NumberAnimation { target: hoverRectangle; property: "width"; to: originalWidth+4; duration: 100}
+    PropertyAnimation { target: hoverRectangle; property: "x"; to: 0; duration: 100}
+    PropertyAnimation { target: hoverRectangle; property: "y"; to: 0; duration: 100}
 
 
     onStopped: {
       mouseArea.enabled = true;
       kwinClientThumbnail.isSmall = false;
+      hoverRectangle.visible = true;
     }
   }
 
@@ -254,7 +249,6 @@ Item {
     }
     onPositionChanged: {
       // Let's do this proper.
-      //console.log('CHANGING POSITIONS');
       var ranAnimation = false;
       var mouseX = mouse.x;
       var mouseY = mouse.y;
@@ -262,9 +256,8 @@ Item {
       shrinkAnim.animY = mouseY;
       growthAnim.animX = mouseX;
       growthAnim.animY = mouseY;
-      //console.log(Drag.hotSpot);
-      //if (actualThumbnail.height != dash.gridHeight) {
       if (kwinClientThumbnail.state == 'isHeld') {
+        hoverRectangle.visible = false;
         shrinkAnim.restart()
       }
     }
@@ -275,19 +268,9 @@ Item {
       kwinClientThumbnail.originalY = kwinClientThumbnail.y;
       kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
       kwinClientThumbnail.clientObject.keepAbove = true;
-      // So doesn't work.
-      //kwinClientThumbnail.z = 1000+kwinClientThumbnail.z;
       kwinClientThumbnail.state = 'isHeld';
-      // This works!
-      //kwinClientThumbnail.Drag.hotSpot.x = mouse.x-(dash.gridHeight/2*dashboard.screenRatio);
-      //kwinClientThumbnail.Drag.hotSpot.y = mouse.y-dash.gridHeight/2;
-      //kwinClientThumbnail.Drag.hotSpot.x = mouse.x;
-      //kwinClientThumbnail.Drag.hotSpot.y = mouse.y;
       kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
       kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
-      //kwinClientThumbnail.oldParent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
-      //kwinClientThumbnail.parent = dragHolder;
-      //kwinClientThumbnail.();
       console.log('BLAHBLAHBLAH');
     }
     onReleased: {
@@ -300,13 +283,9 @@ Item {
       // Let's see if the dropArea can handle this.
       if (kwinClientThumbnail.isSmall) {
         growthAnim.restart();
-        //updateSize(kwinClientThumbnail.originalHeight, kwinClientThumbnail.originalWidth);
+                //updateSize(kwinClientThumbnail.originalHeight, kwinClientThumbnail.originalWidth);
         kwinClientThumbnail.isSmall = false;
       }
-      //console.log()
-      //kwinClientThumbnail.clientObject.setOnActivities(kwinClientThumbnail.newActivity);
-      //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
-      //console.log(Object.getOwnPropertyNames(ActivitySwitcher))
       if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
         //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
         // This is a read-only property, and so we're unable to change it from here.
@@ -320,27 +299,18 @@ Item {
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
-        //console.log(newDesktop);
-        //returnAnim.running = true;
-        //growthAnim.running = true;
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else if (newDesktop == 0) {
-        //returnAnim.running = true;
         growthAnim.running = true;
-        //updateSize(kwinClientThumbnail.originalHeight, kwinClientThumbnail.originalWidth);
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else {
         kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
-        // We need to make it invisible, as well.
-        //kwinClientThumbnail.visible = false;
-        //returnAnim.running = true;
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
         kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
-        // We want the others to pop up, so.
       }
     }
   }
@@ -356,7 +326,7 @@ Item {
     clientObject.activitiesChanged.connect(callUpdateGrid);
     // It seems that occasionally, this might not fire off.  Unsure as to why.
     workspace.currentActivityChanged.connect(callUpdateGrid);
-    mainBackground.onStateChanged.connect(toggleVisible);
+    mainBackground.onStateChanged.connect(callUpdateGrid);
     // We just need to make sure we're calling correct parent signals when
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     workspace.numberDesktopsChanged.connect(callUpdateGrid);
@@ -393,27 +363,27 @@ Item {
       if (height <= clientRealHeight) {
         kwinClientThumbnail.height = height;// - 4;
         kwinClientThumbnail.width = (height * scale);// - 4;
-        kwinClientThumbnail.originalHeight = height;// - 4;
-        kwinClientThumbnail.originalWidth = (height * scale);// - 4;
-        actualThumbnail.height = (height) + 4;// - 4;
-        actualThumbnail.width = (height * scale) + 4;// - 4;
+        kwinClientThumbnail.originalHeight = height-4;// - 4;
+        kwinClientThumbnail.originalWidth = (height * scale)-4;// - 4;
+        actualThumbnail.height = (height)-4;// - 4;
+        actualThumbnail.width = (height * scale)-4;// - 4;
         //actualThumbnail.height = (dashboard.screenHeight) * multi;// - 4;
         //actualThumbnail.width = (dashboard.screenWidth) * multi;// - 4;
       } else {
-        kwinClientThumbnail.height = clientRealHeight-12;
-        kwinClientThumbnail.width = (clientRealHeight-12) * scale;
-        kwinClientThumbnail.originalHeight = clientRealHeight - 12;
-        kwinClientThumbnail.originalWidth = (clientRealHeight-12) * scale;
-        actualThumbnail.height = clientRealHeight + 4 - 12;
-        actualThumbnail.width = (clientRealHeight * scale) + 4;
+        kwinClientThumbnail.height = clientRealHeight;
+        kwinClientThumbnail.width = (clientRealHeight) * scale;
+        kwinClientThumbnail.originalHeight = clientRealHeight-4;
+        kwinClientThumbnail.originalWidth = (clientRealHeight * scale)-4;
+        actualThumbnail.height = clientRealHeight-4;
+        actualThumbnail.width = (clientRealHeight * scale)-4;
       }
     } else {
       kwinClientThumbnail.height = height;// - 4;
       kwinClientThumbnail.width = (height * scale);// - 4;
-      kwinClientThumbnail.originalHeight = height;// - 4;
-      kwinClientThumbnail.originalWidth = (height * scale);// - 4;
-      actualThumbnail.height = (height);// - 4;
-      actualThumbnail.width = (height * scale);// - 4;
+      kwinClientThumbnail.originalHeight = height-4;// - 4;
+      kwinClientThumbnail.originalWidth = (height * scale)-4;// - 4;
+      actualThumbnail.height = (height)-4;// - 4;
+      actualThumbnail.width = (height * scale)-4;// - 4;
     }
   }
 
@@ -444,37 +414,26 @@ Item {
     kwinClientThumbnail.y = kwinClientThumbnail.clientRealY;
     console.log(kwinClientThumbnail.clientRealX);
     console.log('ABOVE ME');
-    updateSize(kwinClientThumbnail.clientRealHeight, kwinClientThumbnail.clientRealWidth);
+    updateSize(kwinClientThumbnail.clientRealHeight+4, kwinClientThumbnail.clientRealWidth+4);
     //kwinClientThumbnail.width = kwinClientThumbnail.clientRealWidth;
     //kwinClientThumbnail.height = kwinClientThumbnail.clientRealHeight;
   }
 
     function callUpdateGrid() {
-      // It seems that when we move a large to a small and vice versa, we don't
-      // always properly trigger updates.
-      // Actually, it seems we don't update our new parent properly.  WHAT.
       console.log('client!');
       console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
       // First, update the client size.
-      kwinClientThumbnail.clientRealX = kwinClientThumbnail.clientObject.x;
-      kwinClientThumbnail.clientRealY = kwinClientThumbnail.clientObject.y;
-      kwinClientThumbnail.clientRealHeight = workspace.clientList()[cId].height;
-      kwinClientThumbnail.clientRealWidth = workspace.clientList()[cId].width;
-      if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '')) {
+      if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') && mainBackground.state == 'visible') {
         if (kwinClientThumbnail.isLarge) {
-          //kwinClientThumbnail.toggleVisible('visible');
           if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
-            //kwinClientThumbnail.clientObject.noBorder = true;
             kwinClientThumbnail.toggleVisible('visible');
           } else {
-            //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
           }
           if (kwinClientThumbnail.clientObject.desktop > -1) {
-            //if (kwinClientThumbnail.currentDesktop == workspace.currentDesktop) {
               kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
               // Now we'll try and adjust for the whole... thing.
-              kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width;
-              kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height;
+              //kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width+4;
+              //kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height+4;
               kwinClientThumbnail.resizeToLarge();
               currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].updateGrid();
           }
@@ -486,26 +445,17 @@ Item {
               //kwinClientThumbnail.clientObject.noBorder = true;
               kwinClientThumbnail.toggleVisible('visible');
             } else {
-              //kwinClientThumbnail.toggleVisible('invisible');
-              //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
             }
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
             littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
-            //littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0].updateGrid();
-            //var p = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
-            //littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
-            //kwinClientThumbnail.height = p.height  / p.rows;
-            //kwinClientThumbnail.width = p.width  / p.columns;
-            //console.log(p.height);
           }
         }
       } else {
         console.log('REPARENTING');
         console.log('MAKE ME INVISIBLE');
-        kwinClientThumbnail.visible = false;
-        actualThumbnail.visible = false;
-        //kwinClientThumbnail.clientObject.noBorder = kwinClientThumbnail.noBorder;
-        //kwinClientThumbnail.parent = desktopThumbnailGrid;
+        kwinClientThumbnail.toggleVisible();
+        //kwinClientThumbnail.visible = false;
+        //actualThumbnail.visible = false;
       }
     }
 
