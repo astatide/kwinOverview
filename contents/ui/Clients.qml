@@ -75,7 +75,10 @@ Item {
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
       mainBackground.onStateChanged(kwinDesktopThumbnailContainer.hideOnDeactive);
       // This doesn't seem to actually... work.  Not sure why.
-      //kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      kwinDesktopThumbnailContainer.onChildrenAdded.connect(kwinDesktopThumbnailContainer.updateGrid);
+      kwinDesktopThumbnailContainer.onChildrenRemoved.connect(kwinDesktopThumbnailContainer.updateGrid);
+
       //console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
       //kwinDesktopThumbnailContainer.swapGrids();
       //kwinDesktopThumbnailContainer.updateGrid();
@@ -192,7 +195,7 @@ Item {
     var maxWidth = 0;
     for (d = 0; d < clientGridLayout.children.length; d++) {
       if (clientGridLayout.children[d].clientObject.activities == workspace.currentActivity || clientGridLayout.children[d].clientObject.activities == '') {
-            maxWidth = maxWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + (spacing);
+            maxWidth = maxWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + (spacing*2);
       }
     }
     maxWidth = maxWidth / rows;

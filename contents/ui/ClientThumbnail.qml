@@ -76,7 +76,7 @@ Item {
         //target: kwinClientThumbnail
         //parent: mainBackground
         // This allows the visual to drag!
-        //target: dashboardDesktopChanger
+        target: dashboardDesktopChanger
         height: dashboard.screenHeight //- 120*dashboard.scalingFactor
       }
     },
@@ -331,7 +331,7 @@ Item {
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
       } else {
-        kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
+        //kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
@@ -461,6 +461,7 @@ Item {
       //console.log('client!');
       //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
       // First, update the client size.
+      var oldDesktop = kwinClientThumbnail.currentDesktop;
       kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
       if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') && mainBackground.state == 'visible') {
         if (kwinClientThumbnail.isLarge) {
@@ -475,6 +476,8 @@ Item {
               // Now we'll try and adjust for the whole... thing.
               //kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width+4;
               //kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height+4;
+              // Update the old desktop, too.
+              currentDesktopGrid.itemAt(oldDesktop-1).children[1].updateGrid();
               currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].updateGrid();
           }
         } else {
@@ -487,7 +490,9 @@ Item {
             } else {
             }
             kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+            littleDesktopRepeater.itemAt(oldDesktop-1).children[2].updateGrid();
             littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].updateGrid();
+
           }
         }
       } else {
