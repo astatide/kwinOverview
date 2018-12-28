@@ -448,6 +448,8 @@ Item {
   function resizeToLarge() {
     kwinClientThumbnail.x = kwinClientThumbnail.clientRealX; //- (kwinClientThumbnail.currentDesktop*(dashboard.screenWidth+10));
     kwinClientThumbnail.y = kwinClientThumbnail.clientRealY;
+    kwinClientThumbnail.clientRealHeight = kwinClientThumbnail.clientObject.height;
+    kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width;
     //console.log(kwinClientThumbnail.clientRealX);
     //console.log('ABOVE ME');
     updateSize(kwinClientThumbnail.clientRealHeight+4, kwinClientThumbnail.clientRealWidth+4);
@@ -492,6 +494,9 @@ Item {
         //console.log('REPARENTING');
         //console.log('MAKE ME INVISIBLE');
         kwinClientThumbnail.toggleVisible('invisible');
+        if (kwinClientThumbnail.islarge) {
+          kwinClientThumbnail.resizeToLarge();
+        }
         //kwinClientThumbnail.visible = false;
         //actualThumbnail.visible = false;
       }

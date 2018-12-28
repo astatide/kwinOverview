@@ -172,7 +172,9 @@ Item {
     cols = 1;
     for (d = 0; d < clientGridLayout.children.length; d++) {
       // See what the size would be if we stopped here.
-      currentWidth = currentWidth + ((height/(oldRows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
+      if (clientGridLayout.children[d].clientObject.activities == workspace.currentActivity || clientGridLayout.children[d].clientObject.activities == '') {
+            currentWidth = currentWidth + ((height/(oldRows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
+      }
       if ((currentWidth > kwinDesktopThumbnailContainer.width)) {
         rows = rows + 1;
         currentWidth = ((height/oldRows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;;
@@ -189,7 +191,9 @@ Item {
     }
     var maxWidth = 0;
     for (d = 0; d < clientGridLayout.children.length; d++) {
-      maxWidth = maxWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + (spacing);
+      if (clientGridLayout.children[d].clientObject.activities == workspace.currentActivity || clientGridLayout.children[d].clientObject.activities == '') {
+            maxWidth = maxWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + (spacing);
+      }
     }
     maxWidth = maxWidth / rows;
 
@@ -198,11 +202,15 @@ Item {
     currentWidth = 0;
     var cWidth = [0];
     var cHeight = [0];
+    var wAdd = [];
     for (d = 0; d < clientGridLayout.children.length; d++) {
       // See what the size would be if we stopped here.
-      currentWidth = currentWidth + ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + (0);
+      if (clientGridLayout.children[d].clientObject.activities == workspace.currentActivity || clientGridLayout.children[d].clientObject.activities == '') {
+            currentWidth = currentWidth + ((height/(rows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
+      }
       if ((currentWidth > maxWidth)) {
         //currentWidth = ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
+        wAdd.push((width - (currentWidth))/2); //- ((height/(rows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) - spacing))/2); // - ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))))/2);
         currentWidth = 0;
         row = row + 1;
         //cHeight[d] = row;
@@ -211,10 +219,16 @@ Item {
       cHeight.push(row);
       cWidth.push(currentWidth);
     }
+    if (row == 0 || row == 1) {
+      wAdd.push((width - currentWidth)/2);
+    }
     nHeight = (height)/rows;
     nWidth = height/rows*(clientGridLayout.children[c].width/clientGridLayout.children[c].height);
     y = (cHeight[c]*(nHeight+spacing)) + ((kwinDesktopThumbnailContainer.height - (height+(spacing*rows)))/2);
-    x = cWidth[c];
+    x = cWidth[c] + wAdd[cHeight[c]];
+    if (clientGridLayout.children.length == rows && rows != 1) {
+      y = y + nHeight/2
+    }
     //console.log('testing width');
     //console.log(cWidth);
     return [nHeight, nWidth, x, y];
