@@ -77,7 +77,7 @@ Item {
         //parent: mainBackground
         // This allows the visual to drag!
         //target: dashboardDesktopChanger
-        //height: dashboard.screenHeight //- 120*dashboard.scalingFactor
+        height: dashboard.screenHeight //- 120*dashboard.scalingFactor
       }
     },
     State {
@@ -273,15 +273,38 @@ Item {
       kwinClientThumbnail.state = 'isHeld';
       kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
       kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
-      console.log('BLAHBLAHBLAH');
+      if (isLarge) {
+        //kwinClientThumbnail.parent = dashboardDesktopChanger;
+        //kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+      }
+      //console.log('BLAHBLAHBLAH');
     }
     onReleased: {
       kwinClientThumbnail.state = 'notHeld';
       kwinClientThumbnail.clientObject.keepAbove = false;
-      console.log(Drag.drop());
-      console.log('TESTING');
-      console.log(kwinClientThumbnail.newDesktop);
-      console.log(kwinClientThumbnail.newActivity);
+      var globalMouse = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y);
+      var ldMouse = littleDesktopRepeater.mapFromGlobal(globalMouse.x, globalMouse.y)
+      var littleDesktop = desktopThumbnailGrid.childAt(ldMouse.x, ldMouse.y);
+      //console.log(littleDesktop);
+      //console.log(dash.childAt(ldMouse.x, ldMouse.y));
+      //console.log(littleDesktopRepeater.mapFromGlobal(globalMouse.x, globalMouse.y).x, littleDesktopRepeater.mapFromGlobal(globalMouse.x, globalMouse.y).y);
+      if (littleDesktop != null) {
+        if (littleDesktop.childAt(ldMouse.x, ldMouse.y) != null) {
+            if (littleDesktop.childAt(ldMouse.x, ldMouse.y).childAt(ldMouse.x, ldMouse.y) != null) {
+              //console.log(littleDesktop.id);
+              newDesktop = littleDesktop.childAt(ldMouse.x, ldMouse.y).childAt(ldMouse.x, ldMouse.y).desktop+1;
+            }
+        }
+      }
+      //console.log(Drag.drop());
+      //console.log('TESTING');
+      //console.log(kwinClientThumbnail.newDesktop);
+      //console.log(kwinClientThumbnail.newActivity);
+      if (isLarge) {
+        //kwinClientThumbnail.parent = littleDesktopRepeater;
+        //kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
+        kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
+      }
       // Let's see if the dropArea can handle this.
       if (kwinClientThumbnail.isSmall) {
         growthAnim.restart();
@@ -292,11 +315,11 @@ Item {
         //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
         // This is a read-only property, and so we're unable to change it from here.
         // Not sure if there's a model out there that would let us do it.
-        console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
+        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
         //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
         // for now, since we can't sort it.
         var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
-        console.log(kwinClientThumbnail.clientObject.activities);
+        //console.log(kwinClientThumbnail.clientObject.activities);
         //returnAnim.running = true;
         kwinClientThumbnail.x = kwinClientThumbnail.originalX;
         kwinClientThumbnail.y = kwinClientThumbnail.originalY;
@@ -336,15 +359,16 @@ Item {
     workspace.numberDesktopsChanged.connect(callUpdateGrid);
     workspace.currentDesktopChanged.connect(callUpdateGrid);
     workspace.clientRemoved.connect(disconnectAllSignals);
+    kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
-    callUpdateGrid();
+    //callUpdateGrid();
   }
 
   function disconnectAllSignals(c) {
-    console.log(c);
+    //console.log(c);
     if (c) {
       if (c.windowId == kwinClientThumbnail.clientId) {
-        console.log('KILLING MYSELF');
+        //console.log('KILLING MYSELF');
         // Yes, we even have to disconnect this.
         workspace.clientRemoved.disconnect(disconnectAllSignals);
         //kwinClientThumbnail.onParentChanged.disconnect(callUpdateGrid);
@@ -413,8 +437,6 @@ Item {
         kwinClientThumbnail.visible = true;
       }
     } else if (state == 'invisible') {
-    //} else {
-      // break it for now.
       kwinThumbnailRenderWindow.wId = -1;
       actualThumbnail.visible = false;
       kwinThumbnailRenderWindow.visible = false;
@@ -426,17 +448,18 @@ Item {
   function resizeToLarge() {
     kwinClientThumbnail.x = kwinClientThumbnail.clientRealX; //- (kwinClientThumbnail.currentDesktop*(dashboard.screenWidth+10));
     kwinClientThumbnail.y = kwinClientThumbnail.clientRealY;
-    console.log(kwinClientThumbnail.clientRealX);
-    console.log('ABOVE ME');
+    //console.log(kwinClientThumbnail.clientRealX);
+    //console.log('ABOVE ME');
     updateSize(kwinClientThumbnail.clientRealHeight+4, kwinClientThumbnail.clientRealWidth+4);
     //kwinClientThumbnail.width = kwinClientThumbnail.clientRealWidth;
     //kwinClientThumbnail.height = kwinClientThumbnail.clientRealHeight;
   }
 
     function callUpdateGrid() {
-      console.log('client!');
-      console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
+      //console.log('client!');
+      //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
       // First, update the client size.
+      kwinClientThumbnail.currentDesktop = kwinClientThumbnail.clientObject.desktop;
       if ((kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') && mainBackground.state == 'visible') {
         if (kwinClientThumbnail.isLarge) {
           if (kwinClientThumbnail.clientObject.desktop > -1) {
@@ -466,8 +489,8 @@ Item {
           }
         }
       } else {
-        console.log('REPARENTING');
-        console.log('MAKE ME INVISIBLE');
+        //console.log('REPARENTING');
+        //console.log('MAKE ME INVISIBLE');
         kwinClientThumbnail.toggleVisible('invisible');
         //kwinClientThumbnail.visible = false;
         //actualThumbnail.visible = false;
@@ -479,8 +502,8 @@ Item {
       //console.log(x, y);
       // If we drag it out of the bar, send it to the current desktop.
       if (y > dash.gridHeight) {
-        console.log('Baby bitch');
-        console.log(workspace.currentDesktop);
+        //console.log('Baby bitch');
+        //console.log(workspace.currentDesktop);
         return workspace.currentDesktop;
       }
       for (var d = 0; d <= workspace.desktops; d++) {

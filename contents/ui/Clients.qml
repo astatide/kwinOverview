@@ -73,9 +73,12 @@ Item {
       kwinDesktopThumbnailContainer.isMain = true;
       kwinDesktopThumbnailContainer.visible = true;
       workspace.currentDesktopChanged.connect(kwinDesktopThumbnailContainer.swapGrids);
+      mainBackground.onStateChanged(kwinDesktopThumbnailContainer.hideOnDeactive);
       // This doesn't seem to actually... work.  Not sure why.
-      kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
-      console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
+      //kwinDesktopThumbnailContainer.onChildrenChanged.connect(kwinDesktopThumbnailContainer.updateGrid);
+      //console.log(Object.getOwnPropertyNames(kwinDesktopThumbnailContainer));
+      //kwinDesktopThumbnailContainer.swapGrids();
+      //kwinDesktopThumbnailContainer.updateGrid();
 
     }
   }
@@ -89,13 +92,22 @@ Item {
     }
   }
 
+  function hideOnDeactive() {
+    if (mainBackground.state == 'invisible') {
+        kwinDesktopThumbnailContainer.visible = false;
+    } else {
+      swapGrids();
+    }
+  }
+
   function swapGrids(oldDesktop, newDesktop) {
-    console.log('WHICH ONE IS WHICH!?');
-    console.log(oldDesktop, newDesktop);
+    //console.log('WHICH ONE IS WHICH!?');
+    //console.log(oldDesktop, newDesktop);
       // Show everything except for the current desktop and the one we're transitioning into.
       if (!kwinDesktopThumbnailContainer.isLarge) {
         if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
           kwinDesktopThumbnailContainer.visible = false;
+          makeVisibleTimer.stop();
         }
         if (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
           //if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop || oldDesktop+1 < kwinDesktopThumbnailContainer.desktop) {
@@ -203,8 +215,8 @@ Item {
     nWidth = height/rows*(clientGridLayout.children[c].width/clientGridLayout.children[c].height);
     y = (cHeight[c]*(nHeight+spacing)) + ((kwinDesktopThumbnailContainer.height - (height+(spacing*rows)))/2);
     x = cWidth[c];
-    console.log('testing width');
-    console.log(cWidth);
+    //console.log('testing width');
+    //console.log(cWidth);
     return [nHeight, nWidth, x, y];
   }
 
@@ -214,7 +226,7 @@ Item {
     // handle all of it.  The work around is working, at least.
     clientGridLayout.rows = clientGridLayout._returnMatrixSize();
     clientGridLayout.columns = clientGridLayout._returnMatrixSize();
-    console.log('BEGIN: YOU SHOULD SEE THIS');
+    //console.log('BEGIN: YOU SHOULD SEE THIS');
     var c;
     for (c = 0; c < clientGridLayout.children.length; c++) {
       //clientGridLayout.children[c].updateSize((kwinDesktopThumbnailContainer.height / (clientGridLayout.columns))-clientGridLayout.spacing, (kwinDesktopThumbnailContainer.width / (clientGridLayout.rows))-clientGridLayout.spacing);
@@ -233,6 +245,6 @@ Item {
       clientGridLayout.children[c].children[1].width = kwinDesktopThumbnailContainer.width / clientGridLayout._returnMatrixSize();*/
       // We should also calculate the x, y pos.
     }
-    console.log('END: YOU SHOULD SEE THIS');
+    //console.log('END: YOU SHOULD SEE THIS');
   }
 }

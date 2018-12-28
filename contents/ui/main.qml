@@ -44,6 +44,7 @@ Window {
 			property int screenHeight: 0
 			property var screenRatio: 0
 			property int dockHeight: 0
+			property var newDesktop: -1
 
 			property var clientsVisible: { new Array }
 
@@ -267,15 +268,15 @@ Window {
 											opacity: 0.5
 										}
 										onEntered: {
-											console.log('ENTERING!');
+											//console.log('ENTERING!');
 											//console.log(Object.getOwnPropertyNames(drag.source));
 											//drag.source.newDesktop = littleDesktopContainer.desktop+1;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 										onExited: {
-											console.log('LEAVING');
+											//console.log('LEAVING');
 											drag.source.newDesktop = workspace.currentDesktop; //drag.source.currentDesktop;
-											console.log(drag.source.newDesktop);
+											//console.log(drag.source.newDesktop);
 										}
 									}
 								}
@@ -292,16 +293,6 @@ Window {
 							});
 						}
 				}
-					Search {
-						id: searchFieldAndResults
-						// Don't show until we start typing.
-						visible: false
-						y: dashboardDesktopChanger.dash.height + 30
-						height: (dashboard.screenHeight - dashboardDesktopChanger.dash.height - 30 - 15) - dashboard.dockHeight
-						width: dashboard.screenWidth
-						property int textHeight: 24
-						anchors.left: parent.left
-					}
 					Rectangle {
 						//anchors.fill: parent
 						id: foregroundDarken
@@ -351,21 +342,10 @@ Window {
 		//flags: Qt.WindowStaysOnTopHint
 		//location: Qt.application.layoutDirection === Qt.RightToLeft ? PlasmaCore.Types.RightEdge : PlasmaCore.Types.LeftEdge
 		x: 0
-		//BackgroundHints: 1
 		y: 0
-		//color: 'black'
 		opacity: 1
-		//visibility: Window.Fullscreen
-		// Start disabled.  toggleBoth sets this appropriately.
-		//height: 100 * dashboard.ScalingFactor
-		//width: dashboard.screenWidth
 		height: (100+20) * dashboard.scalingFactor
 		width: dashboard.screenWidth
-		//height: 1080
-		//maximumHeight: (100+20) * dashboard.scalingFactor
-		//maximumWidth: 1980
-		// Here, we're going to build up the desktops and thumbnails.
-		// For each entry here, we want nDesktops in the first row, and one in the second.
 
 		Item {
 			id: dash
@@ -496,6 +476,8 @@ Window {
 								MouseArea {
 									id: littleDesktopGridMouseArea
 									anchors.fill: parent
+									hoverEnabled: true
+									preventStealing: true
 									onClicked: {
 										// We only want to disable the dashboard when we double click on the item
 										// or when we're currently on said desktop and are 'sure'.
@@ -504,6 +486,15 @@ Window {
 										} else {
 												toggleBoth();
 										}
+									}
+									onEntered: {
+										console.log('ENTERING!');
+										//console.log(Object.getOwnPropertyNames(drag.source));
+										dashboard.newDesktop = littleDesktopContainer.desktop+1;
+										//console.log(drag.source.newDesktop);
+									}
+									onExited: {
+										dashboard.newDesktop = -1;
 									}
 								}
 							Clients {
@@ -603,7 +594,7 @@ Window {
 						anchors.fill: parent
 						id: plusButtonMouseArea
 						onPressed: {
-							console.log('yay');
+							//console.log('yay');
 							actualPlusButton.color = 'grey';
 						}
 						onReleased: {
@@ -637,7 +628,7 @@ Window {
 						anchors.fill: parent
 						id: minusButtonMouseArea
 						onPressed: {
-							console.log('yay');
+							//console.log('yay');
 							actualMinusButton.color = 'grey';
 						}
 						onReleased: {
@@ -680,7 +671,7 @@ Window {
 			enableVisibleClients();
 			// Make sure we add new thumbnails as necessary.
 			workspace.clientAdded.connect(function (c) {
-				console.log(c);
+				//console.log(c);
 				CreateClients.createNewClientThumbnails(
 					desktopThumbnailGrid,
 					dashboard,
@@ -726,7 +717,7 @@ Window {
 
 		function disableVisibleClients() {
 			var c;
-			console.log('BLAHLABLAH');
+			//console.log('BLAHLABLAH');
 							//workspace.showDesktop()
 			for (c = 0; c < workspace.clientList().length; c++) {
 				// We're just hiding it by making it invisible.
@@ -992,22 +983,13 @@ Window {
 			}
 		}
 		function toggleBoth() {
-			console.log('blah');
-			console.log(dashboardDesktopChanger.flags)
-			console.log(Qt.X11BypassWindowManagerHint)
+			//console.log('blah');
+			//console.log(dashboardDesktopChanger.flags)
+			//console.log(Qt.X11BypassWindowManagerHint)
 			if (mainBackground.state == 'visible') {
-				//mainBackground.state = 'invisible';
 				endAnim.restart();
 				dashboardDesktopChanger.enableVisibleClients();
-				//mainContainer.height = 0
-				//mainContainer.width = 0
-				//mainContainer.visible = false
-				//dashboardDesktopChanger.flags = 1023;
-				//dashboardDesktopChanger.flags = Qt.X11BypassWindowManagerHint
-				//dashboardDesktopChanger.dashEndAnim.restart();
 			} else if (mainBackground.state == 'invisible') {
-				//dashboard.flags = Qt.X11BypassWindowManagerHint;
-				//dashboard.requestActivate();
 				dashboardDesktopChanger.disableVisibleClients();
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
@@ -1096,7 +1078,7 @@ Window {
 			mainBackground.visible = false;
 			mainBackground.state = 'invisible';
 			currentDesktopGridThumbnailContainer.state = 'showDesktop';
-			console.log('Hey, did it work?');
+			//console.log('Hey, did it work?');
 
 			// disable!
 
@@ -1111,8 +1093,8 @@ Window {
 				);
 			}
 			// Make the big ones.
-			height: dashboard.screenHeight - dashboardDesktopChanger.dash.gridHeight - 30
-			width: dashboard.screenWidth
+			//height: dashboard.screenHeight - dashboardDesktopChanger.dash.gridHeight - 30
+			//width: dashboard.screenWidth
 		}
 }
 /*
