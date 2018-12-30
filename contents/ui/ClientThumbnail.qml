@@ -149,7 +149,7 @@ Item {
       color: 'black'
       opacity: 0.5
       scale: 1
-      visible: true
+      visible: false
       clip: true
     }
   }
@@ -471,7 +471,7 @@ Item {
                 kwinClientThumbnail.toggleVisible('visible');
                 kwinClientThumbnail.resizeToLarge();
               } else {
-                //kwinClientThumbnail.toggleVisible('invisible');
+                kwinClientThumbnail.toggleVisible('invisible');
               }
               // Now we'll try and adjust for the whole... thing.
               //kwinClientThumbnail.clientRealWidth = kwinClientThumbnail.clientObject.width+4;

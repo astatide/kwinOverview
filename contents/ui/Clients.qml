@@ -49,8 +49,8 @@ Item {
     onRowsChanged: {
       testRows.start();
     }
-    NumberAnimation { id: testRows; property: "y"; duration: 400; easing.type: Easing.OutBounce }
-    NumberAnimation on columns { property: "x"; duration: 400; easing.type: Easing.OutBounce }
+    NumberAnimation { id: testRows; property: "y"; duration: 200; easing.type: Easing.OutBounce }
+    NumberAnimation on columns { property: "x"; duration: 200; easing.type: Easing.OutBounce }
 
     function _onDesktop() {
       return clientGridLayout.children.length;
@@ -89,7 +89,7 @@ Item {
 
   Timer {
     id: makeVisibleTimer
-    interval: 1000
+    interval: 300
     onTriggered: {
       kwinDesktopThumbnailContainer.visible = true;
     }
@@ -222,13 +222,37 @@ Item {
       cHeight.push(row);
       cWidth.push(currentWidth);
     }
+    var scaleForOne = 1;
     if (row == 0 || row == 1) {
+      //cHeight = [0];
+      //cWidth = [0];
+      //wAdd = [0];
       wAdd.push((width - currentWidth)/2);
+      /*currentWidth = 0;
+      for (d = 0; d < clientGridLayout.children.length; d++) {
+        // See what the size would be if we stopped here.
+        if (clientGridLayout.children[d].clientObject.activities == workspace.currentActivity || clientGridLayout.children[d].clientObject.activities == '') {
+              currentWidth = currentWidth + ((height * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) + spacing;
+        }
+        cHeight.push(0);
+        //cWidth.push(currentWidth/width);
+      }
+      for (d = 0; d < clientGridLayout.children.length; d++) {
+        // See what the size would be if we stopped here.
+        //cHeight.push(0);
+        cWidth.push((((clientGridLayout.children[d].width/clientGridLayout.children[d].height))) * height / (currentWidth/width));
+      }
+      wAdd.push((width - (currentWidth))/2); //- ((height/(rows) * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))) - spacing))/2); // - ((height/rows * (clientGridLayout.children[d].width/clientGridLayout.children[d].height))))/2);
+      if (clientGridLayout.children.length != 1) {
+        rows = (currentWidth/width);
+        //scaleForOne = currentWidth/width;
+      }*/
+
     }
     nHeight = (height)/rows;
     nWidth = height/rows*(clientGridLayout.children[c].width/clientGridLayout.children[c].height);
-    y = (cHeight[c]*(nHeight+spacing)) + ((kwinDesktopThumbnailContainer.height - (height+(spacing*rows)))/2);
-    x = cWidth[c] + wAdd[cHeight[c]];
+    x = ((cWidth[c]) + wAdd[cHeight[c]]);
+    y = ((cHeight[c]*(nHeight+spacing)) + ((kwinDesktopThumbnailContainer.height - (height+(spacing*rows)))/2))*scaleForOne;
     if (clientGridLayout.children.length == rows && rows != 1) {
       y = y + nHeight/2
     }

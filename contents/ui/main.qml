@@ -283,14 +283,14 @@ Window {
 							}
 						}
 						Component.onCompleted: {
-							workspace.currentDesktopChanged.connect(function () {
+							/*workspace.currentDesktopChanged.connect(function () {
 								console.log(Object.getOwnPropertyNames(currentDesktopGridThumbnailContainer));
 								console.log("Fuck offffffffffff");
 								//currentDesktopGridThumbnailContainer.contentX = (workspace.currentDesktop-1) * dashboard.screenWidth;
 								console.log(currentDesktopGridThumbnailContainer.contentX);
 								//currentDesktopGridThumbnailContainer.flick(-dashboard.screenWidth*100, 0);
 								//currentDesktopGridThumbnailContainer.x = workspace.desktop+1 * dashboard.screenWidth;
-							});
+							});*/
 						}
 				}
 					Rectangle {
@@ -645,7 +645,7 @@ Window {
 			//dashboard.requestActivate();
 			//searchFieldAndResults.children[1].forceActiveFocus();
 			populateVisibleClients();
-			disableVisibleClients();
+			//disableVisibleClients();
 
 			// disable!
 
@@ -668,10 +668,15 @@ Window {
 				dash.gridHeight*dashboard.screenRatio*.95,
 				false
 			)
-			enableVisibleClients();
+			//enableVisibleClients();
 			// Make sure we add new thumbnails as necessary.
 			workspace.clientAdded.connect(function (c) {
 				//console.log(c);
+				// Make sure we add new clients to the visible list.
+				//var d = workspace.clientList().length;
+				//dashboard.clientsVisible.push(d);
+				//dashboard.clientsVisible[d] = true; // workspace.clientList()[d].minimized;
+				populateVisibleClients();
 				CreateClients.createNewClientThumbnails(
 					desktopThumbnailGrid,
 					dashboard,
@@ -705,9 +710,12 @@ Window {
 				//currentDesktopGrid.itemAt(d).children[0].children[1].updateGrid();
 				//littleDesktopRepeater.itemAt(d).children[0].children[2].updateGrid();
 			}
+			toggleBoth();
+			toggleBoth();
 		}
 		function populateVisibleClients() {
 			// We need to build the list.
+			console.log('POPULATIONG CLIENTS');
 			var c;
 			dashboard.clientsVisible = new Array(workspace.clientList().length);
 			for (c = 0; c < workspace.clientList().length; c++) {
@@ -722,7 +730,7 @@ Window {
 			for (c = 0; c < workspace.clientList().length; c++) {
 				// We're just hiding it by making it invisible.
 				workspace.clientList()[c].opacity = 0;
-				workspace.clientList()[c].minimized = true;
+				//workspace.clientList()[c].minimized = true;
 				//workspace.clientList()[c].clientSideDecorated = !workspace.clientList()[c].clientSideDecorated;
 				workspace.clientList()[c].oldNoBorder = workspace.clientList()[c].noBorder;
 				workspace.clientList()[c].noBorder = true;
@@ -736,7 +744,7 @@ Window {
 				if (dashboard.clientsVisible[c] == false) {
 					// Better than hiding!
 					workspace.clientList()[c].opacity = 1;
-					workspace.clientList()[c].minimized = false;
+					//workspace.clientList()[c].minimized = false;
 					// FINALLY!  noBorder removes the decoration
 					// If we leave the decoration up, then the thumbnail sizing is really weird.
 					// We'll have to sort out the issues regarding borders and spacing and blah blah blah, but.
@@ -986,11 +994,14 @@ Window {
 			//console.log('blah');
 			//console.log(dashboardDesktopChanger.flags)
 			//console.log(Qt.X11BypassWindowManagerHint)
+			dashboardDesktopChanger.populateVisibleClients();
 			if (mainBackground.state == 'visible') {
 				endAnim.restart();
+				//workspace.showDesktop();
 				dashboardDesktopChanger.enableVisibleClients();
 			} else if (mainBackground.state == 'invisible') {
 				dashboardDesktopChanger.disableVisibleClients();
+				//workspace.showDesktop();
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
 				dashboard.height = dashboard.screenHeight;
@@ -1075,7 +1086,7 @@ Window {
 			dashboard.screenWidth = dashboard.activeScreen.width;
 			dashboard.screenHeight = dashboard.activeScreen.height + dashboard._getDockHeight();
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
-			mainBackground.visible = false;
+			//mainBackground.visible = false;
 			mainBackground.state = 'invisible';
 			currentDesktopGridThumbnailContainer.state = 'showDesktop';
 			//console.log('Hey, did it work?');
