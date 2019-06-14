@@ -82,185 +82,12 @@ Window {
 				name: 'invisible'
 			}
 		]
-		NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
-		NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
+		//NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
+		//NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
 
 		ActivitiesContainer {
 			// Instantiate our activity container.
 			id: allActivities
-		}
-
-		Item {
-			id: dashboardBackground
-			anchors.fill: parent
-			property string background: { return allActivities.getCurrentBackground() }
-			x: 0
-			y: 0
-			visible: true
-			Image {
-				id: firstBackgroundDesktop
-				anchors.fill: parent
-				smooth: true
-				fillMode: Image.PreserveAspectCrop
-				source: dashboardBackground.background
-				height: dashboard.screenHeight
-				width: dashboard.screenWidth
-				opacity: 1
-				asynchronous: true
-				cache: false
-				visible: false
-			}
-
-			Image {
-				id: secondBackgroundDesktop
-				anchors.fill: parent
-				smooth: true
-				fillMode: Image.PreserveAspectCrop
-				source: dashboardBackground.background
-				height: dashboard.screenHeight
-				width: dashboard.screenWidth
-				opacity: 0
-				asynchronous: true
-				cache: false
-				visible: false
-
-			}
-
-			FastBlur {
-				id: blurBackground
-				anchors.fill: secondBackgroundDesktop
-				source: secondBackgroundDesktop
-				radius: 32
-				visible: false
-
-			}
-
-			Rectangle {
-				anchors.fill: parent
-				id: backgroundDarken
-				opacity: 0.5
-				color: 'black'
-				height: dashboard.screenHeight + dashboard.dockHeight
-				width: dashboard.screenWidth
-				visible: false
-
-			}
-			Flickable {
-				id: currentDesktopGridThumbnailContainer
-				anchors.fill: parent
-
-				property int spacing: 10
-				opacity: 1
-				visible: true
-				height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
-				width: dashboard.width
-				contentHeight: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
-				contentWidth: dashboard.width*workspace.desktops
-				interactive: false
-
-				y: 0
-				x: 0
-				// Aha, this is a pointer
-				contentX: (workspace.currentDesktop-1) * (dashboard.screenWidth+spacing)
-				Behavior on contentX {
-					NumberAnimation {
-						 duration: 250
-						}
-				}
-
-				MouseArea {
-					enabled: true
-					id: flickTest
-					anchors.fill: parent
-					onClicked: {
-						if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
-							workspace.currentDesktop = bigDesktopContainer.desktop+1;
-						} else {
-								toggleBoth();
-						}
-					}
-				}
-				Grid {
-					// This is just for each of our desktops.
-					id: bigDesktopThumbnailGridBackgrounds
-					visible: true
-					rows: 1
-					x: 0
-					y: 0
-					spacing: currentDesktopGridThumbnailContainer.spacing
-					height: currentDesktopGridThumbnailContainer.height
-					width: currentDesktopGridThumbnailContainer.width
-
-					columns: {
-							return workspace.desktops;
-					}
-					Repeater {
-						// Now, we build up our desktops.
-						model: workspace.desktops
-						id: currentDesktopGrid
-						Item {
-							id: bigDesktopContainer
-							visible: true
-							property int desktop: model.index
-							height: currentDesktopGridThumbnailContainer.height
-							width: currentDesktopGridThumbnailContainer.width
-								MouseArea {
-									enabled: false
-									id: bigDesktopGridMouseArea
-									anchors.fill: parent
-									onClicked: {
-										if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
-											workspace.currentDesktop = bigDesktopContainer.desktop+1;
-										} else {
-												toggleBoth();
-										}
-									}
-								}
-							Clients {
-								//anchors.fill: parent
-								id: bigDesktopClients
-								desktop: bigDesktopContainer.desktop
-								height: currentDesktopGridThumbnailContainer.height
-								width: currentDesktopGridThumbnailContainer.width
-								visible: false
-								isLarge: true
-							}
-							// Can we use this?
-							DropArea {
-								id: bigDesktopDropArea
-								anchors.fill: parent
-								x: 0
-								y: 0
-								height: currentDesktopGridThumbnailContainer.height
-								width: currentDesktopGridThumbnailContainer.width
-								Rectangle {
-									anchors.fill: parent
-									visible: false
-									color: "green"
-									opacity: 0.5
-								}
-								onEntered: {
-								}
-								onExited: {
-									drag.source.newDesktop = workspace.currentDesktop; //drag.source.currentDesktop;
-								}
-							}
-						}
-					}
-				}
-				Component.onCompleted: {
-				}
-		}
-			Rectangle {
-				id: foregroundDarken
-				visible: true
-				opacity: 0
-				x: 0
-				y: 0
-				color: 'black'
-				height: dashboard.screenHeight
-				width: dashboard.screenWidth
-			}
 		}
 	}
 	Timer {
@@ -281,6 +108,7 @@ Window {
 		opacity: 1
 		height: (100+20) * dashboard.scalingFactor
 		width: dashboard.screenWidth
+		property string background: { return allActivities.getCurrentBackground() }
 
 		Item {
 			id: dash
@@ -377,7 +205,7 @@ Window {
 								id: littleDesktopBackground
 								mipmap: true
 								fillMode: Image.PreserveAspectCrop
-								source: dashboardBackground.background
+								source: dashboardDesktopChanger.background
 								height: desktopThumbnailGrid.height
 								width: dash.gridHeight*dashboard.screenRatio
 								x: 0
@@ -524,14 +352,6 @@ Window {
 		Component.onCompleted: {
 			populateVisibleClients();
 			CreateClients.createAllClientThumbnails(
-				currentDesktopGridThumbnailContainer,
-				dashboard,
-				6,
-				dashboard.height,
-				dashboard.width,
-				true
-			)
-			CreateClients.createAllClientThumbnails(
 				desktopThumbnailGrid,
 				dashboard,
 				6,
@@ -548,15 +368,6 @@ Window {
 					dash.gridHeight*.95,
 					dash.gridHeight*dashboard.screenRatio*.95,
 					false,
-					c
-				);
-				CreateClients.createNewClientThumbnails(
-					currentDesktopGridThumbnailContainer,
-					dashboard,
-					6,
-					dashboard.screenHeight - dash.gridHeight - 30,
-					dashboard.screenWidth,
-					true,
 					c
 				);
 			});
@@ -856,7 +667,6 @@ Window {
 			dashboard.screenHeight = dashboard.activeScreen.height + dashboard._getDockHeight();
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
 			mainBackground.state = 'invisible';
-			currentDesktopGridThumbnailContainer.state = 'showDesktop';
 
 			// Try and register a shortcut, maybe.
 			if (KWin.registerShortcut) {
