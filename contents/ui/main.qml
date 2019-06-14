@@ -20,263 +20,253 @@ import "../code/createClients.js" as CreateClients
 
 	// dashboard background.  Holds window thumbnails.  I hope.
 Window {
-	id: mainContainer
+	id: dashboard
 	visible: true
-	height: dashboard.screenHeight
+	height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 	width: dashboard.screenWidth
 	x: 0
 	y: 0
-	flags: Qt.WindowTransparentForInput //| Qt.X11BypassWindowManagerHint
-	Window {
-			id: dashboard
-			opacity: 1
-			visible: true
+	//flags: Qt.WindowTransparentForInput //| Qt.X11BypassWindowManagerHint
+	flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
+
+	color: '#00000000'
+
+	property var windowId: 0
+	property var scalingFactor: 2
+	property var activeScreen: 0
+	property int screenWidth: 0
+	property int screenHeight: 0
+	property var screenRatio: 0
+	property int dockHeight: 0
+	property var newDesktop: -1
+
+	property var clientsVisible: { new Array }
+	function _getDockHeight() {
+		// We have to account for any docks.  Which is a hassle, but eh.
+		var c;
+		var dockHeight = 0;
+		for (c = 0; c < workspace.clientList().length; c++) {
+			if (workspace.clientList()[c].dock) {
+				dockHeight = dockHeight + workspace.clientList()[c].height;
+			}
+		}
+		return dockHeight;
+	}
+	function returnNumberOfDesktops() {
+		return workspace.desktops;
+	}
+	Item {
+		id: mainBackground
+		anchors.fill: parent
+		x: 0
+		y: 0
+		opacity: 1
+
+
+		// This creates a mouseArea for the rectangle.  We change the height of our dock.
+		MouseArea {
+			anchors.fill: parent
+			enabled: true
+			onClicked: {
+				//mainContainer.toggleBoth();
+				dashboard.toggleBoth();
+			}
+		}
+
+		// First, we create some states: visible, and otherwise.
+		states: [
+			State {
+				name: 'visible'
+			},
+			State {
+				name: 'invisible'
+			}
+		]
+		NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
+		NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
+
+		ActivitiesContainer {
+			// Instantiate our activity container.
+			id: allActivities
+		}
+
+		Item {
+			id: dashboardBackground
+			anchors.fill: parent
+			property string background: { return allActivities.getCurrentBackground() }
 			x: 0
 			y: 0
-			flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
-			height: dashboard.screenHeight - (dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
-			width: dashboard.screenWidth
-			color: '#00000000'
-			property var windowId: 0
-			property var scalingFactor: 2
-			property var activeScreen: 0
-			property int screenWidth: 0
-			property int screenHeight: 0
-			property var screenRatio: 0
-			property int dockHeight: 0
-			property var newDesktop: -1
-
-			property var clientsVisible: { new Array }
-
-			function _getDockHeight() {
-				// We have to account for any docks.  Which is a hassle, but eh.
-				var c;
-				var dockHeight = 0;
-				for (c = 0; c < workspace.clientList().length; c++) {
-					if (workspace.clientList()[c].dock) {
-						dockHeight = dockHeight + workspace.clientList()[c].height;
-					}
-				}
-				return dockHeight;
+			visible: true
+			Image {
+				id: firstBackgroundDesktop
+				anchors.fill: parent
+				smooth: true
+				fillMode: Image.PreserveAspectCrop
+				source: dashboardBackground.background
+				height: dashboard.screenHeight
+				width: dashboard.screenWidth
+				opacity: 1
+				asynchronous: true
+				cache: false
+				visible: false
 			}
 
-			Item {
-				id: mainBackground
+			Image {
+				id: secondBackgroundDesktop
 				anchors.fill: parent
-				x: 0
-				y: 0
+				smooth: true
+				fillMode: Image.PreserveAspectCrop
+				source: dashboardBackground.background
+				height: dashboard.screenHeight
+				width: dashboard.screenWidth
+				opacity: 0
+				asynchronous: true
+				cache: false
+				visible: false
+
+			}
+
+			FastBlur {
+				id: blurBackground
+				anchors.fill: secondBackgroundDesktop
+				source: secondBackgroundDesktop
+				radius: 32
+				visible: false
+
+			}
+
+			Rectangle {
+				anchors.fill: parent
+				id: backgroundDarken
+				opacity: 0.5
+				color: 'black'
+				height: dashboard.screenHeight + dashboard.dockHeight
+				width: dashboard.screenWidth
+				visible: false
+
+			}
+			Flickable {
+				id: currentDesktopGridThumbnailContainer
+				anchors.fill: parent
+
+				property int spacing: 10
 				opacity: 1
+				visible: true
+				height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+				width: dashboard.width
+				contentHeight: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
+				contentWidth: dashboard.width*workspace.desktops
+				interactive: false
 
+				y: 0
+				x: 0
+				// Aha, this is a pointer
+				contentX: (workspace.currentDesktop-1) * (dashboard.screenWidth+spacing)
+				Behavior on contentX {
+					NumberAnimation {
+						 duration: 250
+						}
+				}
 
-				// This creates a mouseArea for the rectangle.  We change the height of our dock.
 				MouseArea {
-					anchors.fill: parent
 					enabled: true
-					onClicked: {
-						mainContainer.toggleBoth();
-					}
-				}
-
-				// First, we create some states: visible, and otherwise.
-				states: [
-					State {
-						name: 'visible'
-					},
-					State {
-						name: 'invisible'
-					}
-				]
-				NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
-				NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
-
-				ActivitiesContainer {
-					// Instantiate our activity container.
-					id: allActivities
-				}
-
-				Item {
-					id: dashboardBackground
+					id: flickTest
 					anchors.fill: parent
-					property string background: { return allActivities.getCurrentBackground() }
+					onClicked: {
+						if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
+							workspace.currentDesktop = bigDesktopContainer.desktop+1;
+						} else {
+								toggleBoth();
+						}
+					}
+				}
+				Grid {
+					// This is just for each of our desktops.
+					id: bigDesktopThumbnailGridBackgrounds
+					visible: true
+					rows: 1
 					x: 0
 					y: 0
-					visible: true
-					Image {
-						id: firstBackgroundDesktop
-						anchors.fill: parent
-						smooth: true
-						fillMode: Image.PreserveAspectCrop
-						source: dashboardBackground.background
-						height: dashboard.screenHeight
-						width: dashboard.screenWidth
-						opacity: 1
-						asynchronous: true
-						cache: false
-						visible: false
+					spacing: currentDesktopGridThumbnailContainer.spacing
+					height: currentDesktopGridThumbnailContainer.height
+					width: currentDesktopGridThumbnailContainer.width
+
+					columns: {
+							return workspace.desktops;
 					}
-
-					Image {
-						id: secondBackgroundDesktop
-						anchors.fill: parent
-						smooth: true
-						fillMode: Image.PreserveAspectCrop
-						source: dashboardBackground.background
-						height: dashboard.screenHeight
-						width: dashboard.screenWidth
-						opacity: 0
-						asynchronous: true
-						cache: false
-						visible: false
-
-					}
-
-					FastBlur {
-						id: blurBackground
-						anchors.fill: secondBackgroundDesktop
-						source: secondBackgroundDesktop
-						radius: 32
-						visible: false
-
-					}
-
-					Rectangle {
-						anchors.fill: parent
-						id: backgroundDarken
-						opacity: 0.5
-						color: 'black'
-						height: dashboard.screenHeight + dashboard.dockHeight
-						width: dashboard.screenWidth
-						visible: false
-
-					}
-					Flickable {
-						id: currentDesktopGridThumbnailContainer
-						anchors.fill: parent
-
-						property int spacing: 10
-						opacity: 1
-						visible: true
-						height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
-						width: dashboard.width
-						contentHeight: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
-						contentWidth: dashboard.width*workspace.desktops
-						interactive: false
-
-						y: 0
-						x: 0
-						// Aha, this is a pointer
-						contentX: (workspace.currentDesktop-1) * (dashboard.screenWidth+spacing)
-						Behavior on contentX {
-					 		NumberAnimation {
-								 duration: 250
-						 		}
-			 			}
-
-						MouseArea {
-							enabled: true
-							id: flickTest
-							anchors.fill: parent
-							onClicked: {
-								if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
-									workspace.currentDesktop = bigDesktopContainer.desktop+1;
-								} else {
-										toggleBoth();
-								}
-							}
-						}
-						Grid {
-							// This is just for each of our desktops.
-							id: bigDesktopThumbnailGridBackgrounds
+					Repeater {
+						// Now, we build up our desktops.
+						model: workspace.desktops
+						id: currentDesktopGrid
+						Item {
+							id: bigDesktopContainer
 							visible: true
-							rows: 1
-							x: 0
-							y: 0
-							spacing: currentDesktopGridThumbnailContainer.spacing
+							property int desktop: model.index
 							height: currentDesktopGridThumbnailContainer.height
 							width: currentDesktopGridThumbnailContainer.width
-
-							columns: {
-									return workspace.desktops;
-							}
-							Repeater {
-								// Now, we build up our desktops.
-								model: workspace.desktops
-								id: currentDesktopGrid
-								Item {
-									id: bigDesktopContainer
-									visible: true
-									property int desktop: model.index
-									height: currentDesktopGridThumbnailContainer.height
-									width: currentDesktopGridThumbnailContainer.width
-										MouseArea {
-											enabled: false
-											id: bigDesktopGridMouseArea
-											anchors.fill: parent
-											onClicked: {
-												if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
-													workspace.currentDesktop = bigDesktopContainer.desktop+1;
-												} else {
-														toggleBoth();
-												}
-											}
-										}
-									Clients {
-										//anchors.fill: parent
-										id: bigDesktopClients
-										desktop: bigDesktopContainer.desktop
-										height: currentDesktopGridThumbnailContainer.height
-										width: currentDesktopGridThumbnailContainer.width
-										visible: false
-										isLarge: true
-									}
-									// Can we use this?
-									DropArea {
-										id: bigDesktopDropArea
-										anchors.fill: parent
-										x: 0
-										y: 0
-										height: currentDesktopGridThumbnailContainer.height
-										width: currentDesktopGridThumbnailContainer.width
-										Rectangle {
-											anchors.fill: parent
-											visible: false
-											color: "green"
-											opacity: 0.5
-										}
-										onEntered: {
-										}
-										onExited: {
-											drag.source.newDesktop = workspace.currentDesktop; //drag.source.currentDesktop;
+								MouseArea {
+									enabled: false
+									id: bigDesktopGridMouseArea
+									anchors.fill: parent
+									onClicked: {
+										if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
+											workspace.currentDesktop = bigDesktopContainer.desktop+1;
+										} else {
+												toggleBoth();
 										}
 									}
 								}
+							Clients {
+								//anchors.fill: parent
+								id: bigDesktopClients
+								desktop: bigDesktopContainer.desktop
+								height: currentDesktopGridThumbnailContainer.height
+								width: currentDesktopGridThumbnailContainer.width
+								visible: false
+								isLarge: true
+							}
+							// Can we use this?
+							DropArea {
+								id: bigDesktopDropArea
+								anchors.fill: parent
+								x: 0
+								y: 0
+								height: currentDesktopGridThumbnailContainer.height
+								width: currentDesktopGridThumbnailContainer.width
+								Rectangle {
+									anchors.fill: parent
+									visible: false
+									color: "green"
+									opacity: 0.5
+								}
+								onEntered: {
+								}
+								onExited: {
+									drag.source.newDesktop = workspace.currentDesktop; //drag.source.currentDesktop;
+								}
 							}
 						}
-						Component.onCompleted: {
-						}
-				}
-					Rectangle {
-						id: foregroundDarken
-						visible: true
-						opacity: 0
-						x: 0
-						y: 0
-						color: 'black'
-						height: dashboard.screenHeight
-						width: dashboard.screenWidth
 					}
+				}
+				Component.onCompleted: {
+				}
+		}
+			Rectangle {
+				id: foregroundDarken
+				visible: true
+				opacity: 0
+				x: 0
+				y: 0
+				color: 'black'
+				height: dashboard.screenHeight
+				width: dashboard.screenWidth
+			}
 		}
 	}
-
 	Timer {
 		id: timer
 		interval: 200
 		onTriggered: {
-		}
-	}
-
-		function returnNumberOfDesktops() {
-			return workspace.desktops;
 		}
 	}
 
@@ -809,8 +799,8 @@ Window {
 			} else if (mainBackground.state == 'invisible') {
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
-				mainContainer.height = dashboard.screenHeight;
-				mainContainer.width = dashboard.screenWidth;
+				dashboard.height = dashboard.screenHeight;
+				dashboard.width = dashboard.screenWidth;
 				initAnim.restart();
 				mainBackground.state = 'visible';
 				mainBackground.visible = true;
