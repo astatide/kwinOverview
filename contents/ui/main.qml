@@ -38,7 +38,7 @@ Window {
 			width: dashboard.screenWidth
 			color: '#00000000'
 			property var windowId: 0
-			property var scalingFactor: 1.2
+			property var scalingFactor: 2
 			property var activeScreen: 0
 			property int screenWidth: 0
 			property int screenHeight: 0
@@ -62,11 +62,7 @@ Window {
 
 			Item {
 				id: mainBackground
-				//width: dashboard.screenWidth
 				anchors.fill: parent
-				//focus: true
-		    //height: dashboard.height //+ dashboard.dockHeight
-				//width: dashboard.width
 				x: 0
 				y: 0
 				opacity: 1
@@ -92,7 +88,6 @@ Window {
 				]
 				NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
 				NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
-				// These are just temporary to get it out of my way.  We'll change them later.
 
 				ActivitiesContainer {
 					// Instantiate our activity container.
@@ -102,8 +97,6 @@ Window {
 				Item {
 					id: dashboardBackground
 					anchors.fill: parent
-					//height: dashboard.height
-					//width: dashboard.width
 					property string background: { return allActivities.getCurrentBackground() }
 					x: 0
 					y: 0
@@ -117,7 +110,6 @@ Window {
 						height: dashboard.screenHeight
 						width: dashboard.screenWidth
 						opacity: 1
-						// Maybe?
 						asynchronous: true
 						cache: false
 						visible: false
@@ -132,14 +124,12 @@ Window {
 						height: dashboard.screenHeight
 						width: dashboard.screenWidth
 						opacity: 0
-						// Maybe?
 						asynchronous: true
 						cache: false
 						visible: false
 
 					}
 
-					// Doesn't seem to like this.
 					FastBlur {
 						id: blurBackground
 						anchors.fill: secondBackgroundDesktop
@@ -159,8 +149,6 @@ Window {
 						visible: false
 
 					}
-				//}
-					// This seems pretty nice, honestly.
 					Flickable {
 						id: currentDesktopGridThumbnailContainer
 						anchors.fill: parent
@@ -168,10 +156,8 @@ Window {
 						property int spacing: 10
 						opacity: 1
 						visible: true
-						//height: dashboard.height
 						height: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						width: dashboard.width
-						//contentX: workspace.desktop+1 * dashboard.screenWidth
 						contentHeight: dashboard.screenHeight //- 220//(dashboardActivityChanger.height + dashboardDesktopChanger.height)*dashboard.scalingFactor
 						contentWidth: dashboard.width*workspace.desktops
 						interactive: false
@@ -183,7 +169,6 @@ Window {
 						Behavior on contentX {
 					 		NumberAnimation {
 								 duration: 250
-								 //easing.type: Easing.OutBounce
 						 		}
 			 			}
 
@@ -192,8 +177,6 @@ Window {
 							id: flickTest
 							anchors.fill: parent
 							onClicked: {
-								// We only want to disable the dashboard when we double click on the item
-								// or when we'r100, //e currently on said desktop and are 'sure'.
 								if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
 									workspace.currentDesktop = bigDesktopContainer.desktop+1;
 								} else {
@@ -203,7 +186,6 @@ Window {
 						}
 						Grid {
 							// This is just for each of our desktops.
-							//id: newRepeater
 							id: bigDesktopThumbnailGridBackgrounds
 							visible: true
 							rows: 1
@@ -218,7 +200,6 @@ Window {
 							}
 							Repeater {
 								// Now, we build up our desktops.
-								//model: dashboard.returnNumberOfDesktops()
 								model: workspace.desktops
 								id: currentDesktopGrid
 								Item {
@@ -232,8 +213,6 @@ Window {
 											id: bigDesktopGridMouseArea
 											anchors.fill: parent
 											onClicked: {
-												// We only want to disable the dashboard when we double click on the item
-												// or when we'r100, //e currently on said desktop and are 'sure'.
 												if (bigDesktopContainer.desktop != workspace.currentDesktop-1) {
 													workspace.currentDesktop = bigDesktopContainer.desktop+1;
 												} else {
@@ -249,13 +228,10 @@ Window {
 										width: currentDesktopGridThumbnailContainer.width
 										visible: false
 										isLarge: true
-										//height: dashboard.screenHeight - dash.gridHeight - 30
-										//width: dashboard.screenWidth
 									}
 									// Can we use this?
 									DropArea {
 										id: bigDesktopDropArea
-										//anchors.fill: littleDesktopBackground
 										anchors.fill: parent
 										x: 0
 										y: 0
@@ -268,39 +244,23 @@ Window {
 											opacity: 0.5
 										}
 										onEntered: {
-											//console.log('ENTERING!');
-											//console.log(Object.getOwnPropertyNames(drag.source));
-											//drag.source.newDesktop = littleDesktopContainer.desktop+1;
-											//console.log(drag.source.newDesktop);
 										}
 										onExited: {
-											//console.log('LEAVING');
 											drag.source.newDesktop = workspace.currentDesktop; //drag.source.currentDesktop;
-											//console.log(drag.source.newDesktop);
 										}
 									}
 								}
 							}
 						}
 						Component.onCompleted: {
-							/*workspace.currentDesktopChanged.connect(function () {
-								console.log(Object.getOwnPropertyNames(currentDesktopGridThumbnailContainer));
-								console.log("Fuck offffffffffff");
-								//currentDesktopGridThumbnailContainer.contentX = (workspace.currentDesktop-1) * dashboard.screenWidth;
-								console.log(currentDesktopGridThumbnailContainer.contentX);
-								//currentDesktopGridThumbnailContainer.flick(-dashboard.screenWidth*100, 0);
-								//currentDesktopGridThumbnailContainer.x = workspace.desktop+1 * dashboard.screenWidth;
-							});*/
 						}
 				}
 					Rectangle {
-						//anchors.fill: parent
 						id: foregroundDarken
 						visible: true
 						opacity: 0
 						x: 0
 						y: 0
-						//clip: true
 						color: 'black'
 						height: dashboard.screenHeight
 						width: dashboard.screenWidth
@@ -311,11 +271,7 @@ Window {
 	Timer {
 		id: timer
 		interval: 200
-		//onTriggered: TextField.searchTextChanged()
 		onTriggered: {
-			// I suspect that we have problems reacquiring focus on a desktop change.
-			//dashboard.requestActivate();
-			//searchFieldAndResults.children[1].forceActiveFocus();
 		}
 	}
 
@@ -326,21 +282,10 @@ Window {
 
 	Window {
 		id: dashboardDesktopChanger
-		//opacity: 1
-		//flags: Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint // won't work without it, apparently.
-		//flags: Qt.SplashScreen || Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // won't work without it, apparently.
-		//flags: Qt.FramelessWindowHint
-		//flags: Qt.ToolTip
-		//flags: Qt.X11BypassWindowManagerHint
-		//flags: Qt.X11BypassWindowManagerHint | Qt.WA_TranslucentBackground | Qt.WindowTransparentForInput | Qt.WA_OpaquePaintEvent | Qt.WA_PaintOnScreen
 		flags: Qt.WA_TranslucentBackground | Qt.WA_OpaquePaintEvent | Qt.WindowMaximized | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
 		color: '#00000000'
 		visible: true
 		title: "Yay"
-		//attributes: Qt.WA_TranslucentBackground
-		//type: PlasmaCore.Dialog.Dock
-		//flags: Qt.WindowStaysOnTopHint
-		//location: Qt.application.layoutDirection === Qt.RightToLeft ? PlasmaCore.Types.RightEdge : PlasmaCore.Types.LeftEdge
 		x: 0
 		y: 0
 		opacity: 1
@@ -354,26 +299,20 @@ Window {
 
 			// When y is set, we start this animation.  This gracefully moves the dock into position, ignoring the whole 'slide' thing.
 			width: dashboard.screenWidth
-			//height: main.screenHeight
 			height: 120 * dashboard.scalingFactor
 			property int gridHeight: 100 * dashboard.scalingFactor
 			y: 0 //-120 * dashboard.scalingFactor
-			//anchors.fill: dashboard.mainBackground
-			//anchors.fill: parent
+
 
 			PlasmaCore.Dialog {
 				id: dashPlasmaBack
 				visible: true
-				//height: 120*dashboard.scalingFactor
-				//width: dashboard.screenWidth
 				opacity: 0.5
 				y: 0
 				x: 0
 				flags: Qt.X11BypassWindowManagerHint
-				//anchors.fill: parent
 				Rectangle {
 					opacity: 0
-					//visible: dashboard.visible
 					visible: false
 					height: dash.height - 10
 					width: dashboard.screenWidth
@@ -382,29 +321,19 @@ Window {
 					y: 0
 				}
 			}
-			//  This is where wesetWindowFlags(Qt::X11BypassWindowManagerHint)'ll build up the grid.  I like to think, anyway.
 
-
-			// This seems pretty nice, honestly.
 			Flickable {
 				id: desktopThumbnailGrid
 				anchors.top: parent.top
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.leftMargin: 5
-				//anchors.fill: parent
-
 				property int spacing: 10
 				height: dash.gridHeight
 				contentHeight: desktopThumbnailGridBackgrounds.height
 				contentWidth: desktopThumbnailGridBackgrounds.width
-				//boundsMovement: Flickable.StopAtBounds
-				//boundsBehavior: Flickable.DragAndOvershootBounds
 
-				//visible: true
-				//x: 10
 				y: 0
-				// This is our active rectangle.  We shift it when our active desktop changes.
 				Rectangle {
 					id: activeDesktopIndicator
 					// We just want this to stand out, currently.
@@ -413,11 +342,8 @@ Window {
 					visible: true
 					scale: 1
 					clip: true
-					//x: -2
 					x: ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2
 					y: 8
-					//height: desktopThumbnailGridBackgrounds.height
-					//width: desktopThumbnailGridBackgrounds.width
 					height: desktopThumbnailGrid.height+4
 					width: (dash.gridHeight*dashboard.screenRatio)+4
 				}
@@ -431,30 +357,24 @@ Window {
 					from: activeDesktopIndicatorShiftAnim.originalX
 					to: activeDesktopIndicatorShiftAnim.newX
 					duration: 1000
-					//easing.type: Easing.OutBounce
 				}
 				Grid {
 					// This is just for each of our desktops.
-					//id: newRepeater
 					id: desktopThumbnailGridBackgrounds
 					rows: 1
 					x: 0
 					y: 10
 					spacing: desktopThumbnailGrid.spacing
-					//anchors.fill: parent
 
 					columns: {
 						if (workspace.desktops <= 6 ) {
-							//desktopThumbnailGridBackgrounds.columns = 6;
 							return 6;
 						} else {
-							//desktopThumbnailGridBackgrounds.columns = workspace.desktops;
 							return workspace.desktops;
 						}
 					}
 					Repeater {
 						// Now, we build up our desktops.
-						//model: dashboard.returnNumberOfDesktops()
 						model: workspace.desktops
 						id: littleDesktopRepeater
 						Item {
@@ -479,8 +399,6 @@ Window {
 									hoverEnabled: true
 									preventStealing: true
 									onClicked: {
-										// We only want to disable the dashboard when we double click on the item
-										// or when we're currently on said desktop and are 'sure'.
 										if (littleDesktopContainer.desktop != workspace.currentDesktop-1) {
 											workspace.currentDesktop = littleDesktopContainer.desktop+1;
 										} else {
@@ -489,42 +407,25 @@ Window {
 									}
 									onEntered: {
 										console.log('ENTERING!');
-										//console.log(Object.getOwnPropertyNames(drag.source));
 										dashboard.newDesktop = littleDesktopContainer.desktop+1;
-										//console.log(drag.source.newDesktop);
 									}
 									onExited: {
 										dashboard.newDesktop = -1;
 									}
 								}
 							Clients {
-								//anchors.fill: parent
 								id: littleDesktopGrid
 								desktop: littleDesktopContainer.desktop
-								//x: dash.gridHeight*.025*dashboard.screenRatio
-								//y: dash.gridHeight*.025
 								height: dash.gridHeight
 								width: dash.gridHeight*dashboard.screenRatio
-								//height: dashboard.screenHeight - dash.gridHeight - 30
-								//width: dashboard.screenWidth
 							}
-							// Can we use this?
 							DropArea {
 								id: littleDesktopDropArea
-								//anchors.fill: littleDesktopBackground
 								anchors.fill: parent
 								x: 0
 								y: 0
 								height: desktopThumbnailGrid.height
 								width: dash.gridHeight*dashboard.screenRatio
-								// Doesn't really seem to work.
-								/*onDropped: {
-									drag.drop.accept();
-									console.log('DROPPING!');
-									//console.log(drag.source);
-									//drag.source.newDesktop = model.index+1;
-									//console.log(drag.source.newDesktop);
-								}*/
 								Rectangle {
 									anchors.fill: parent
 									visible: false
@@ -532,7 +433,6 @@ Window {
 								}
 								onEntered: {
 									console.log('ENTERING!');
-									//console.log(Object.getOwnPropertyNames(drag.source));
 									drag.source.newDesktop = littleDesktopContainer.desktop+1;
 									console.log(drag.source.newDesktop);
 								}
@@ -544,11 +444,6 @@ Window {
 							}
 						}
 					}
-					/*Component.onCompleted: {
-						workspace.numberDesktopsChanged.connect(function () {
-							littleDesktopRepeater.model = workspace.desktops;
-						});
-					}*/
 				}
 			}
 			Item {
@@ -558,7 +453,6 @@ Window {
 				height: 120
 				Rectangle {
 					width: 50
-					//color: 'black'
 					color: 'transparent'
 					opacity: 0.5
 					LinearGradient {
@@ -573,11 +467,8 @@ Window {
 				}
 				Rectangle {
 					id: plusButton
-					//opacity: 0.5
-					//visible: dashboard.visible
 					height: 55 * dashboard.scalingFactor
 					width: 40 * dashboard.scalingFactor
-					//color: 'white'
 					color: 'transparent'
 					Text {
 						id: actualPlusButton
@@ -594,7 +485,6 @@ Window {
 						anchors.fill: parent
 						id: plusButtonMouseArea
 						onPressed: {
-							//console.log('yay');
 							actualPlusButton.color = 'grey';
 						}
 						onReleased: {
@@ -642,16 +532,7 @@ Window {
 			}
 		}
 		Component.onCompleted: {
-			//dashboard.requestActivate();
-			//searchFieldAndResults.children[1].forceActiveFocus();
 			populateVisibleClients();
-			//disableVisibleClients();
-
-			// disable!
-
-			// Try and register a shortcut, maybe.
-
-			// Make the big ones.
 			CreateClients.createAllClientThumbnails(
 				currentDesktopGridThumbnailContainer,
 				dashboard,
@@ -668,14 +549,7 @@ Window {
 				dash.gridHeight*dashboard.screenRatio*.95,
 				false
 			)
-			//enableVisibleClients();
-			// Make sure we add new thumbnails as necessary.
 			workspace.clientAdded.connect(function (c) {
-				//console.log(c);
-				// Make sure we add new clients to the visible list.
-				//var d = workspace.clientList().length;
-				//dashboard.clientsVisible.push(d);
-				//dashboard.clientsVisible[d] = true; // workspace.clientList()[d].minimized;
 				populateVisibleClients();
 				CreateClients.createNewClientThumbnails(
 					desktopThumbnailGrid,
@@ -701,14 +575,11 @@ Window {
 				activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
 				activeDesktopIndicatorShiftAnim.restart();
 				if (mainBackground.state == 'visible') {
-					//dashboard.requestActivate();
 					timer.restart();
 				}
 			});
 			var d;
 			for (d = 0; d < workspace.desktops; d++) {
-				//currentDesktopGrid.itemAt(d).children[0].children[1].updateGrid();
-				//littleDesktopRepeater.itemAt(d).children[0].children[2].updateGrid();
 			}
 			toggleBoth();
 			toggleBoth();
@@ -725,13 +596,8 @@ Window {
 
 		function disableVisibleClients() {
 			var c;
-			//console.log('BLAHLABLAH');
-							//workspace.showDesktop()
 			for (c = 0; c < workspace.clientList().length; c++) {
-				// We're just hiding it by making it invisible.
 				workspace.clientList()[c].opacity = 0;
-				//workspace.clientList()[c].minimized = true;
-				//workspace.clientList()[c].clientSideDecorated = !workspace.clientList()[c].clientSideDecorated;
 				workspace.clientList()[c].oldNoBorder = workspace.clientList()[c].noBorder;
 				workspace.clientList()[c].noBorder = true;
 
@@ -739,17 +605,11 @@ Window {
 		}
 		function enableVisibleClients() {
 			var c;
-								//workspace.showDesktop();
 			for (c = 0; c < workspace.clientList().length; c++) {
 				if (dashboard.clientsVisible[c] == false) {
 					// Better than hiding!
 					workspace.clientList()[c].opacity = 1;
-					//workspace.clientList()[c].minimized = false;
-					// FINALLY!  noBorder removes the decoration
-					// If we leave the decoration up, then the thumbnail sizing is really weird.
-					// We'll have to sort out the issues regarding borders and spacing and blah blah blah, but.
 					workspace.clientList()[c].noBorder = workspace.clientList()[c].oldNoBorder;
-					//workspace.clientList()[c].clientSideDecorated = !workspace.clientList()[c].clientSideDecorated;
 
 				}
 			}
@@ -765,22 +625,14 @@ Window {
 			visible: true
 			x: 0
 			y: dashboard.screenHeight //- (100*dashboard.scalingFactor)
-			// Start disabled.  toggleBoth sets this appropriately.
 			height: 100 * dashboard.scalingFactor
 			width: dashboard.screenWidth
 			Item {
 				id: activitySwitcherDash
 				x: 0
 				width: dashboard.screenWidth
-				//x: screenWidth/2-blahBlahBlah.width
-				//y: 124
-				//anchors.bottom: mainBackground.bottom
-				//y: (dashboard.screenHeight - 80)
 				scale: 1
-				//y: dashboard.screenHeight
-				//y: dashboard.screenHeight - dash.height + 10
 				height: 100 * dashboard.scalingFactor
-				//y: 90
 				y: 0 //100 * dashboard.scalingFactor
 				property int gridHeight: 80 * dashboard.scalingFactor
 				NumberAnimation {
@@ -801,22 +653,17 @@ Window {
 					id: activitySwitcherDashTimer
 					interval: 500
 					onTriggered: {
-						//hideActivitySwitcherDashAnim.restart();
 					}
 				}
 				PlasmaCore.Dialog {
 					id: activitySwitcherPlasmaBack
 					visible: true
-					//height: 120*dashboard.scalingFactor
-					//width: dashboard.screenWidth
 					opacity: 0.5
 					y: dashboard.screenHeight
 					x: 0
 					flags: Qt.X11BypassWindowManagerHint
-					//anchors.fill: parent
 					Rectangle {
 						opacity: 0
-						//visible: dashboard.visible
 						visible: false
 						height: activitySwitcherDash.height
 						width: dashboard.screenWidth
@@ -842,7 +689,6 @@ Window {
 					enabled: true
 					hoverEnabled: true
 					onEntered: {
-						//showActivitySwitcherDashAnim.restart();
 					}
 					onExited: {
 						activitySwitcherDashTimer.restart();
@@ -853,7 +699,6 @@ Window {
 					anchors.fill: parent
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.horizontalCenter: parent.horizontalCenter
-					//anchors.top: activitySwitcherDashBackground.top
 					anchors.topMargin: 10 * dashboard.scalingFactor
 					anchors.leftMargin: desktopThumbnailGrid.spacing
 					rows: 1
@@ -872,12 +717,10 @@ Window {
 							Image {
 								id: activityThumbnail
 								anchors.fill: parent
-								//smooth: true
 								mipmap: true
 								fillMode: Image.PreserveAspectCrop
 								source: model.background
 								opacity: 1
-								// Maybe?
 								asynchronous: true
 								cache: false
 							}
@@ -885,28 +728,20 @@ Window {
 								id: activityThumbnailBlackRectangle
 								scale: 1
 								opacity: 0
-								//y: 0
-								//x: 0
 								anchors.top: activityThumbnail.top
-								//height: 20
 								height: activityThumbnail.height
 								width: activityThumbnail.width
 								color: 'black'
 							}
 							Text {
-								//anchors.fill: parent
 								id: activityThumbnailTitleText
-								//anchors.top: activityThumbnail.top
 								anchors.horizontalCenter: activityThumbnail.horizontalCenter
 								anchors.verticalCenter: activityThumbnailBlackRectangle.verticalCenter
 								anchors.topMargin: 2
 								opacity: 0
 								text: model.name
-								//font.family: "Helvetica"
-								//font.pointSize: 12
 								font.bold: true
 								color: "white"
-								//y: 5
 							}
 							ParallelAnimation {
 								id: thumbnailHoverStart
@@ -932,29 +767,18 @@ Window {
 							}
 							MouseArea {
 								anchors.fill: parent
-								//anchors.fill: activityThumbnail
-								//parent: activitySwitcherDashMouseArea
 								enabled: true
 								hoverEnabled: true
 								onClicked: {
-									//console.log(Object.getOwnPropertyNames(workspace));
-									//console.log(Object.getOwnPropertyNames(ActivitySwitcher));
-									//workspace.currentActivity = model.id;
 									fadeToBlack.restart();
 									ActivitySwitcher.Backend.setCurrentActivity(model.id)
 									fadeFromBlack.restart();
 								}
 								onEntered: {
-									//showActivitySwitcherDashAnim.start();
-									//hideActivitySwitcherDashAnim.running = false;
-									//activitySwitcherDashMouseArea.stop();
 									activitySwitcherDashTimer.stop();
 									thumbnailHoverStart.restart();
 								}
 								onExited: {
-									//hideActivitySwitcherDashAnim.running = true;
-									//activitySwitcherDashMouseArea.stop();
-									//activitySwitcherDashTimer.restart();
 									thumbnailHoverEnd.restart();
 								}
 							}
@@ -963,26 +787,13 @@ Window {
 							DropArea {
 								id: activityDropArea
 								anchors.fill: parent
-								/*Rectangle {
-									anchors.fill: parent
-									visible: true
-									color: "green"
-								}*/
 								onEntered: {
 									console.log('ENTERING ACTIVITY!');
-									//console.log(Object.getOwnPropertyNames(drag.source));
-									//drag.source.newDesktop = bigDesktopRepeater.desktop+1;
 									drag.source.newActivity = model.id;
-									//console.log(Object.getOwnPropertyNames(ActivitySwitcher.Backend));
-									//console.log(Object.getOwnPropertyNames(workspace));
-									//con
-									//console.log(drag.source.newDesktop);
 								}
 								onExited: {
 									console.log('LEAVING ACTIVITY');
-									//drag.source.newDesktop = drag.source.currentDesktop;
 									drag.source.newActivity = drag.source.clientObject.activities;
-									//console.log(drag.source.newDesktop);
 								}
 							}
 						}
@@ -991,29 +802,17 @@ Window {
 			}
 		}
 		function toggleBoth() {
-			//console.log('blah');
-			//console.log(dashboardDesktopChanger.flags)
-			//console.log(Qt.X11BypassWindowManagerHint)
 			dashboardDesktopChanger.populateVisibleClients();
 			if (mainBackground.state == 'visible') {
 				endAnim.restart();
-				//workspace.showDesktop();
 				dashboardDesktopChanger.enableVisibleClients();
 			} else if (mainBackground.state == 'invisible') {
-				dashboardDesktopChanger.disableVisibleClients();
-				//workspace.showDesktop();
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
-				dashboard.height = dashboard.screenHeight;
-				dashboard.width = dashboard.screenWidth;
-				dashboard.y = 0;
-				//dashboard.visible = true;
 				mainContainer.height = dashboard.screenHeight;
 				mainContainer.width = dashboard.screenWidth;
 				initAnim.restart();
 				mainBackground.state = 'visible';
-				//dashboardDesktopChanger.requestActivate();
-				//dashboardDesktopChanger.dashInitAnim.restart();
 				mainBackground.visible = true;
 				timer.restart();
 				dashboardActivityChanger.requestActivate();
@@ -1038,15 +837,6 @@ Window {
 			}
 			onRunningChanged: {
 				if (!initAnim.running) {
-					//dashboard.height = 0;
-					//dashboard.width = 0;
-					//dashboard.visible = false;
-					//dashboard.y = dashboard.screenHeight;
-					//dashboardDesktopChanger.width = 0;
-					//dashboardActivityChanger.width = 0;
-					//mainBackground.state = 'visible';
-					//dashboard.visible = false;
-					//mainBackground.visible = false;
 				}
 			}
 		}
@@ -1054,44 +844,29 @@ Window {
 			id: endAnim
 			SequentialAnimation {
 				ParallelAnimation {
-					//NumberAnimation { target: dashboard; property: "opacity"; to: 0; from: 1; duration: 100}
 					NumberAnimation { target: dashboardDesktopChanger; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: dashPlasmaBack; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: dashboardActivityChanger; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
 					NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
-					//NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0; from: 0.5; duration: 100}
-					//NumberAnimation { target: blurBackground; property: "radius"; to: 1; from: 32; duration: 100}
-					//NumberAnimation { target: backgroundDarken; property: "opacity"; from: 0.5; to: 0; duration: 100}
 				}
 			}
 
 			onRunningChanged: {
 				if (!endAnim.running) {
-					//dashboard.height = 0;
-					//dashboard.width = 0;
-					//dashboard.visible = false;
 					dashboard.y = dashboard.screenHeight;
-					//dashboardDesktopChanger.width = 0;
-					//dashboardActivityChanger.width = 0;
 					mainBackground.state = 'invisible';
-					//dashboard.visible = false;
 					mainBackground.visible = false;
 				}
 			}
 		}
 		Component.onCompleted: {
-			//dashboard.requestActivate();
 			dashboard.dockHeight = dashboard._getDockHeight();
 			dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
 			dashboard.screenWidth = dashboard.activeScreen.width;
 			dashboard.screenHeight = dashboard.activeScreen.height + dashboard._getDockHeight();
 			dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
-			//mainBackground.visible = false;
 			mainBackground.state = 'invisible';
 			currentDesktopGridThumbnailContainer.state = 'showDesktop';
-			//console.log('Hey, did it work?');
-
-			// disable!
 
 			// Try and register a shortcut, maybe.
 			if (KWin.registerShortcut) {
@@ -1103,139 +878,5 @@ Window {
 															}
 				);
 			}
-			// Make the big ones.
-			//height: dashboard.screenHeight - dashboardDesktopChanger.dash.gridHeight - 30
-			//width: dashboard.screenWidth
 		}
 }
-/*
-Repeater {
-	// Now, we build up our desktops.
-	model: workspace.desktops
-	id: currentDesktopGrid
-	// We're leaving a little room for the text search area!
-	height: (dashboard.screenHeight - dash.height - 30 - 15 - searchFieldAndResults.textHeight) - dashboard.dockHeight
-	width: dashboard.screenWidth
-	scale: 1
-	visible: true
-	Item {
-		id: bigDesktopRepeater
-		visible: true
-		property int desktop: model.index
-		Clients {
-			id: bigDesktopClients
-			desktop: bigDesktopRepeater.desktop
-			visible: false
-			x: 0
-			// Leave a little room for the text!
-			y: dash.height + 30 + searchFieldAndResults.textHeight - dashboard.dockHeight
-			height: (dashboard.screenHeight - dash.height - 30 - activitySwitcherDash.height - 30) - dashboard.dockHeight
-			width: dashboard.screenWidth
-			isMain: false
-			isLarge: true
-			DropArea {
-				id: bigDesktopDropArea
-				anchors.fill: parent
-				Rectangle {
-					anchors.fill: parent
-					visible: false
-					color: "green"
-				}
-				onEntered: {
-					console.log('ENTERING LARGE DESKTOP!');
-					//console.log(Object.getOwnPropertyNames(drag.source));
-					drag.source.newDesktop = bigDesktopRepeater.desktop+1;
-					console.log(drag.source.newDesktop);
-				}
-				onExited: {
-					console.log('LEAVING');
-					drag.source.newDesktop = drag.source.currentDesktop;
-					console.log(drag.source.newDesktop);
-				}
-			}
-		}
-	}
-}
-
-*/
-
-/*
-Component.onCompleted: {
-	dashboard.requestActivate();
-	searchFieldAndResults.children[1].forceActiveFocus();
-	dashboard.dockHeight = _getDockHeight();
-	dashboard.activeScreen =  workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop);
-	dashboard.screenWidth = dashboard.activeScreen.width;
-	dashboard.screenHeight = dashboard.activeScreen.height + _getDockHeight();
-	dashboard.screenRatio = dashboard.activeScreen.width/dashboard.activeScreen.height;
-	mainBackground.visible = false;
-	mainBackground.state = 'invisible';
-	currentDesktopGridThumbnailContainer.state = 'showDesktop';
-	populateVisibleClients();
-
-	// disable!
-
-	// Try and register a shortcut, maybe.
-	if (KWin.registerShortcut) {
-	KWin.registerShortcut("OVERVIEW: Show kwinOverview",
-													"Show kwinOverview",
-													"Meta+A",
-													function() {
-														toggleBoth()
-													}
-		);
-	}
-	// Make the big ones.
-	height: dashboard.screenHeight - dash.gridHeight - 30
-	width: dashboard.screenWidth
-	CreateClients.createAllClientThumbnails(
-		currentDesktopGridThumbnailContainer,
-		dashboard,
-		6,
-		dashboard.screenHeight - dash.gridHeight - 30,
-		dashboard.screenWidth,
-		true
-	)
-	CreateClients.createAllClientThumbnails(
-		desktopThumbnailGrid,
-		dashboard,
-		6,
-		dash.gridHeight*.95,
-		dash.gridHeight*dashboard.screenRatio*.95,
-		false
-	)
-	// Make sure we add new thumbnails as necessary.
-	workspace.clientAdded.connect(function (c) {
-		console.log(c);
-		CreateClients.createNewClientThumbnails(
-			desktopThumbnailGrid,
-			dashboard,
-			6,
-			dash.gridHeight*.95,
-			dash.gridHeight*dashboard.screenRatio*.95,
-			false,
-			c
-		);
-		CreateClients.createNewClientThumbnails(
-			currentDesktopGridThumbnailContainer,
-			dashboard,
-			6,
-			dashboard.screenHeight - dash.gridHeight - 30,
-			dashboard.screenWidth,
-			true,
-			c
-		);
-		dashboard.requestActivate();
-		searchFieldAndResults.children[1].forceActiveFocus();
-	});
-	workspace.currentDesktopChanged.connect(function() {
-		activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
-		activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
-		activeDesktopIndicatorShiftAnim.restart();
-		if (mainBackground.state == 'visible') {
-			dashboard.requestActivate();
-			timer.restart();
-		}
-	});
-}
-*/
