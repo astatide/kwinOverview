@@ -55,6 +55,10 @@ Window {
 	function returnNumberOfDesktops() {
 		return workspace.desktops;
 	}
+	ActivitiesContainer {
+		// Instantiate our activity container.
+		id: allActivities
+	}
 	Item {
 		id: mainBackground
 		anchors.fill: parent
@@ -64,14 +68,6 @@ Window {
 
 
 		// This creates a mouseArea for the rectangle.  We change the height of our dock.
-		MouseArea {
-			anchors.fill: parent
-			enabled: true
-			onClicked: {
-				//mainContainer.toggleBoth();
-				dashboard.toggleBoth();
-			}
-		}
 
 		// First, we create some states: visible, and otherwise.
 		states: [
@@ -84,11 +80,6 @@ Window {
 		]
 		//NumberAnimation { id: fadeToBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 1; from: 0}
 		//NumberAnimation { id: fadeFromBlack; running: false; alwaysRunToEnd: true; target: foregroundDarken; property: "opacity"; to: 0; from: 1}
-
-		ActivitiesContainer {
-			// Instantiate our activity container.
-			id: allActivities
-		}
 	}
 	Timer {
 		id: timer
@@ -387,7 +378,7 @@ Window {
 		}
 		function populateVisibleClients() {
 			// We need to build the list.
-			console.log('POPULATIONG CLIENTS');
+			console.log('POPULATING CLIENTS');
 			var c;
 			dashboard.clientsVisible = new Array(workspace.clientList().length);
 			for (c = 0; c < workspace.clientList().length; c++) {

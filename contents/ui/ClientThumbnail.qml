@@ -138,8 +138,8 @@ Item {
       x: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).x
       y: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).y
       z: 0
-      visible: false
-      clip: false
+      visible: true
+      clip: true
     }
     Rectangle {
       id: thumbnailBackgroundRectangle
@@ -149,7 +149,7 @@ Item {
       color: 'black'
       opacity: 0.5
       scale: 1
-      visible: false
+      visible: true
       clip: true
     }
   }
@@ -430,14 +430,15 @@ Item {
       //runMoveToThumbnailAnim();
       // only toggle the ones on the current activity.
       if (kwinClientThumbnail.clientObject.activities == workspace.currentActivity || kwinClientThumbnail.clientObject.activities == '') {
-        kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
+        //kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
         actualThumbnail.visible = true;
         kwinThumbnailRenderWindow.visible = true;
         kwinThumbnailRenderWindow.enabled = true;
         kwinClientThumbnail.visible = true;
       }
     } else if (state == 'invisible') {
-      kwinThumbnailRenderWindow.wId = -1;
+      //kwinThumbnailRenderWindow.wId = -1;
+      //kwinThumbnailRenderWindow.wId = kwinClientThumbnail.clientId;
       actualThumbnail.visible = false;
       kwinThumbnailRenderWindow.visible = false;
       kwinThumbnailRenderWindow.enabled = false;
