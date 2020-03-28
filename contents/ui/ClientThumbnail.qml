@@ -32,12 +32,13 @@ Item {
   property int scale: 1
   property var cId: 0
   property var originalParent: parent
+  property var client: ''
   // Setting the height/width seems to break EVERYTHING, as the thumbnails are busted.
   //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
   //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
   // Get our actual client information.  This way, we can move through desktops/activities.
   property var clientObject: ''
-  property var clientId: 0
+  property string clientId: "0"
   property var currentDesktop: 0
   property var newDesktop: 0
   property var newActivity: 0
@@ -46,7 +47,7 @@ Item {
   //Drag.hotSpot: Qt.point(50,50)
 
   // Ha ha!
-  opacity: 1
+  opacity: 0.5
 
   // This is for moving the thumbnail back
   property int originalX: 0
@@ -97,9 +98,9 @@ Item {
     // This is a background rectangle useful for highlighting the item under the mouse.
     id: hoverRectangle
     anchors.fill: parent
-    color: 'white'
-    opacity: 0
-    visible: false
+    color: 'black'
+    opacity: 0.5
+    visible: true
     scale: 1
     clip: true
     height: kwinClientThumbnail.height
@@ -113,7 +114,7 @@ Item {
 
   Item {
     id: actualThumbnail
-    visible: false
+    visible: true
     opacity: 1
     x: 2
     y: 2
@@ -121,7 +122,7 @@ Item {
     Behavior on width { NumberAnimation { duration: 1000 } }
     Behavior on x { NumberAnimation { duration: 100 } }
     Behavior on y { NumberAnimation { duration: 100 } }
-    clip: false
+    clip: true
     scale: 1
     height: kwinClientThumbnail.clientRealHeight
     width: kwinClientThumbnail.clientRealWidth
@@ -132,7 +133,12 @@ Item {
       // so that we can shrink the thumbnail without messing with the grid itself.
       id: kwinThumbnailRenderWindow
       anchors.fill: actualThumbnail
-      wId: kwinClientThumbnail.clientId
+      //wId: { return this.setWId(kwinClientThumbnail.clientId); }
+      //property var hasRun: { return this.setClient(kwinClientThumbnail.client); }
+      //client: workspace.clients[kwinClientThumbnail.cId]
+      client: kwinClientThumbnail.client
+      //AbstractClient: kwinClientThumbnail.client
+      wId: kwinClientThumbnail.client.internalId
       height: actualThumbnail.height
       width: actualThumbnail.width
       x: 0 //-kwinClientThumbnail.mapToGlobal(parent.x,parent.y).x
@@ -140,6 +146,8 @@ Item {
       z: 0
       visible: true
       clip: true
+
+
     }
     Rectangle {
       id: thumbnailBackgroundRectangle

@@ -401,7 +401,7 @@ Window {
 				if (dashboard.clientsVisible[c] == false) {
 					// Better than hiding!
 					workspace.clientList()[c].opacity = 1;
-					workspace.clientList()[c].noBorder = workspace.clientList()[c].oldNoBorder;
+					//workspace.clientList()[c].noBorder = workspace.clientList()[c].oldNoBorder;
 
 				}
 			}
@@ -623,8 +623,8 @@ Window {
 			// Expensive!
 			SequentialAnimation {
 				ParallelAnimation {
-					NumberAnimation { target: blurBackground; property: "radius"; to: 32; from: 1}
-					NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: 0}
+					//NumberAnimation { target: blurBackground; property: "radius"; to: 32; from: 1}
+					//NumberAnimation { target: backgroundDarken; property: "opacity"; to: 0.5; from: 0}
 				}
 			}
 			onRunningChanged: {

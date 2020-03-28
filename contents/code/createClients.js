@@ -7,6 +7,9 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
       // Don't make ones for docks.  Or desktops.
       console.log('WHAT SORT ARE WE?');
       console.log(workspace.clientList()[c].windowType);
+      console.log('Are we defined?');
+      console.log(workspace.clients[c]);
+      //console.log(workspace.abstractClients);
       if (!workspace.clientList()[c].dock && workspace.clientList()[c].normalWindow) {
       //if (!workspace.clientList()[c].dock) {
         var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
@@ -18,11 +21,12 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
                                     {id: 'clientId' + c,
                                     //'background': model.get(0).background,
                                     'cId': c,
-                                    'clientObject': workspace.clientList()[c],
+                                    'clientObject': workspace.clients[c],
+                                    'client': workspace.clients[c],
                                     'originalWidth':  workspace.clientList()[c].width+4, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
                                     'originalHeight': workspace.clientList()[c].height+4, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                     'scale': (height / width) / (dashboard.height/dashboard.width),
-                                    'clientId': workspace.clientList()[c].windowId,
+                                    'clientId': workspace.clientList()[c].internalId,
                                     // We'll use this to determine where to switch from.
                                     'currentDesktop': workspace.clientList()[c].desktop,
                                     'noBorder': workspace.clientList()[c].noBorder,
@@ -49,7 +53,7 @@ function createAllClientThumbnails(parentContainer, dashboard, columns, height, 
 function createNewClientThumbnails(parentContainer, dashboard, columns, height, width, isLarge, c) {
   //if (!c.dock) {
   console.log('WHAT SORT ARE WE?');
-  console.log(c.windowType, c.windowRole, c.desktopWindow, c.normalWindow);
+  console.log(c, c.windowType, c.windowRole, c.desktopWindow, c.normalWindow);
   if (!c.dock && c.normalWindow) {
   //if (!c.dock) {
     var clientThumbnail = Qt.createComponent('../ui/ClientThumbnail.qml')
@@ -59,8 +63,9 @@ function createNewClientThumbnails(parentContainer, dashboard, columns, height, 
                                 // Custom ID for destruction later.
                                 {id: 'clientId' + c,
                                 //'background': model.get(0).background,
-                                'cId': c.windowId,
+                                'cId': c,
                                 'clientObject': c,
+                                'client': c,
                                 'originalWidth':  c.width+4, //parentContainer.width, //100, //workspace.clientList()[c].width / columns,
                                 'originalHeight': c.height+4, //parentContainer.height, //workspace.clientList()[c].height / columns,
                                 'scale': (height / width) / (dashboard.height/dashboard.width),

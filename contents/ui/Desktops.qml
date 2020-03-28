@@ -151,7 +151,7 @@ Item {
       // Now, we build up our windows.
       model: workspace.clientList().length
       Item {
-        id: kwinClientThumbnail
+        id: kwinClientThumbnailTest
         visible: true
         // We need to dynamically set these.
         property int originalWidth: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
@@ -160,7 +160,7 @@ Item {
         //width: kwinDesktopThumbnailContainer.width / clientGridLayout.columns
         //height: kwinDesktopThumbnailContainer.height / clientGridLayout.columns
         // Get our actual client information.  This way, we can move through desktops/activities.
-        property var clientObject: { workspace.clientList()[model.index] }
+        property var clientObject: { workspace.clients[model.index] }
         //anchors.fill: parent
 
         opacity: 0
@@ -195,7 +195,7 @@ Item {
           id: actualThumbnail
           //anchors.verticalCenter: parent.verticalCenter
           anchors.fill: parent
-          wId: workspace.clientList()[model.index].windowId
+          wId: workspace.clients[model.index].internalId
           //width: kwinClientThumbnail.width
           //height: kwinClientThumbnail.height
           //x: kwinClientThumbnail.x
@@ -321,7 +321,7 @@ Item {
             kwinClientThumbnail.visible = true;
             //actualThumbnail.visible = true;
           } else {
-            kwinClientThumbnail.visible = false;
+            //kwinClientThumbnail.visible = false;
             //actualThumbnail.visible = false;
           }
           //growFromNothing.running = true;
@@ -360,7 +360,7 @@ Item {
 
   Text {
     id: kwinDesktopName
-    visible: false
+    visible: true
     text: "Test"
     font.family: "Helvetica"
     font.pointSize: 12
