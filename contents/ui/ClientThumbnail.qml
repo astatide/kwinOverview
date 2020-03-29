@@ -243,9 +243,9 @@ Item {
       // We only want to disable the dashboard when we double click on the item
       // or when we're currently on said desktop and are 'sure'.
       if (currentDesktop == workspace.currentDesktop) {
-        mainContainer.toggleBoth();
+        //mainContainer.toggleBoth();
       }
-      workspace.activeClient = clientObject;
+      //workspace.activeClient = clientObject;
     }
 
     onEntered: {
@@ -274,13 +274,13 @@ Item {
 
     onPressed: {
       // Sets things up for the return animation.
-      kwinClientThumbnail.originalX = kwinClientThumbnail.x;
-      kwinClientThumbnail.originalY = kwinClientThumbnail.y;
-      kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
-      kwinClientThumbnail.clientObject.keepAbove = true;
-      kwinClientThumbnail.state = 'isHeld';
-      kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
-      kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
+      //kwinClientThumbnail.originalX = kwinClientThumbnail.x;
+      //kwinClientThumbnail.originalY = kwinClientThumbnail.y;
+      //kwinClientThumbnail.originalZ = kwinClientThumbnail.z;
+      //kwinClientThumbnail.clientObject.keepAbove = true;
+      //kwinClientThumbnail.state = 'isHeld';
+      //kwinClientThumbnail.newDesktop = kwinClientThumbnail.currentDesktop;
+      //kwinClientThumbnail.currentDesktop = kwinClientThumbnail.newDesktop;
       if (isLarge) {
         //kwinClientThumbnail.parent = dashboardDesktopChanger;
         //kwinClientThumbnail.parent = littleDesktopRepeater.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[2].children[0];
