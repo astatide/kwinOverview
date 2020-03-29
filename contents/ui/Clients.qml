@@ -109,13 +109,13 @@ Item {
       // Show everything except for the current desktop and the one we're transitioning into.
       if (!kwinDesktopThumbnailContainer.isLarge) {
         if (workspace.currentDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
-          kwinDesktopThumbnailContainer.visible = false;
-          makeVisibleTimer.stop();
+          kwinDesktopThumbnailContainer.visible = true;
+          //makeVisibleTimer.stop();
         }
         if (oldDesktop-1 == kwinDesktopThumbnailContainer.desktop) {
           //if (oldDesktop-1 < kwinDesktopThumbnailContainer.desktop || oldDesktop+1 < kwinDesktopThumbnailContainer.desktop) {
-            kwinDesktopThumbnailContainer.visible = false;
-            makeVisibleTimer.restart();
+            kwinDesktopThumbnailContainer.visible = true;
+            //makeVisibleTimer.restart();
           //}
         }
       } else {
