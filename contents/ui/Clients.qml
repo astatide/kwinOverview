@@ -35,65 +35,61 @@ Item {
     columns: _returnMatrixSize()
     height: parent.height
     width: parent.width
-    rowSpacing: 20 * (clientContainer.height/dashboard.screenHeight)
-    scale: 1
-
-    onRowsChanged: {
-      testRows.start();
-    }
-
-    NumberAnimation { id: testRows; property: "y"; duration: 200; easing.type: Easing.OutBounce }
-    NumberAnimation on columns { property: "x"; duration: 200; easing.type: Easing.OutBounce }
+    property int onDesktop: 0
+    //rowSpacing: 20 * (clientContainer.height/dashboard.screenHeight)
+    //scale: 1
+    //flow: GridLayout.TopToBottom
 
     function _onDesktop() {
-      return clientGridLayout.children.length;
-    }
-
-    onChildrenChanged: {
-      rows: _returnMatrixSize();
-      columns: _returnMatrixSize();
-      console.log('children!');
+      return onDesktop;
     }
 
     Repeater {
       model: workspace.clients
+      id: repeaterItem
 
       Loader {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
         id: loader
-        source: {
-          console.log("What is it?")
-          console.log(model);
-          if (model.desktop == clientContainer.desktop) {
-            return "ClientThumbnail.qml";
+        source: "ClientThumbnail.qml"
+        onLoaded: {
+        console.log('get fucked');
+          //loader.item.clientObject = model.abstractClient;
+          loader.item.visible = false;
+          loader.item.height = 0;
+          loader.item.width = 0;
+          loader.item.client = model;
+          loader.item.clientId = model.internalId;
+          loader.item.currentDesktop = model.desktop-1;
+          if (model.desktop-1 == clientContainer.desktop) {
+            clientGridLayout.onDesktop ++;
+            loader.item.visible = true
+            loader.item.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
+            loader.item.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
           } else {
-            return '';
+            // reparent to somewhere else.  Basically, don't keep it in the grid.
+            loader.parent = clientContainer;
           }
         }
-        onLoaded: {
-          console.log('get fucked');
-            //loader.item.clientObject = model.abstractClient;
-            loader.item.client = model;
-            loader.item.clientId = model.internalId;
-            loader.item.currentDesktop = model.desktop;
-            //loader.item.height = Layout.preferredHeight;
-            //loader.item.width = 40;
-            //loader.item.setSize();
-        }
-        //onLoaded {
-          //console.log('blah blah blah');
-        //}
       }
-      //ClientThumbnail {
-      //  height: 100
-      //}
+    }
+
+    onChildrenChanged: {
+      rows = _returnMatrixSize();
+      columns = _returnMatrixSize();
+      console.log('children!');
+      for (var i = 0; i < repeaterItem.count; i++) {
+        repeaterItem.itemAt(i).height = Math.ceil(clientContainer.height / clientGridLayout.rows);
+        repeaterItem.itemAt(i).width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+      }
     }
 
     function _returnMatrixSize() {
       // Figure out how many we have on the desktop, then calculate an
       // an appropriate row x column size.
+      //return 1;
       var oD = _onDesktop();
+      console.log('How many on desktop?');
+      console.log(oD);
       // Just do it manually for the moment; not elegant, but effective.
       // Not sure what math library I'd need and I'm feeling lazy.
       if (oD <= 1) {
