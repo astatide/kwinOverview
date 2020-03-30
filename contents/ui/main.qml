@@ -97,10 +97,11 @@ Window {
 	}
 
 		function toggleBoth() {
-			dashboardDesktopChanger.populateVisibleClients();
+			//dashboardDesktopChanger.populateVisibleClients();
 			if (mainBackground.state == 'visible') {
 				endAnim.restart();
-				dashboardDesktopChanger.enableVisibleClients();
+				//dashboardDesktopChanger.enableVisibleClients();
+				mainBackground.state = 'invisible';
 			} else if (mainBackground.state == 'invisible') {
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
@@ -118,8 +119,9 @@ Window {
 		}
 		ParallelAnimation {
 			id: initAnim
-			NumberAnimation { target: dashboardDesktopChanger; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
-			NumberAnimation { target: dashPlasmaBack; property: "y"; from: -dash.height*dashboard.scalingFactor; to: 0}
+			NumberAnimation { target: dashboardDesktopChanger; property: "y"; from: -dashboardDesktopChanger.height*dashboard.scalingFactor; to: 0}
+			//NumberAnimation { target: dashboardDesktopChanger; property: "height"; from: 0; to: 220;}
+			//NumberAnimation { target: dashPlasmaBack; property: "y"; from: -dashboardDesktopChanger.height*dashboard.scalingFactor; to: 0}
 			NumberAnimation { target: dashboardActivityChanger; property: "y"; from: dashboard.screenHeight; to: dashboard.screenHeight - (100*dashboard.scalingFactor)}
 			NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; from: dashboard.screenHeight; to: dashboard.screenHeight - (100*dashboard.scalingFactor)}
 			NumberAnimation { target: dashboard; property: "opacity"; to: 1; from: 0}
@@ -139,8 +141,9 @@ Window {
 			id: endAnim
 			SequentialAnimation {
 				ParallelAnimation {
-					NumberAnimation { target: dashboardDesktopChanger; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
-					NumberAnimation { target: dashPlasmaBack; property: "y"; to: -dash.height*dashboard.scalingFactor; duration: 100}
+					NumberAnimation { target: dashboardDesktopChanger; property: "y"; to: -dashboardDesktopChanger.height*dashboard.scalingFactor; duration: 100}
+					//NumberAnimation { target: dashboardDesktopChanger; property: "height"; to: 0; duration: 100}
+					//NumberAnimation { target: dashPlasmaBack; property: "y"; to: -dashboardDesktopChanger.height*dashboard.scalingFactor; duration: 100}
 					NumberAnimation { target: dashboardActivityChanger; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
 					NumberAnimation { target: activitySwitcherPlasmaBack; property: "y"; to: dashboard.screenHeight; from: dashboard.screenHeight - (100*dashboard.scalingFactor); duration: 100}
 				}

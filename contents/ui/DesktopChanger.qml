@@ -42,25 +42,31 @@ Window {
         property int gridHeight: (desktopChanger.height - 2*desktopChanger.border)
         y: 0 //-120 * dashboard.scalingFactor
 
-
-        PlasmaCore.Dialog {
+        Rectangle {
             id: dashPlasmaBack
+            opacity: 0
             visible: true
-            opacity: 0.5
-            y: 0
-            x: 0
-            flags: Qt.X11BypassWindowManagerHint
-            height: dash.height
-            width: dash.width
-            Rectangle {
-                opacity: 0
-                visible: false
-                // Basically, without this, Plasma just... doesn't show up, since it's "empty", I guess.
-                height: desktopChanger.height
-                width: desktopChanger.width
-                color: 'black'
-                x: 0
-                y: 0
+            // Basically, without this, Plasma just... doesn't show up, since it's "empty", I guess.
+            height: desktopChanger.height
+            width: desktopChanger.width
+            //anchors.fill: desktopChanger
+            color: 'black'
+            y: desktopChanger.y
+            x: desktopChanger.x
+            PlasmaCore.Dialog {
+                visible: true
+                opacity: 0.5
+                y: desktopChanger.y
+                x: desktopChanger.x
+                flags: Qt.X11BypassWindowManagerHint
+                height: dashPlasmaBack.height
+                width: dashPlasmaBack.width
+                //anchors.fill: parent
+                Rectangle {
+                    visible: false
+                    height: desktopChanger.height
+                    width: desktopChanger.width
+                }
             }
         }
 
