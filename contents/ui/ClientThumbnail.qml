@@ -46,9 +46,9 @@ Item {
   property int clientRealWidth: 0
   property int clientRealHeight: 0
   property var noBorder: false
-  x: 0
-  y: 0
-  z: 0
+  //x: 0
+  //y: 0
+  //z: 0
   property int originalZ: 0
 
   //property bool isHeld: false
@@ -160,53 +160,12 @@ Item {
     }
 
     onPressed: {
+      kwinClientThumbnail.originalX = kwinClientThumbnail.x;
+      kwinClientThumbnail.originalY = kwinClientThumbnail.y;
     }
     onReleased: {
-      kwinClientThumbnail.state = 'notHeld';
-      kwinClientThumbnail.clientObject.keepAbove = false;
-      var globalMouse = kwinClientThumbnail.mapToGlobal(mouse.x, mouse.y);
-      var ldMouse = littleDesktopRepeater.mapFromGlobal(globalMouse.x, globalMouse.y)
-      var littleDesktop = desktopThumbnailGrid.childAt(ldMouse.x, ldMouse.y);
-      if (littleDesktop != null) {
-        if (littleDesktop.childAt(ldMouse.x, ldMouse.y) != null) {
-            if (littleDesktop.childAt(ldMouse.x, ldMouse.y).childAt(ldMouse.x, ldMouse.y) != null) {
-              //console.log(littleDesktop.id);
-              newDesktop = littleDesktop.childAt(ldMouse.x, ldMouse.y).childAt(ldMouse.x, ldMouse.y).desktop+1;
-            }
-        }
-      }
-      if (isLarge) {
-        kwinClientThumbnail.parent = currentDesktopGrid.itemAt(kwinClientThumbnail.clientObject.desktop-1).children[1].children[0];
-      }
-      // Let's see if the dropArea can handle this.
-      if (kwinClientThumbnail.isSmall) {
-        //growthAnim.restart();
-        kwinClientThumbnail.isSmall = false;
-      }
-      if (kwinClientThumbnail.clientObject.activities != kwinClientThumbnail.newActivity) {
-        //kwinClientThumbnail.clientObject.setActivity(kwinClientThumbnail.newActivity);
-        // This is a read-only property, and so we're unable to change it from here.
-        // Not sure if there's a model out there that would let us do it.
-        //console.log(Object.getOwnPropertyNames(kwinClientThumbnail.clientObject));
-        //kwinClientThumbnail.clientObject.activities = kwinClientThumbnail.newActivity;
-        // for now, since we can't sort it.
-        var activityModel = console.log(Object.getOwnPropertyNames(Activities.ResourceInstance));
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
-      } else if (kwinClientThumbnail.clientObject.desktop == kwinClientThumbnail.newDesktop ) {
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
-      } else if (newDesktop == 0) {
-        //growthAnim.running = true;
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
-      } else {
-        //kwinClientThumbnail.clientObject.desktop = kwinClientThumbnail.newDesktop;
-        //kwinClientThumbnail.x = kwinClientThumbnail.originalX;
-        //kwinClientThumbnail.y = kwinClientThumbnail.originalY;
-        //kwinClientThumbnail.z = kwinClientThumbnail.originalZ;
-        //kwinClientThumbnail.callUpdateGrid();
-      }
+      kwinClientThumbnail.x = kwinClientThumbnail.originalX;
+      kwinClientThumbnail.y = kwinClientThumbnail.originalY;
     }
   }
 
