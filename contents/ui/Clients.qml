@@ -41,45 +41,67 @@ Item {
     //flow: GridLayout.TopToBottom
 
     function _onDesktop() {
-      return onDesktop;
+      var cc = 0;
+      for (var i = 0; i < repeaterItem.count; i++) {
+        if (repeaterItem.itemAt(i).currentDesktop == clientContainer.desktop) {
+          cc++;
+        }
+      }
+      return cc;
     }
 
     Repeater {
-      model: workspace.clients
+      model: workspace.clients /*{
+        var clientArray = [];
+        for (var i = 0; i < workspace.clients.length; i++) {
+          if (workspace.clients[i].desktop-1 == clientContainer.desktop) {
+            clientArray.push(workspace.clients[i]);
+          }
+        }
+        console.log('HOW MANY DID WE HAVE?');
+        console.log(clientArray);
+        return clientArray;
+      }*/
       id: repeaterItem
 
-      Loader {
+      ClientThumbnail {
         id: loader
-        source: "ClientThumbnail.qml"
-        onLoaded: {
-        console.log('get fucked');
-          //loader.item.clientObject = model.abstractClient;
-          loader.item.visible = false;
-          loader.item.height = 0;
-          loader.item.width = 0;
-          loader.item.client = model;
-          loader.item.clientId = model.internalId;
-          loader.item.currentDesktop = model.desktop-1;
+        visible: false
+        height: 0
+        width: 0
+        client: model
+        clientId: model.internalId
+        currentDesktop: model.desktop-1
+        Component.onCompleted: {
+          console.log('get fucked');
           if (model.desktop-1 == clientContainer.desktop) {
-            clientGridLayout.onDesktop ++;
-            loader.item.visible = true
-            loader.item.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
-            loader.item.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+            clientGridLayout.onDesktop++;
+            loader.visible = true;
+            loader.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
+            loader.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
           } else {
             // reparent to somewhere else.  Basically, don't keep it in the grid.
-            loader.parent = clientContainer;
+            //loader.parent = clientContainer;
+            //loader.client = '';
+            //loader.clientId = '';
+            //loader.currentDesktop = 0;
+            //loader.destroy();
           }
         }
       }
     }
 
     onChildrenChanged: {
+      console.log('CHILDREN HAVE CHANGED');
       rows = _returnMatrixSize();
       columns = _returnMatrixSize();
-      console.log('children!');
+      //console.log('children!');
       for (var i = 0; i < repeaterItem.count; i++) {
-        repeaterItem.itemAt(i).height = Math.ceil(clientContainer.height / clientGridLayout.rows);
-        repeaterItem.itemAt(i).width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+        if (repeaterItem.itemAt(i).currentDesktop == clientContainer.desktop) {
+          //cc++;
+          repeaterItem.itemAt(i).height = Math.ceil(clientContainer.height / clientGridLayout.rows);
+          repeaterItem.itemAt(i).width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+        }
       }
     }
 

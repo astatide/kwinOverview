@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Window 2.2
 //import org.kde.kwin 2.0 as KWin
 import org.kde.kwin 2.0 as KWinLib
@@ -47,22 +47,23 @@ Item {
             }
         }
         onEntered: {
-            console.log('ENTERING!');
+            console.log('ENTERING MOUSE!');
             dashboard.newDesktop = desktopContainer.desktop+1;
         }
         onExited: {
+            console.log('EXITING MOUSE!')
             dashboard.newDesktop = -1;
         }
     }
     Clients {
         id: desktopGrid
         desktop: desktopContainer.desktop
-        height: desktopContainer.height
-        width: desktopContainer.width
+        height: desktopContainer.height * 0.95
+        width: desktopContainer.width * 0.95
     }
     DropArea {
         id: desktopDropArea
-        anchors.fill: parent
+        anchors.fill: desktopContainer
         x: 0
         y: 0
         height: desktopContainer.height
@@ -74,6 +75,7 @@ Item {
         }
         onEntered: {
             console.log('ENTERING!');
+            console.log(desktopGrid.children[0]);
             drag.source.newDesktop = desktopContainer.desktop+1;
             console.log(drag.source.newDesktop);
         }
@@ -84,7 +86,11 @@ Item {
         }
         onDropped: {
             console.log('DROPPED!');
-            drop.source.parent = desktopGrid;
+            console.log(drop.source);
+            drop.source.client.desktop = desktopContainer.desktop + 1;
+            drop.source.parent = desktopGrid.children[0];
+            console.log(desktopGrid.children[0]);
+            console.log(drop.source.parent);
         }
     }
 }

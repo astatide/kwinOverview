@@ -164,8 +164,10 @@ Item {
       kwinClientThumbnail.originalY = kwinClientThumbnail.y;
     }
     onReleased: {
+      parent.Drag.drop();
       kwinClientThumbnail.x = kwinClientThumbnail.originalX;
       kwinClientThumbnail.y = kwinClientThumbnail.originalY;
+      
     }
   }
 
@@ -186,10 +188,16 @@ Item {
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     //workspace.numberDesktopsChanged.connect(callUpdateGrid);
     //workspace.currentDesktopChanged.connect(callUpdateGrid);
+    client.desktopChanged.connect(setVisible);
     workspace.clientRemoved.connect(disconnectAllSignals);
     //kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
     //callUpdateGrid();
+  }
+
+  function setVisible() {
+    console.log('AH YEAH');
+    
   }
 
   function disconnectAllSignals(c) {
