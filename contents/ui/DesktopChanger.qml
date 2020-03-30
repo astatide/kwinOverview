@@ -50,8 +50,8 @@ Window {
             y: 0
             x: 0
             flags: Qt.X11BypassWindowManagerHint
-            height: parent.parent.height
-            width: parent.parent.width
+            height: dash.height
+            width: dash.width
             Rectangle {
                 opacity: 0
                 visible: false
@@ -216,26 +216,26 @@ Window {
     }
     Component.onCompleted: {
         populateVisibleClients();
-        CreateClients.createAllClientThumbnails(
-            desktopThumbnailGrid,
-            dashboard,
-            6,
-            dash.gridHeight*.95,
-            dash.gridHeight*dashboard.screenRatio*.95,
-            false
-        )
-        workspace.clientAdded.connect(function (c) {
-            populateVisibleClients();
-            CreateClients.createNewClientThumbnails(
-                desktopThumbnailGrid,
-                dashboard,
-                6,
-                dash.gridHeight*.95,
-                dash.gridHeight*dashboard.screenRatio*.95,
-                false,
-                c
-            );
-        });
+        //CreateClients.createAllClientThumbnails(
+        //    desktopThumbnailGrid,
+        //    dashboard,
+        //    6,
+        //    dash.gridHeight*.95,
+        //    dash.gridHeight*dashboard.screenRatio*.95,
+        //    false
+        //)
+        //workspace.clientAdded.connect(function (c) {
+        //    populateVisibleClients();
+        //    CreateClients.createNewClientThumbnails(
+        //        desktopThumbnailGrid,
+        //        dashboard,
+        //        6,
+        //        dash.gridHeight*.95,
+        //        dash.gridHeight*dashboard.screenRatio*.95,
+        //        false,
+         //       c
+        //    );
+        //});
         workspace.currentDesktopChanged.connect(function() {
             activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
             activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
