@@ -194,7 +194,7 @@ Item {
     //workspace.numberDesktopsChanged.connect(callUpdateGrid);
     //workspace.currentDesktopChanged.connect(callUpdateGrid);
     //kwinClientThumbnail.client.desktopChanged.connect(setVisible);
-    workspace.clientRemoved.connect(disconnectAllSignals);
+    //workspace.clientRemoved.connect(disconnectAllSignals);
     //kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
     //callUpdateGrid();
@@ -207,7 +207,7 @@ Item {
 
   function disconnectAllSignals(c) {
     //console.log(c);
-    if (c) {
+    if ( kwinClientThumbnail != null) {
       if (c.internalId == kwinClientThumbnail.client.internalId) {
         //console.log('KILLING MYSELF');
         // Yes, we even have to disconnect this.
@@ -220,7 +220,8 @@ Item {
         //clientObject.desktopChanged.disconnect(callUpdateGrid);
         //clientObject.activitiesChanged.disconnect(callUpdateGrid);
         //workspace.currentActivityChanged.disconnect(callUpdateGrid);
-        kwinClientThumbnail.destroy();
+        //kwinClientThumbnail.parent = 
+        //kwinClientThumbnail.destroy();
       }
     }
   }
