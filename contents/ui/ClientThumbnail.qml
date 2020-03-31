@@ -86,6 +86,11 @@ Item {
     //setSize();
   }
 
+  onClientChanged: {
+    //console.log('our client has changed');
+    //kwinThumbnailRenderWindow.wId = kwinClientThumbnail.client.internalId;
+  }
+
   Item {
     id: actualThumbnail
     visible: true
@@ -144,7 +149,7 @@ Item {
     hoverEnabled: true
     property bool dragActive: drag.active
     onClicked: {
-
+      workspace.activeClient = kwinClientThumbnail.client;
     }
 
     onEntered: {
@@ -188,7 +193,7 @@ Item {
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     //workspace.numberDesktopsChanged.connect(callUpdateGrid);
     //workspace.currentDesktopChanged.connect(callUpdateGrid);
-    client.desktopChanged.connect(setVisible);
+    //kwinClientThumbnail.client.desktopChanged.connect(setVisible);
     workspace.clientRemoved.connect(disconnectAllSignals);
     //kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
@@ -203,18 +208,18 @@ Item {
   function disconnectAllSignals(c) {
     //console.log(c);
     if (c) {
-      if (c.windowId == kwinClientThumbnail.clientId) {
+      if (c.internalId == kwinClientThumbnail.client.internalId) {
         //console.log('KILLING MYSELF');
         // Yes, we even have to disconnect this.
         workspace.clientRemoved.disconnect(disconnectAllSignals);
         //kwinClientThumbnail.onParentChanged.disconnect(callUpdateGrid);
-        workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
-        workspace.currentDesktopChanged.disconnect(callUpdateGrid);
-        mainBackground.onStateChanged.disconnect(callUpdateGrid);
+        //workspace.numberDesktopsChanged.disconnect(callUpdateGrid);
+        //workspace.currentDesktopChanged.disconnect(callUpdateGrid);
+        //mainBackground.onStateChanged.disconnect(callUpdateGrid);
         //dashboard.onStateChanged.disconnect(callUpdateGrid);
-        clientObject.desktopChanged.disconnect(callUpdateGrid);
-        clientObject.activitiesChanged.disconnect(callUpdateGrid);
-        workspace.currentActivityChanged.disconnect(callUpdateGrid);
+        //clientObject.desktopChanged.disconnect(callUpdateGrid);
+        //clientObject.activitiesChanged.disconnect(callUpdateGrid);
+        //workspace.currentActivityChanged.disconnect(callUpdateGrid);
         kwinClientThumbnail.destroy();
       }
     }

@@ -42,8 +42,8 @@ Item {
 
     function _onDesktop() {
       var cc = 0;
-      for (var i = 0; i < repeaterItem.count; i++) {
-        if (repeaterItem.itemAt(i).currentDesktop == clientContainer.desktop) {
+      for (var i = 0; i < clientGridLayout.children.length; i++) {
+        if (clientGridLayout.children[i].currentDesktop == clientContainer.desktop) {
           cc++;
         }
       }
@@ -74,6 +74,7 @@ Item {
         currentDesktop: model.desktop-1
         Component.onCompleted: {
           console.log('get fucked');
+          console.log(loader.client);
           if (model.desktop-1 == clientContainer.desktop) {
             clientGridLayout.onDesktop++;
             loader.visible = true;
@@ -81,7 +82,7 @@ Item {
             loader.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
           } else {
             // reparent to somewhere else.  Basically, don't keep it in the grid.
-            //loader.parent = clientContainer;
+            loader.parent = clientContainer;
             //loader.client = '';
             //loader.clientId = '';
             //loader.currentDesktop = 0;
@@ -124,6 +125,24 @@ Item {
     Component.onCompleted: {
       clientContainer.isMain = true;
       clientContainer.visible = true;
+      workspace.clientAdded.connect(checkForNewClients);
+    }
+
+    function checkForNewClients(c) {
+      console.log("WE CREATED NEW CLIENTS!");
+      console.log(c);
+      if (c.desktop-1 == clientContainer.desktop) {
+        console.log('AND IT IS ON THIS DESKTOP!dol');
+        var component = Qt.createComponent('ClientThumbnail.qml');
+        var new_client = component.createObject(null, {'client': c, 'clientId': c.internalId, 'currentDesktop': clientContainer.desktop, 'visible': true});
+        //new_client.client = c;
+        console.log('NEW CLIENT CREATED');
+        console.log(new_client.client, c, c.internalId);
+        new_client.parent = clientGridLayout;
+        new_client.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
+        new_client.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+        console.log(new_client.parent);
+      }
     }
   }
 
