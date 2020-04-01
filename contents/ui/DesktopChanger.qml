@@ -28,8 +28,9 @@ Window {
     x: 0
     y: 0
     opacity: 1
-    height: (100+border) * dashboard.scalingFactor
-    width: dashboard.screenWidth
+    height: 0
+    width: 0
+    property bool showActiveDesktop: true
 
     Item {
         id: dash
@@ -44,8 +45,8 @@ Window {
 
         Rectangle {
             id: dashPlasmaBack
-            opacity: 0
-            visible: true
+            opacity: dash.opacity
+            visible: false
             // Basically, without this, Plasma just... doesn't show up, since it's "empty", I guess.
             height: desktopChanger.height
             width: desktopChanger.width
@@ -54,7 +55,7 @@ Window {
             y: desktopChanger.y
             x: desktopChanger.x
             PlasmaCore.Dialog {
-                visible: true
+                visible: dash.visible
                 opacity: 0.5
                 y: desktopChanger.y
                 x: desktopChanger.x
@@ -221,7 +222,7 @@ Window {
         }
     }
     Component.onCompleted: {
-        populateVisibleClients();
+        //populateVisibleClients();
         //CreateClients.createAllClientThumbnails(
         //    desktopThumbnailGrid,
         //    dashboard,
@@ -258,7 +259,7 @@ Window {
     }
     function populateVisibleClients() {
         // We need to build the list.
-        console.log('POPULATING CLIENTS');
+        //console.log('POPULATING CLIENTS');
         var c;
         dashboard.clientsVisible = new Array(workspace.clientList().length);
         for (c = 0; c < workspace.clientList().length; c++) {

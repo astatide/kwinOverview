@@ -39,10 +39,20 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         preventStealing: true
+        propagateComposedEvents: true
         onClicked: {
             if (desktopContainer.desktop != workspace.currentDesktop-1) {
                 workspace.currentDesktop = desktopContainer.desktop+1;
             } else {
+                mouse.accepted = false;
+                //toggleBoth();
+            }
+        }
+        onPressed: {
+            if (desktopContainer.desktop != workspace.currentDesktop-1) {
+                workspace.currentDesktop = desktopContainer.desktop+1;
+            } else {
+                mouse.accepted = false;
                 //toggleBoth();
             }
         }

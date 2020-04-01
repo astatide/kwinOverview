@@ -27,11 +27,11 @@ Repeater {
 	function getCurrentBackground() {
 		var i;
 		for (i = 0; i < activityRepeater.count; i++) {
-			console.log('Testing activity model');
+			//console.log('Testing activity model');
 			//console.log(model[i].id);
-			console.log(Object.getOwnPropertyNames(activityRepeater.itemAt(i)));
+			//console.log(Object.getOwnPropertyNames(activityRepeater.itemAt(i)));
 			if (activityRepeater.itemAt(i).isCurrent == true) {
-				console.log(activityRepeater.itemAt(i).background);
+			//	console.log(activityRepeater.itemAt(i).background);
 				return activityRepeater.itemAt(i).background;
 			}
 		}

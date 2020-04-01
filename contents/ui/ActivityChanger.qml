@@ -99,10 +99,10 @@ import "../code/createClients.js" as CreateClients
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.horizontalCenter: parent.horizontalCenter
 					anchors.topMargin: 10 * dashboard.scalingFactor
-					anchors.leftMargin: desktopThumbnailGrid.spacing
+					anchors.leftMargin: 10
 					rows: 1
 					columns:  10
-					spacing: desktopThumbnailGrid.spacing
+					spacing: 10
 					visible: true
 					Repeater {
 						id: activitySwitcherRepeater

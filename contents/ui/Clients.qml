@@ -47,9 +47,9 @@ Item {
       //  }
       //}
       for (var i = 0; i < clientGridLayout.children.length; i++) {
-        console.log('What is our child?', clientGridLayout.children[i]);
-        console.log('What is our client?', clientGridLayout.children[i].client);
-        console.log('What is our clientId?', clientGridLayout.children[i].clientId);
+        //console.log('What is our child?', clientGridLayout.children[i]);
+        //console.log('What is our client?', clientGridLayout.children[i].client);
+        //console.log('What is our clientId?', clientGridLayout.children[i].clientId);
         try { 
           if (isOnDesktop(clientGridLayout.children[i].client)) {
             cc++;
@@ -57,7 +57,7 @@ Item {
         }
         catch(error) {}
       }
-      console.log(cc);
+      //console.log(cc);
       return cc;
     }
 
@@ -107,14 +107,15 @@ Item {
         //Layout.fillWidth: true
         //Layout.fillHeight: true
         Component.onCompleted: {
-          console.log('get fucked');
-          console.log(loader.client);
+          //console.log('get fucked');
+          //console.log(loader.client);
           if (model.desktop-1 == clientContainer.desktop) {
             clientGridLayout.onDesktop++;
             loader.visible = true;
             var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
             var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
             loader.resizeClient(h, w);
+            loader.visible = clientContainer.visible;
             //loader.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
             //loader.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
           } else {
@@ -139,10 +140,11 @@ Item {
         if (clientGridLayout.children[i].desktop == clientContainer.desktop) {
           //cc++;
           //console.log(clientGridLayout.children[i]);
-          console.log("RESIZING!");
+          //console.log("RESIZING!");
           var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
           var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
           clientGridLayout.children[i].resizeClient(h, w);
+          //clientGridLayout.children[i].visible = clientContainer.visible;
           //clientGridLayout.children[i].height = Math.ceil(clientContainer.height / (clientGridLayout.rows));
           //clientGridLayout.children[i].width = Math.ceil(clientContainer.width / (clientGridLayout.columns));
         }
@@ -161,7 +163,7 @@ Item {
       if (oD <= 1) {
         return 1
       } else {
-        return Math.floor(Math.sqrt(oD));
+        return Math.ceil(Math.sqrt(oD));
       }
     }
 
@@ -183,18 +185,18 @@ Item {
     function addNewClient(c) {
       console.log("Oh yeah we have clients");
       if (c) {
-        console.log("c exists");
-        console.log(c.desktop-1);
+        //console.log("c exists");
+        //console.log(c.desktop-1);
         if (c.desktop-1 == clientContainer.desktop) {
           clientGridLayout.onDesktop += 1;
           var component = Qt.createComponent('ClientThumbnail.qml');
-          console.log("DOING IT ON DESKTOP!");
-          console.log(clientContainer.desktop);
+          //console.log("DOING IT ON DESKTOP!");
+          //console.log(clientContainer.desktop);
           var new_client = component.createObject(clientGridLayout, {'client': c, 'clientId': c.internalId, 'desktop': clientContainer.desktop, 'visible': true,  'clientRatio': c.width / c.height});
           var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
           var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
           new_client.resizeClient(h, w);
-          console.log(new_client)
+          //console.log(new_client)
         }
       }
     }

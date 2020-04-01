@@ -127,7 +127,7 @@ Item {
       anchors.fill: actualThumbnail
       //client: kwinClientThumbnail.client
       wId: kwinClientThumbnail.client.internalId
-      visible: true
+      visible: kwinClientThumbnail.visible
       clip: true
     }
 
@@ -145,12 +145,6 @@ Item {
     }
   }
 
-  function setSize() {
-    console.log("CHANGING ME HEIGHT YA BASTICH");
-    actualThumbnail.width = kwinClientThumbnail.width;
-    actualThumbnail.height = kwinClientThumbnail.height;
-  }
-
   MouseArea {
     id: mouseArea
     anchors.fill: parent
@@ -160,6 +154,7 @@ Item {
     hoverEnabled: true
     property bool dragActive: drag.active
     onClicked: {
+      //console.log('Click click:', kwinClientThumbnail.client);
       workspace.activeClient = kwinClientThumbnail.client;
     }
 
@@ -204,7 +199,7 @@ Item {
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     //workspace.numberDesktopsChanged.connect(callUpdateGrid);
     //workspace.currentDesktopChanged.connect(callUpdateGrid);
-    //kwinClientThumbnail.client.desktopChanged.connect(setVisible);
+    kwinClientThumbnail.client.desktopChanged.connect(setVisible);
     //workspace.clientRemoved.connect(disconnectAllSignals);
     //kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
