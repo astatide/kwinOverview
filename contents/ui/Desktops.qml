@@ -88,6 +88,7 @@ Item {
             console.log('DROPPED!');
             console.log(drop.source);
             drop.source.client.desktop = desktopContainer.desktop + 1;
+            drop.source.desktop = desktopContainer.desktop;
             drop.source.parent = desktopGrid.children[0];
             console.log(desktopGrid.children[0]);
             console.log(drop.source.parent);

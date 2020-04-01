@@ -27,13 +27,13 @@ Item {
   height: parent.height
   width: parent.width
 
-  GridLayout {
+  Grid {
     id: clientGridLayout
     rows: _returnMatrixSize()
     columns: _returnMatrixSize()
     height: parent.height
     width: parent.width
-    property int onDesktop: 0
+    property int onDesktop: _onDesktop()
     property int forceReset: 0
     //rowSpacing: 20 * (clientContainer.height/dashboard.screenHeight)
     //scale: 1
@@ -41,12 +41,33 @@ Item {
 
     function _onDesktop() {
       var cc = 0;
-      for (var i = 0; i < workspace.clients.length; i++) {
-        if (workspace.clients[i].desktop-1 == clientContainer.desktop) {
-          cc++;
+      //for (var i = 0; i < workspace.clients.length; i++) {
+      //  if (workspace.clients[i].desktop-1 == clientContainer.desktop) {
+      //    cc++;
+      //  }
+      //}
+      for (var i = 0; i < clientGridLayout.children.length; i++) {
+        console.log('What is our child?', clientGridLayout.children[i]);
+        console.log('What is our client?', clientGridLayout.children[i].client);
+        console.log('What is our clientId?', clientGridLayout.children[i].clientId);
+        try { 
+          if (isOnDesktop(clientGridLayout.children[i].client)) {
+            cc++;
+          }
         }
+        catch(error) {}
       }
+      console.log(cc);
       return cc;
+    }
+
+    function isOnDesktop(c) {
+      if (c.desktop-1 == clientContainer.desktop) {
+        return true;
+      } else {
+        return false;
+      }
+      return false;
     }
 
     function clientsOnDesktop() {
@@ -81,15 +102,26 @@ Item {
         width: 0
         client: model
         clientId: model.internalId
-        currentDesktop: model.desktop-1
+        desktop: model.desktop-1
+        clientRatio: model.width / model.height
+        //Layout.fillWidth: true
+        //Layout.fillHeight: true
         Component.onCompleted: {
           console.log('get fucked');
           console.log(loader.client);
           if (model.desktop-1 == clientContainer.desktop) {
             clientGridLayout.onDesktop++;
             loader.visible = true;
+            var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
+            var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
+            loader.resizeClient(h, w);
             //loader.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
             //loader.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
+          } else {
+          //if (model.desktop-1 != clientContainer.desktop) {
+            //loader.parent = clientContainer;
+            loader.opacity = 0;
+            //loader.destroy();
           }
         }
       }
@@ -97,18 +129,22 @@ Item {
 
     onChildrenChanged: {
       //console.log('CHILDREN HAVE CHANGED!');
-      var rows = _returnMatrixSize();
-      var columns = _returnMatrixSize();
+
+      clientGridLayout.rows = _returnMatrixSize();
+      clientGridLayout.columns = _returnMatrixSize();
       //console.log('children!');
       //for (var i = 0; i < repeaterItem.count; i++) {
       //  if (repeaterItem.itemAt(i).currentDesktop == clientContainer.desktop) {
       for (var i = 0; i < clientGridLayout.children.length; i++) {
-        if (clientGridLayout.children[i].currentDesktop == clientContainer.desktop) {
+        if (clientGridLayout.children[i].desktop == clientContainer.desktop) {
           //cc++;
           //console.log(clientGridLayout.children[i]);
-          //console.log("RESIZING!");
-          clientGridLayout.children[i].height = Math.ceil(clientContainer.height / (clientGridLayout.rows));
-          clientGridLayout.children[i].width = Math.ceil(clientContainer.width / (clientGridLayout.columns));
+          console.log("RESIZING!");
+          var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
+          var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
+          clientGridLayout.children[i].resizeClient(h, w);
+          //clientGridLayout.children[i].height = Math.ceil(clientContainer.height / (clientGridLayout.rows));
+          //clientGridLayout.children[i].width = Math.ceil(clientContainer.width / (clientGridLayout.columns));
         }
       }
     }
@@ -117,7 +153,7 @@ Item {
       // Figure out how many we have on the desktop, then calculate an
       // an appropriate row x column size.
       //return 1;
-      var oD = _onDesktop();
+      var oD = clientGridLayout._onDesktop(); // _onDesktop();
       //console.log('How many on desktop?');
       //console.log(oD);
       // Just do it manually for the moment; not elegant, but effective.
@@ -125,50 +161,42 @@ Item {
       if (oD <= 1) {
         return 1
       } else {
-        return Math.ceil(Math.sqrt(oD));
+        return Math.floor(Math.sqrt(oD));
       }
     }
 
     Component.onCompleted: {
+      clientGridLayout.onDesktop = _onDesktop();
       clientContainer.isMain = true;
       clientContainer.visible = true;
-      workspace.clientAdded.connect(checkForNewClients);
-      workspace.clientRemoved.connect(checkForNewClients)
+      workspace.clientAdded.connect(addNewClient);
+      workspace.clientRemoved.connect(removeClients);
     }
 
-    function checkForNewClients(c) {
+    function removeClients(c) {
+      // remove the client
+      if (c.desktop-1 == clientContainer.desktop) {
+        clientGridLayout.onDesktop -= 1;
+      }
+    }
 
-      //repeaterItem.model = workspace.clients;
-      // this forces an update
-      if (c.desktop-1 == clientContainer.desktop) {
-        // clients doesn't seem to update right away?  What the fuck.
-        console.log('FRESH');
-        console.log(c, c.desktop-1);
-        for (var i = 0; i < workspace.clients.length; i++) {
-          console.log(workspace.clients[i]);
+    function addNewClient(c) {
+      console.log("Oh yeah we have clients");
+      if (c) {
+        console.log("c exists");
+        console.log(c.desktop-1);
+        if (c.desktop-1 == clientContainer.desktop) {
+          clientGridLayout.onDesktop += 1;
+          var component = Qt.createComponent('ClientThumbnail.qml');
+          console.log("DOING IT ON DESKTOP!");
+          console.log(clientContainer.desktop);
+          var new_client = component.createObject(clientGridLayout, {'client': c, 'clientId': c.internalId, 'desktop': clientContainer.desktop, 'visible': true,  'clientRatio': c.width / c.height});
+          var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
+          var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
+          new_client.resizeClient(h, w);
+          console.log(new_client)
         }
-        //console.log(workspace.clients);
-        clientGridLayout.forceReset = _onDesktop();
-        repeaterItem.model = workspace.clients;
       }
-      if (clientGridLayout.forceReset != _onDesktop()) {
-        clientGridLayout.forceReset = _onDesktop();
-        repeaterItem.model = workspace.clients;
-      }
-      /*console.log("WE CREATED NEW CLIENTS!");
-      console.log(c);
-      if (c.desktop-1 == clientContainer.desktop) {
-        console.log('AND IT IS ON THIS DESKTOP!dol');
-        var component = Qt.createComponent('ClientThumbnail.qml');
-        var new_client = component.createObject(null, {'client': c, 'clientId': c.internalId, 'currentDesktop': clientContainer.desktop, 'visible': true});
-        //new_client.client = c;
-        console.log('NEW CLIENT CREATED');
-        console.log(new_client.client, c, c.internalId);
-        new_client.parent = clientGridLayout;
-        //new_client.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
-        //new_client.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
-        console.log(new_client.parent);
-      }*/
     }
   }
 
@@ -194,7 +222,7 @@ Item {
     //console.log(oldDesktop, newDesktop);
       // Show everything except for the current desktop and the one we're transitioning into.
       if (!clientContainer.isLarge) {
-        if (workspace.currentDesktop-1 == clientContainer.desktop) {
+        if (workspace.desktop-1 == clientContainer.desktop) {
           clientContainer.visible = true;
           //makeVisibleTimer.stop();
         }
@@ -206,7 +234,7 @@ Item {
         }
       } else {
         // Hide everything except for the current desktop and the one we're transitioning into.
-        if (workspace.currentDesktop-1 != clientContainer.desktop) {
+        if (workspace.desktop-1 != clientContainer.desktop) {
           clientContainer.visible = false;
         } else {
           clientContainer.visible = true;

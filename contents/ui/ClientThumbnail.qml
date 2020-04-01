@@ -26,7 +26,7 @@ Item {
   property var cId: 0
   property var client: ''
   property string clientId: "0"
-  property var currentDesktop: 0
+  property var desktop: 0
   property var newDesktop: 0
   property var newActivity: 0
   property var oldParent: 0
@@ -50,6 +50,7 @@ Item {
   //y: 0
   //z: 0
   property int originalZ: 0
+  property var clientRatio: 0
 
   //property bool isHeld: false
   property bool isSmall: false
@@ -89,6 +90,16 @@ Item {
   onClientChanged: {
     //console.log('our client has changed');
     //kwinThumbnailRenderWindow.wId = kwinClientThumbnail.client.internalId;
+  }
+
+  function resizeClient(h, w) {
+    if (clientRatio > 1) {
+      kwinClientThumbnail.width = w;
+      kwinClientThumbnail.height = w / clientRatio;
+    } else {
+      kwinClientThumbnail.width = h * clientRatio;
+      kwinClientThumbnail.height = h;
+    }
   }
 
   Item {
