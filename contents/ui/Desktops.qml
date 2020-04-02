@@ -24,6 +24,7 @@ Item {
     height: 100
     property var screenRatio: 1
     width: height * screenRatio
+    property bool showClients: true
     Image {
         id: desktopBackground
         mipmap: true
@@ -70,7 +71,13 @@ Item {
         desktop: desktopContainer.desktop
         height: desktopContainer.height * 0.95
         width: desktopContainer.width * 0.95
+        visible: showClients
     }
+
+    onShowClientsChanged: {
+      desktopGrid.visible = showClients;
+    }
+
     DropArea {
         id: desktopDropArea
         anchors.fill: desktopContainer

@@ -27,7 +27,8 @@ Window {
 	x: 0
 	y: 0
 	//flags: Qt.WindowTransparentForInput //| Qt.X11BypassWindowManagerHint
-	flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
+	//flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
+	//flags: Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.X11BypassWindowManagerHint
 
 	color: '#00000000'
 
@@ -91,11 +92,11 @@ Window {
 	DesktopChanger {
 		id: largeDesktopChanger
 		height: { return workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop).height - dashboardDesktopChanger.height - dashboardActivityChanger.height; }
-		width: dashboard.width
+		width: { return (height * workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop).width/workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop).height)-100; }
 		y: dashboardDesktopChanger.height;
-		x: 0
+		x: { return (workspace.clientArea(KWinLib.MaximizedArea, workspace.activeScreen, workspace.currentDesktop).width - width)/2 }
 		visible: true
-		//opacity: 1
+		showActiveDesktop: true
 	}
 
 	//DesktopChanger {
@@ -107,19 +108,31 @@ Window {
 		id: dashboardDesktopChanger
 		height: (100+border) * dashboard.scalingFactor
 		width: dashboard.screenWidth
+		showActiveDesktop: false
+		shiftOnDesktopChange: false
 	}
 
 	ActivityChanger {
 		id: dashboardActivityChanger
 	}
 
+    function disableVisibleClients() {
+        var c;
+        for (c = 0; c < workspace.clientList().length; c++) {
+            workspace.clientList()[c].opacity = 0;
+            workspace.clientList()[c].oldNoBorder = workspace.clientList()[c].noBorder;
+            workspace.clientList()[c].noBorder = true;
+
+        }
+    }
+
 		function toggleBoth() {
 			//dashboardDesktopChanger.populateVisibleClients();
 			if (mainBackground.state == 'visible') {
 				endAnim.restart();
-				//dashboardDesktopChanger.enableVisibleClients();
 				mainBackground.state = 'invisible';
 			} else if (mainBackground.state == 'invisible') {
+				disableVisibleClients();
 				dashboardDesktopChanger.width = dashboard.screenWidth;
 				dashboardActivityChanger.width = dashboard.screenWidth;
 				//largeDesktopChanger.height = 200//(dashboard.screenHeight - dashboardDesktopChanger.height - dashboardActivityChanger.height);

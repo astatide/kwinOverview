@@ -18,7 +18,8 @@ import "../code/createClients.js" as CreateClients
 
 Window {
     id: desktopChanger
-    flags: Qt.WA_TranslucentBackground | Qt.WA_OpaquePaintEvent | Qt.WindowMaximized | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
+    //flags: Qt.WA_TranslucentBackground | Qt.WA_OpaquePaintEvent | Qt.WindowMaximized | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.BypassGraphicsProxyWidget | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint
+    flags: Qt.X11BypassWindowManagerHint
     property int border: 10
     property var screenRatio: 16/9
     property string background: { return allActivities.getCurrentBackground() }
@@ -31,6 +32,8 @@ Window {
     height: 0
     width: 0
     property bool showActiveDesktop: true
+    property bool showOnlyActiveDesktop: true
+    property bool shiftOnDesktopChange: true
 
     Item {
         id: dash
@@ -79,8 +82,8 @@ Window {
             anchors.leftMargin: 5
             property int spacing: 10
             height: dash.gridHeight
-            contentHeight: desktopThumbnailGridBackgrounds.height
-            contentWidth: desktopThumbnailGridBackgrounds.width
+            contentHeight: desktopChanger.height
+            contentWidth: desktopChanger.width
 
             y: 0
             Rectangle {
@@ -244,9 +247,31 @@ Window {
         //    );
         //});
         workspace.currentDesktopChanged.connect(function() {
+            if (shiftOnDesktopChange == true) {
+                desktopThumbnailGrid.contentX = (workspace.currentDesktop-1)*(desktopThumbnailGridBackgrounds.width+desktopThumbnailGridBackgrounds.spacing)/workspace.desktops;
+            }
             activeDesktopIndicatorShiftAnim.newX = ((dash.gridHeight*dashboard.screenRatio+desktopThumbnailGrid.spacing)*(workspace.currentDesktop-1)) - 2;
             activeDesktopIndicatorShiftAnim.originalX = activeDesktopIndicator.x;
             activeDesktopIndicatorShiftAnim.restart();
+            if (desktopChanger.showActiveDesktop != true) {
+                console.log('trying to change the clients! SHOW');
+                for (var i = 0; i < workspace.desktops; i++) {
+                    if (i != workspace.currentDesktop-1) {
+                        littleDesktopRepeater.itemAt(i).showClients = true;
+                    } else {
+                        littleDesktopRepeater.itemAt(i).showClients = false;
+                    }
+                }
+            } else {
+                for (var i = 0; i < workspace.desktops; i++) {
+                    console.log(i);
+                    if (i != workspace.currentDesktop-1) {
+                        littleDesktopRepeater.itemAt(i).showClients = false;
+                    } else {
+                        littleDesktopRepeater.itemAt(i).showClients = true;
+                    }
+                }
+            }
             if (mainBackground.state == 'visible') {
                 timer.restart();
             }

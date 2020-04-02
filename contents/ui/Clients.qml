@@ -97,7 +97,7 @@ Item {
 
       ClientThumbnail {
         id: loader
-        visible: false
+        visible: clientContainer.visible
         height: 0
         width: 0
         client: model
@@ -115,13 +115,13 @@ Item {
             var h = Math.ceil(clientContainer.height / (clientGridLayout.rows));
             var w = Math.ceil(clientContainer.width / (clientGridLayout.columns));
             loader.resizeClient(h, w);
-            loader.visible = clientContainer.visible;
+            //loader.visible = clientContainer.visible;
             //loader.height = Math.ceil(clientContainer.height / clientGridLayout.rows);
             //loader.width = Math.ceil(clientContainer.width / clientGridLayout.columns);
           } else {
           //if (model.desktop-1 != clientContainer.desktop) {
             //loader.parent = clientContainer;
-            loader.opacity = 0;
+            //loader.opacity = 0;
             //loader.destroy();
           }
         }
@@ -148,6 +148,13 @@ Item {
           //clientGridLayout.children[i].height = Math.ceil(clientContainer.height / (clientGridLayout.rows));
           //clientGridLayout.children[i].width = Math.ceil(clientContainer.width / (clientGridLayout.columns));
         }
+      }
+    }
+
+    onVisibleChanged: {
+      console.log("CLIENTS HAVE CHANGED!", visible);
+      for (var i = 0; i < clientGridLayout.children.length; i++) {
+        clientGridLayout.children[i].visible = visible;
       }
     }
 

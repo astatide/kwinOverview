@@ -92,6 +92,18 @@ Item {
     //kwinThumbnailRenderWindow.wId = kwinClientThumbnail.client.internalId;
   }
 
+  onVisibleChanged: {
+    console.log("HEY I CHANGED");
+    if (visible == true) {
+      kwinThumbnailRenderWindow.wId = kwinClientThumbnail.client.internalId;
+    } else {
+      //var a = kwinClientThumbnail.client.internalId;
+      //console.log(a);
+      //kwinThumbnailRenderWindow.wId = '{3f963662-6746-4508-be80-ec43f10d3319}';
+      kwinThumbnailRenderWindow.wId = '{00000000-0000-0000-0000-000000000000}';
+    }
+  }
+
   function resizeClient(h, w) {
     if (clientRatio > 1) {
       kwinClientThumbnail.width = w;
@@ -104,7 +116,7 @@ Item {
 
   Item {
     id: actualThumbnail
-    visible: true
+    visible: kwinClientThumbnail.visible
     opacity: 1
     x: 2
     y: 2
@@ -199,7 +211,7 @@ Item {
     // the desktop changes.  This avoids crashes upon creating/removing new desktops!
     //workspace.numberDesktopsChanged.connect(callUpdateGrid);
     //workspace.currentDesktopChanged.connect(callUpdateGrid);
-    kwinClientThumbnail.client.desktopChanged.connect(setVisible);
+    //kwinClientThumbnail.client.desktopChanged.connect(setVisible);
     //workspace.clientRemoved.connect(disconnectAllSignals);
     //kwinClientThumbnail.toggleVisible('invisible');
     //searchFieldAndResults.children[1].forceActiveFocus();
